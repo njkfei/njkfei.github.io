@@ -4,7 +4,7 @@
   <subtitle><![CDATA[记录点滴]]></subtitle>
   <link href="/atom.xml" rel="self"/>
   <link href="http://wiki.niejinkun.com/"/>
-  <updated>2016-11-04T15:38:23.985Z</updated>
+  <updated>2016-11-04T15:40:03.626Z</updated>
   <id>http://wiki.niejinkun.com/</id>
   
   <author>
@@ -19,7 +19,7 @@
     <link href="http://wiki.niejinkun.com/2016/11/04/my-tools/"/>
     <id>http://wiki.niejinkun.com/2016/11/04/my-tools/</id>
     <published>2016-11-03T16:00:00.000Z</published>
-    <updated>2016-11-04T15:38:23.985Z</updated>
+    <updated>2016-11-04T15:40:03.626Z</updated>
     <content type="html"><![CDATA[<ul>
 <li>gc log analyst online : 在线GC日志分析：<a href="http://gceasy.io/" target="_blank" rel="external">http://gceasy.io/</a></li>
 <li><p>gc log demo : <a href="http://gceasy.io/my-gc-report.jsp?p=c2hhcmVkLzIwMTYvMTEvNC8tLWdjLmxvZy0tMTUtMTctNTE=" target="_blank" rel="external">http://gceasy.io/my-gc-report.jsp?p=c2hhcmVkLzIwMTYvMTEvNC8tLWdjLmxvZy0tMTUtMTctNTE=</a></p>
@@ -27,6 +27,8 @@
 <li><p>jstack log analyst online : 在线thread日志分析 ：<a href="http://fastthread.io/" target="_blank" rel="external">http://fastthread.io/</a></p>
 </li>
 <li><p>jstack log demo: <a href="http://fastthread.io/ft-thread-report.jsp?dumpId=1&amp;oTxnId_value=8152f8f3-2e6a-4747-bb62-6e2ef99596e0" target="_blank" rel="external">http://fastthread.io/ft-thread-report.jsp?dumpId=1&amp;oTxnId_value=8152f8f3-2e6a-4747-bb62-6e2ef99596e0</a></p>
+</li>
+<li><p>goaccess nginx 日志分析：nginx日志分析神器</p>
 </li>
 <li><p>travic ci hexo github : 自动完成博客发布</p>
 </li>
