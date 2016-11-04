@@ -1,0 +1,30 @@
+<footer id="footer">
+  <% if (theme.sidebar === 'bottom'){ %>
+    <%- partial('_partial/sidebar') %>
+  <% } %>
+<div class="outer">
+    <div id="footer-info" class="inner" style="text-align:center;">
+	  <table width="100%" border="0">
+        <tr>
+          <td style="text-align:left">
+            Copyright &copy; 2014-<%= date(new Date(), 'YYYY') %> <%= config.author || config.title %> &nbsp; &nbsp;
+            Powered by <a href="http://hexo.io/" target="_blank">Hexo</a><br>
+	        Theme <a href="https://github.com/njk/landscape-njk" target="_blank">爱折腾</a> by 游骑爬 &nbsp; &nbsp;
+	        Hosted on <a href="https://github.com/" target="_blank">GitHub</a>
+		  </td>
+		  <td style="text-align:right">
+		    <div style="font-family: FontAwesome;font-size: 20px;">
+		    <a href="http://weibo.com/1032111474" title="微博" target="_blank">&#61834;</a>&nbsp;
+			<a href="http://user.qzone.qq.com/297206021" title="QQ空间" target="_blank">&#61910;</a>&nbsp;
+			<a href="https://github.com/njkfei" title="GitHub" target="_blank">&#61595;</a>&nbsp;
+			</div><br>
+		    <a href="/sitemap.xml">网站地图</a>&nbsp; &nbsp;
+			<a href="/atom.xml">订阅本站</a>&nbsp; &nbsp;
+			<a href="mailto:297206021@qq.com" target="_blank">联系作者</a>&nbsp; &nbsp;
+			ICP 备案中
+		  </td>
+        </tr>
+      </table>
+    </div>
+</div>
+</footer>

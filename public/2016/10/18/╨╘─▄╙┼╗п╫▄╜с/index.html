@@ -1,0 +1,636 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+  <meta charset="utf-8">
+  
+  <title>性能优化总结 | 游骑爬，生命在于折腾</title>
+  <meta name="author" content="niejinping">
+  
+  <meta name="description" content="学习总结，知识管理">
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+  <meta property="og:title" content="性能优化总结"/>
+  <meta property="og:site_name" content="游骑爬，生命在于折腾"/>
+
+  
+    <meta property="og:image" content="undefined"/>
+  
+
+  
+    <link rel="alternative" href="/atom.xml" title="游骑爬，生命在于折腾" type="application/atom+xml">
+  
+  
+    <link href="/favicon.png" rel="icon">
+  
+  
+  <link rel="stylesheet" href="/css/bootstrap.min.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/css/font-awesome.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/css/style.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/css/highlight.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/css/google-fonts.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/css/responsive.css" media="screen" type="text/css">  
+  <link rel="stylesheet" href="/css/sidenav.css" media="screen" type="text/css">  
+  <!--[if lt IE 9]><script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script><![endif]-->
+
+  <script src="/js/jquery-2.0.3.min.js"></script>
+
+  <!-- analytics -->
+  
+<script type="text/javascript">
+var _gaq = _gaq || [];
+_gaq.push(['_setAccount', 'UA-72124819-1']);
+_gaq.push(['_trackPageview']);
+(function() {
+var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+
+ga.src = ('https:' == document.location.protocol ? 'https://' : 'http://') + 'stats.g.doubleclick.net/dc.js';
+
+var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+})();
+</script>
+
+
+</head>
+
+<body id="body" data-spy="scroll" data-target=".toc">
+  <div class="container" id="container">
+	<div class="content">
+	  <div class="page-header">		
+  <h1><a class="brand" href="/">游骑爬，生命在于折腾</a><span class="split"></span><span class="title">性能优化总结</span><span class="date" id="title-date"><i class="fa fa-clock-o"></i> 2016-10-18</span></h1>
+</div>		
+
+<div class="row page">
+  <!-- cols -->	
+  
+  <div class="col-xs-12 col-sm-3 col-md-3 toc"> 
+	<!-- toc -->
+<script type="text/javascript">
+		jQuery(document).ready(function() {
+ 		   generateWikiTOC('.note', '.toc',  2 , 2 );
+		});
+</script>
+  </div><!-- col-md-3 -->
+  
+  
+
+  
+  <div class="col-xs-12 col-sm-9 col-md-9 note">
+	
+
+	  <!-- content -->
+	  <h1 id="u6027_u80FD_u4F18_u5316_u600E_u4E48_u641E"><a href="#u6027_u80FD_u4F18_u5316_u600E_u4E48_u641E" class="headerlink" title="性能优化怎么搞"></a>性能优化怎么搞</h1><h2 id="u95EE_u9898_u63D0_u51FA"><a href="#u95EE_u9898_u63D0_u51FA" class="headerlink" title="问题提出"></a>问题提出</h2><ul>
+<li>压力不大,系统居然挂了</li>
+<li>QPS,TPS上不来</li>
+<li>先重启系统再说</li>
+</ul>
+<h2 id="u539F_u56E0_u5206_u6790"><a href="#u539F_u56E0_u5206_u6790" class="headerlink" title="原因分析"></a>原因分析</h2><ul>
+<li>CPU是不是满了</li>
+<li>内存是不是不够用了</li>
+<li>disk是不是频繁的读写</li>
+<li>网络io是不是爆了</li>
+</ul>
+<h2 id="u600E_u4E48_u529E"><a href="#u600E_u4E48_u529E" class="headerlink" title="怎么办"></a>怎么办</h2><ul>
+<li>理论</li>
+<li>工具</li>
+</ul>
+<h2 id="u7406_u8BBA"><a href="#u7406_u8BBA" class="headerlink" title="理论"></a>理论</h2><p>性能调优是一个系统工程,<br>需要从整体上去分析系统性能,<br>理论是最好的武器</p>
+<h3 id="u57FA_u672C_u7406_u8BBA_u70B9"><a href="#u57FA_u672C_u7406_u8BBA_u70B9" class="headerlink" title="基本理论点"></a>基本理论点</h3><ul>
+<li>操作系统</li>
+<li>进程,线程</li>
+<li>同步,异步</li>
+<li>计算机网络</li>
+<li>JVM,GC,JMM</li>
+</ul>
+<h3 id="u4E00_u4E9B_u53C2_u8003_u6570_u636E"><a href="#u4E00_u4E9B_u53C2_u8003_u6570_u636E" class="headerlink" title="一些参考数据"></a>一些参考数据</h3><ul>
+<li>人人网首页亿级PV,部署10台服务器</li>
+<li>搜狗搜索,10台服务器</li>
+<li>1号店:读服务 小于20ms,写服务 小于50ms</li>
+<li>58同城搜索服务:单台机器9000 QPS<br>上述数据来源于infoq,或其它公开分享．</li>
+</ul>
+<h2 id="u5DE5_u5177"><a href="#u5DE5_u5177" class="headerlink" title="工具"></a>工具</h2><p>工欲善其事,必先利其器<br>或者说,实践是检验真理的惟一标准</p>
+<h3 id="CPU"><a href="#CPU" class="headerlink" title="CPU"></a>CPU</h3><p>查看CPU有两条指令.</p>
+<ul>
+<li>top</li>
+<li>uptime<br>uptime是top命令的子集.只要查看CPU的负载.一般而言,压力测试,首先就要看CPU利用率是否随压力的上升而上升.对于设计良好的系统而言.压力和CPU利用率(load average)是线性关系的.</li>
+</ul>
+<h4 id="uptime"><a href="#uptime" class="headerlink" title="uptime"></a>uptime</h4><figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="number">10</span>:<span class="number">01</span>:<span class="number">14</span> up <span class="number">161</span> days, <span class="number">16</span>:<span class="number">48</span>,  <span class="number">2</span> users,  load average: <span class="number">0.01</span>, <span class="number">0.04</span>, <span class="number">0.05</span></span><br></pre></td></tr></table></figure>
+<ul>
+<li>load average(负载)需要考虑cpu的核数.</li>
+<li>负载系数(load average / cpu core count)</li>
+<li>当负载系数达到 0.7时，需要考虑加机器了</li>
+<li>当负载系统达到1时，系统达到了最大性能</li>
+<li>当负载系统达到1.2时，用户的请求开始阻塞了</li>
+</ul>
+<h3 id="u5185_u5B58"><a href="#u5185_u5B58" class="headerlink" title="内存"></a>内存</h3><p>当内存不足时，系统性能会严重下降，但这种不常见．留意一下即可．</p>
+<h4 id="vmstat"><a href="#vmstat" class="headerlink" title="vmstat"></a>vmstat</h4><figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">niejinping@ubuntu$vmstat <span class="number">3</span> <span class="number">100</span></span><br><span class="line">procs -----------memory---------- ---swap-- -----io---- -system-- ------cpu-----</span><br><span class="line"> r  b   swpd   <span class="built_in">free</span>   buff  cache   si   so    bi    bo   in   cs us sy id wa st</span><br><span class="line"> <span class="number">1</span>  <span class="number">0</span>  <span class="number">87244</span> <span class="number">222132</span> <span class="number">116088</span> <span class="number">29564036</span>    <span class="number">0</span>    <span class="number">0</span>     <span class="number">0</span>     <span class="number">1</span>    <span class="number">0</span>    <span class="number">0</span>  <span class="number">0</span>  <span class="number">0</span> <span class="number">100</span>  <span class="number">0</span>  <span class="number">0</span></span><br><span class="line"> <span class="number">1</span>  <span class="number">0</span>  <span class="number">87244</span> <span class="number">222744</span> <span class="number">116088</span> <span class="number">29564036</span>    <span class="number">0</span>    <span class="number">0</span>     <span class="number">0</span>    <span class="number">12</span>  <span class="number">232</span>  <span class="number">544</span>  <span class="number">0</span>  <span class="number">0</span> <span class="number">100</span>  <span class="number">0</span>  <span class="number">0</span></span><br><span class="line"> <span class="number">0</span>  <span class="number">0</span>  <span class="number">87244</span> <span class="number">223044</span> <span class="number">116088</span> <span class="number">29564068</span>    <span class="number">0</span>    <span class="number">0</span>     <span class="number">0</span>     <span class="number">0</span>  <span class="number">255</span>  <span class="number">639</span>  <span class="number">0</span>  <span class="number">0</span> <span class="number">100</span>  <span class="number">0</span>  <span class="number">0</span></span><br></pre></td></tr></table></figure>
+<h3 id="u78C1_u76D8io"><a href="#u78C1_u76D8io" class="headerlink" title="磁盘io"></a>磁盘io</h3><p>磁盘的性能比内存差1w倍．说个案例</p>
+<ul>
+<li>某公司某服务大量写日志，把磁盘干爆，不得不重启，然后删除日志</li>
+<li>某公司接入微信，接入前做压力测试，QPS一直上不去．<br>你知道后来怎么解决的吗？<br>查看磁盘的状态可使用dstat命令<h4 id="dstat"><a href="#dstat" class="headerlink" title="dstat"></a>dstat</h4><figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">niejinping@ubuntu$dstat</span><br><span class="line">----total-cpu-usage---- -dsk/total- -net/total- ---paging-- ---system--</span><br><span class="line">usr sys idl wai hiq siq| read  writ| recv  send|  in   out | <span class="keyword">int</span>   csw </span><br><span class="line">  <span class="number">0</span>   <span class="number">0</span> <span class="number">100</span>   <span class="number">0</span>   <span class="number">0</span>   <span class="number">0</span>|<span class="number">1429</span>B   <span class="number">21</span>k|   <span class="number">0</span>     <span class="number">0</span> |   <span class="number">1</span>B    <span class="number">8</span>B| <span class="number">271</span>   <span class="number">727</span> </span><br><span class="line">  <span class="number">0</span>   <span class="number">0</span> <span class="number">100</span>   <span class="number">0</span>   <span class="number">0</span>   <span class="number">0</span>|   <span class="number">0</span>     <span class="number">0</span> |<span class="number">1866</span>B <span class="number">1990</span>B|   <span class="number">0</span>     <span class="number">0</span> | <span class="number">253</span>   <span class="number">590</span> </span><br><span class="line">  <span class="number">0</span>   <span class="number">0</span> <span class="number">100</span>   <span class="number">0</span>   <span class="number">0</span>   <span class="number">0</span>|   <span class="number">0</span>    <span class="number">28</span>k|<span class="number">1260</span>B  <span class="number">915</span>B|   <span class="number">0</span>     <span class="number">0</span> | <span class="number">272</span>   <span class="number">836</span> </span><br><span class="line">  <span class="number">0</span>   <span class="number">0</span> <span class="number">100</span>   <span class="number">0</span>   <span class="number">0</span>   <span class="number">0</span>|   <span class="number">0</span>     <span class="number">0</span> |<span class="number">1784</span>B <span class="number">1121</span>B|   <span class="number">0</span>     <span class="number">0</span> | <span class="number">163</span>   <span class="number">365</span> </span><br><span class="line">  <span class="number">0</span>   <span class="number">0</span> <span class="number">100</span>   <span class="number">0</span>   <span class="number">0</span>   <span class="number">0</span>|   <span class="number">0</span>     <span class="number">0</span> |<span class="number">1652</span>B <span class="number">1185</span>B|   <span class="number">0</span>     <span class="number">0</span> | <span class="number">203</span>   <span class="number">497</span> </span><br><span class="line">  <span class="number">0</span>   <span class="number">0</span> <span class="number">100</span>   <span class="number">0</span>   <span class="number">0</span>   <span class="number">0</span>|   <span class="number">0</span>     <span class="number">0</span> |<span class="number">1943</span>B <span class="number">1587</span>B|   <span class="number">0</span>     <span class="number">0</span> | <span class="number">284</span>   <span class="number">706</span> </span><br><span class="line">  <span class="number">0</span>   <span class="number">0</span> <span class="number">100</span>   <span class="number">0</span>   <span class="number">0</span>   <span class="number">0</span>|   <span class="number">0</span>     <span class="number">0</span> |<span class="number">1102</span>B  <span class="number">458</span>B|   <span class="number">0</span>     <span class="number">0</span> | <span class="number">200</span>   <span class="number">489</span> </span><br><span class="line">  <span class="number">0</span>   <span class="number">0</span> <span class="number">100</span>   <span class="number">0</span>   <span class="number">0</span>   <span class="number">0</span>|   <span class="number">0</span>     <span class="number">0</span> |<span class="number">2314</span>B <span class="number">1259</span>B|   <span class="number">0</span>     <span class="number">0</span> | <span class="number">213</span>   <span class="number">515</span> </span><br><span class="line">  <span class="number">0</span>   <span class="number">0</span> <span class="number">100</span>   <span class="number">0</span>   <span class="number">0</span>   <span class="number">0</span>|   <span class="number">0</span>    <span class="number">16</span>k|<span class="number">1665</span>B <span class="number">1363</span>B|   <span class="number">0</span>     <span class="number">0</span> | <span class="number">203</span>   <span class="number">496</span></span><br></pre></td></tr></table></figure>
+</li>
+</ul>
+<p>如果磁盘读写异常，dst/total里面的数据会很夸张的哦，一看就知道了．</p>
+<h4 id="iostat"><a href="#iostat" class="headerlink" title="iostat"></a>iostat</h4><figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">niejinping@ubuntu$iostat</span><br><span class="line">Linux <span class="number">3.13</span><span class="number">.0</span>-<span class="number">86</span>-generic (JHJR-Home-<span class="number">01</span>)  <span class="number">10</span>/<span class="number">18</span>/<span class="number">16</span>        _x86_64_        (<span class="number">32</span> CPU)</span><br><span class="line"></span><br><span class="line">avg-cpu:  %user   %nice %system %iowait  %steal   %idle</span><br><span class="line">           <span class="number">0.11</span>    <span class="number">0.00</span>    <span class="number">0.05</span>    <span class="number">0.01</span>    <span class="number">0.00</span>   <span class="number">99.83</span></span><br><span class="line"></span><br><span class="line">Device:            tps    kB_read/s    kB_wrtn/s    kB_read    kB_wrtn</span><br><span class="line">sda               <span class="number">0.66</span>         <span class="number">4.45</span>        <span class="number">20.60</span>   <span class="number">62214026</span>  <span class="number">287806841</span></span><br></pre></td></tr></table></figure>
+<p>上面的tps就是iops.kB_wrtn/s如果很大，说明有大量的写操作了．要注意．</p>
+<h5 id="u6027_u80FD_u53C2_u8003_u503C"><a href="#u6027_u80FD_u53C2_u8003_u503C" class="headerlink" title="性能参考值"></a>性能参考值</h5><table>
+<thead>
+<tr>
+<th>类型</th>
+<th>IOPS</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>普通硬盘</td>
+<td>100量级</td>
+<td>慢，便宜</td>
+</tr>
+<tr>
+<td>SSD</td>
+<td>10000量级</td>
+<td>非常快，贵</td>
+</tr>
+</tbody>
+</table>
+<h3 id="u7F51_u7EDC"><a href="#u7F51_u7EDC" class="headerlink" title="网络"></a>网络</h3><p>说个案例：</p>
+<ul>
+<li>大量的socket连接，把tomcat挂了．</li>
+</ul>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">niejinping@ubuntu$lsof -p <span class="number">17624</span>  </span><br><span class="line">COMMAND   PID    USER   FD   TYPE    DEVICE  SIZE/OFF      NODE NAME</span><br><span class="line">java    <span class="number">17624</span> product  cwd    DIR       <span class="number">8</span>,<span class="number">2</span>      <span class="number">4096</span>   <span class="number">1971016</span> /home/product</span><br><span class="line">java    <span class="number">17624</span> product  rtd    DIR       <span class="number">8</span>,<span class="number">2</span>      <span class="number">4096</span>         <span class="number">2</span> /</span><br></pre></td></tr></table></figure>
+<p>wc统计一下，发现socket超过65535了，直接把tomcat挂了．</p>
+<ul>
+<li>大量复杂对象序列化在网络上传，把网卡搞爆<br>这个不好搞，要业务重构了．</li>
+</ul>
+<h3 id="u7EBF_u7A0B"><a href="#u7EBF_u7A0B" class="headerlink" title="线程"></a>线程</h3><p>线程可以提高系统的性能，这句话容易产生误导．<br>合理的使用线程，才能提高程序的性能．在设置线程的参数时．需要考虑以下几个方面：</p>
+<ul>
+<li>面向IO还是面向CPU</li>
+<li>CPU的核数</li>
+<li>线上服务还是线下服务</li>
+<li>锁，锁，锁<h4 id="u9762_u5411CPU"><a href="#u9762_u5411CPU" class="headerlink" title="面向CPU"></a>面向CPU</h4></li>
+<li>线程设置为CPU核数即可．</li>
+</ul>
+<h4 id="u9762_u5411IO"><a href="#u9762_u5411IO" class="headerlink" title="面向IO"></a>面向IO</h4><ul>
+<li>线程数可以设置大一些</li>
+</ul>
+<h4 id="u9501"><a href="#u9501" class="headerlink" title="锁"></a>锁</h4><p>这个就麻烦了，越大，抢锁的概述就越高，这时候线程们可能一直在抢锁，什么也没干．<br>给我们的启示是：</p>
+<ul>
+<li>如果线程设置不合理，大家都很忙，大家又好像什么都没干</li>
+</ul>
+<h2 id="JVM"><a href="#JVM" class="headerlink" title="JVM"></a>JVM</h2><figure class="highlight mathematica"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">内存管理是一个围城，搞<span class="keyword">C</span>/<span class="keyword">C</span>++的人想跳进去，搞JAVA的人想跳出来．</span><br></pre></td></tr></table></figure>
+<p>java程序员不需要在程序代码中管理内存，这是最容易出问题的地方．<br><figure class="highlight"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">JVM参数设置不合理，会严重影响程序的性能，这种事情一再发生．</span><br></pre></td></tr></table></figure></p>
+<ul>
+<li>了解JVM的内存模型，以及分代机制，以利于合理确定JVM参数</li>
+<li>JDK提供了非常多的工具，供程序员使用．</li>
+</ul>
+<h3 id="JVM_u5E38_u7528_u5DE5_u5177"><a href="#JVM_u5E38_u7528_u5DE5_u5177" class="headerlink" title="JVM常用工具"></a>JVM常用工具</h3><ul>
+<li>jstat</li>
+<li>jstatd</li>
+<li>jinfo</li>
+<li>jmap</li>
+<li>jstack</li>
+<li>jconsole</li>
+<li>visualvm</li>
+<li>jmc</li>
+</ul>
+<h4 id="jstat"><a href="#jstat" class="headerlink" title="jstat"></a>jstat</h4><p>这个主要看JVM的GC情况，使用最多．<br><figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">  S0     S1     E      O      P     YGC     YGCT    FGC    FGCT     GCT   </span><br><span class="line"><span class="number">100.00</span>   <span class="number">0.00</span>  <span class="number">41.64</span>   <span class="number">1.00</span>  <span class="number">82.13</span>      <span class="number">4</span>    <span class="number">0.411</span>     <span class="number">2</span>    <span class="number">0.315</span>    <span class="number">0.726</span></span><br><span class="line"><span class="number">100.00</span>   <span class="number">0.00</span>  <span class="number">41.64</span>   <span class="number">1.00</span>  <span class="number">82.13</span>      <span class="number">4</span>    <span class="number">0.411</span>     <span class="number">2</span>    <span class="number">0.315</span>    <span class="number">0.726</span></span><br><span class="line"><span class="number">100.00</span>   <span class="number">0.00</span>  <span class="number">41.64</span>   <span class="number">1.00</span>  <span class="number">82.13</span>      <span class="number">4</span>    <span class="number">0.411</span>     <span class="number">2</span>    <span class="number">0.315</span>    <span class="number">0.726</span></span><br></pre></td></tr></table></figure></p>
+<h4 id="jstatd"><a href="#jstatd" class="headerlink" title="jstatd"></a>jstatd</h4><p>开启远程监控使用的．</p>
+<h4 id="jinfo"><a href="#jinfo" class="headerlink" title="jinfo"></a>jinfo</h4><p>可以看java进程的启动参数</p>
+<h4 id="jmap"><a href="#jmap" class="headerlink" title="jmap"></a>jmap</h4><p>看java进程内的对象</p>
+<h4 id="jstack"><a href="#jstack" class="headerlink" title="jstack"></a>jstack</h4><p>看线程状态．可以分析死锁．<br><figure class="highlight stylus"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="string">"http-9096-exec-1011"</span> daemon prio=<span class="number">10</span> tid=<span class="number">0</span>x00007f2b34022800 nid=<span class="number">0</span>x7b40 waiting <span class="keyword">for</span> monitor entry [<span class="number">0</span>x00007f2824e0c000]</span><br><span class="line">   java<span class="class">.lang</span><span class="class">.Thread</span><span class="class">.State</span>: BLOCKED (on <span class="tag">object</span> monitor)</span><br><span class="line">	at org<span class="class">.apache</span><span class="class">.log4j</span><span class="class">.Category</span><span class="class">.callAppenders</span>(Category<span class="class">.java</span>:<span class="number">204</span>)</span><br><span class="line">	- waiting to lock &lt;<span class="number">0</span>x00007f2c0cf662e0&gt; (<span class="tag">a</span> org<span class="class">.apache</span><span class="class">.log4j</span><span class="class">.spi</span><span class="class">.RootLogger</span>)</span><br><span class="line">	at org<span class="class">.apache</span><span class="class">.log4j</span><span class="class">.Category</span><span class="class">.forcedLog</span>(Category<span class="class">.java</span>:<span class="number">391</span>)</span><br><span class="line">	at org<span class="class">.apache</span><span class="class">.log4j</span><span class="class">.Category</span><span class="class">.log</span>(Category<span class="class">.java</span>:<span class="number">856</span>)</span><br></pre></td></tr></table></figure></p>
+<p>上面就是大量的线程在抢log4j的文件锁．</p>
+<h4 id="jconsole"><a href="#jconsole" class="headerlink" title="jconsole"></a>jconsole</h4><p>仪表盘式工具，可看cpu,类，gc,线程信息，不如visualvm好用．优点是jdk自带</p>
+<h4 id="visualvm"><a href="#visualvm" class="headerlink" title="visualvm"></a>visualvm</h4><p>非常好用的工具，带丰富的插件．</p>
+<h4 id="jmc"><a href="#jmc" class="headerlink" title="jmc"></a>jmc</h4><p>这个更好用的，但对jdk有版本要求．要求jdk7u40以上的版本．</p>
+<h2 id="u603B_u7ED3"><a href="#u603B_u7ED3" class="headerlink" title="总结"></a>总结</h2><ul>
+<li>理论来指导</li>
+<li>还要手术刀</li>
+</ul>
+<h3 id="u5206_u6790_u8FC7_u7A0B"><a href="#u5206_u6790_u8FC7_u7A0B" class="headerlink" title="分析过程"></a>分析过程</h3><ol>
+<li>看CPU负载</li>
+<li>看GC情况</li>
+<li>看硬盘io</li>
+<li>看网络io</li>
+<li>看线程状态</li>
+</ol>
+	  
+
+	  <div>
+  		<center>
+		  <div class="pagination">
+<ul class="pagination">
+	
+	
+	
+	
+	
+	
+		
+		
+	
+		
+		
+	
+		
+		
+	
+		
+		
+	
+		
+		
+	
+		
+		
+	
+		
+		
+			
+			
+		
+	
+		
+		
+	
+		
+		
+	
+		
+		
+	
+		
+		
+	
+		
+		
+	
+		
+		
+	
+		
+		
+			
+			
+			
+		
+		
+	
+		
+		
+	
+		
+		
+	
+		
+		
+	
+		
+		
+	
+		
+		
+	
+		
+		
+	
+		
+		
+	
+		
+		
+	
+		
+		
+			
+		
+	
+		
+		
+			
+		
+	
+		
+		
+	
+		
+		
+			
+		
+	
+		
+		
+	
+		
+		
+	
+		
+		
+	
+		
+		
+	
+		
+		
+	
+		
+		
+	
+		
+		
+	
+		
+		
+	
+		
+		
+	
+		
+		
+	
+		
+		
+	
+		
+		
+	
+		
+		
+	
+		
+		
+	
+		
+		
+	
+		
+		
+	
+		
+		
+	
+		
+		
+	
+		
+		
+	
+		
+		
+	
+		
+		
+	
+		
+		
+	
+		
+		
+	
+		
+		
+	
+		
+		
+	
+		
+		
+	
+		
+		
+	
+		
+		
+	
+		
+		
+	
+		
+		
+	
+		
+		
+	
+		
+		
+	
+		
+		
+	
+		
+		
+	
+		
+		
+	
+		
+		
+	
+		
+		
+	
+		
+		
+	
+		
+		
+	
+		
+		
+	
+		
+		
+	
+		
+		
+	
+		
+		
+	
+		
+		
+	
+		
+		
+	
+		
+		
+	
+		
+		
+	
+		
+		
+	
+		
+		
+	
+		
+		
+	
+		
+		
+	
+		
+		
+	
+		
+		
+	
+		
+		
+	
+		
+		
+	
+		
+		
+	
+		
+		
+	
+		
+		
+	
+		
+		
+	
+		
+		
+	
+		
+		
+	
+		
+		
+	
+		
+		
+	
+		
+		
+	
+		
+		
+	
+		
+		
+	
+		
+		
+	
+		
+		
+	
+		
+		
+	
+		
+		
+	
+		
+		
+	
+		
+		
+	
+		
+		
+	
+		
+		
+	
+		
+		
+	
+		
+		
+	
+		
+		
+	
+		
+		
+	
+		
+		
+	
+		
+		
+	
+		
+		
+	
+		
+		
+	
+		
+		
+	
+		
+		
+	
+	
+	
+		<li class="prev disabled"><a><i class="fa fa-arrow-circle-o-left"></i>prev</a></li>
+	
+	<li><a href="/"><i class="fa fa-archive"></i>Home</a></li>
+	
+		<li class="next"><a href="/2016/05/31/my-tools/" class="alignright next">next<i class="fa fa-arrow-circle-o-right"></i></a></li>
+	
+</ul>
+</div>
+
+		</center>
+	  </div>
+	  
+	</div> <!-- col-md-9/col-md-12 -->
+	
+  </div><!-- row -->
+
+	</div>
+  </div>
+  <div class="container-narrow">
+	<footer> <p>
+  &copy; 2016 niejinping
+  
+      with help from <a href="http://zespia.tw/hexo/" target="_blank">Hexo</a> and <a href="http://getbootstrap.com/" target="_blank">Twitter Bootstrap</a>. Theme by <a href="http://github.com/wzpan/hexo-theme-wixo/">Wixo</a>.    
+</p> </footer>
+  </div> <!-- container-narrow -->
+  
+<a id="gotop" href="#">   
+  <span>▲</span> 
+</a>
+
+<script src="/js/jquery.imagesloaded.min.js"></script>
+<script src="/js/gallery.js"></script>
+<script src="/js/bootstrap.min.js"></script>
+<script src="/js/jquery.tableofcontents.min.js"></script>
+<script src="/js/tocgenerator.min.js"></script>
+<script src="/js/main.js"></script>
+
+
+
+
+<link rel="stylesheet" href="/fancybox/jquery.fancybox.css" media="screen" type="text/css">
+<script src="/fancybox/jquery.fancybox.pack.js"></script>
+<script type="text/javascript">
+(function($){
+  $('.fancybox').fancybox();
+})(jQuery);
+</script>
+
+
+<script>
+var _hmt = _hmt || [];
+(function() {
+  var hm = document.createElement("script");
+  hm.src = "//hm.baidu.com/hm.js?78cd2d23583461b225b36bbf47433d64";
+  var s = document.getElementsByTagName("script")[0]; 
+  s.parentNode.insertBefore(hm, s);
+})();
+</script>
+
+</body>
+</html>

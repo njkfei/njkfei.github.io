@@ -1,0 +1,517 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+  <meta charset="utf-8">
+  
+  <title>java API文档一体化集成实践 | 游骑爬，生命在于折腾</title>
+  <meta name="author" content="niejinping">
+  
+  <meta name="description" content="学习总结，知识管理">
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+  <meta property="og:title" content="java API文档一体化集成实践"/>
+  <meta property="og:site_name" content="游骑爬，生命在于折腾"/>
+
+  
+    <meta property="og:image" content="undefined"/>
+  
+
+  
+    <link rel="alternative" href="/atom.xml" title="游骑爬，生命在于折腾" type="application/atom+xml">
+  
+  
+    <link href="/favicon.png" rel="icon">
+  
+  
+  <link rel="stylesheet" href="/css/bootstrap.min.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/css/font-awesome.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/css/style.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/css/highlight.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/css/google-fonts.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/css/responsive.css" media="screen" type="text/css">  
+  <link rel="stylesheet" href="/css/sidenav.css" media="screen" type="text/css">  
+  <!--[if lt IE 9]><script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script><![endif]-->
+
+  <script src="/js/jquery-2.0.3.min.js"></script>
+
+  <!-- analytics -->
+  
+<script type="text/javascript">
+var _gaq = _gaq || [];
+_gaq.push(['_setAccount', 'UA-72124819-1']);
+_gaq.push(['_trackPageview']);
+(function() {
+var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+
+ga.src = ('https:' == document.location.protocol ? 'https://' : 'http://') + 'stats.g.doubleclick.net/dc.js';
+
+var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+})();
+</script>
+
+
+</head>
+
+<body id="body" data-spy="scroll" data-target=".toc">
+  <div class="container" id="container">
+	<div class="content">
+	  <div class="page-header">		
+  <h1><a class="brand" href="/">游骑爬，生命在于折腾</a><span class="split"></span><span class="title">java API文档一体化集成实践</span><span class="date" id="title-date"><i class="fa fa-clock-o"></i> 2016-08-26</span></h1>
+</div>		
+
+<div class="row page">
+  <!-- cols -->	
+  
+  
+
+  
+	<div class="col-md-12">
+	  
+
+	  <!-- content -->
+	  <h1 id="springboot_api_u6587_u6863_u5728_u7EBF_u751F_u6210demo"><a href="#springboot_api_u6587_u6863_u5728_u7EBF_u751F_u6210demo" class="headerlink" title="springboot api文档在线生成demo"></a>springboot api文档在线生成demo</h1><p> api文档和代码同步是一个麻烦的问题。程序员中有一个笑话是：</p>
+<ul>
+<li>我讨厌写文档</li>
+<li><p>我讨厌没有文档</p>
+<p>即使有文档，也不保证文档和代码是一致的，特别是随着时间的推移，API文档和代码不同步的情况更严重。</p>
+<p>因此，解决办法就是，将API文档植入到代码当中。这样，同步性的问题基本解决。</p>
+<p>但是，需要考虑一个问题，就是API文档的安全性。文档和API一起发布在线上，那么需要避免API文档被外界窃取。<br>当然，方法是有的。</p>
+<h2 id="u6587_u6863_u4EE3_u7801_u4E00_u4F53_u5316"><a href="#u6587_u6863_u4EE3_u7801_u4E00_u4F53_u5316" class="headerlink" title="文档代码一体化"></a>文档代码一体化</h2><p>采用swagger开源插件，即可完美解决API文档和代码的一致性问题。</p>
+<h2 id="u5B89_u5168_u95EE_u9898"><a href="#u5B89_u5168_u95EE_u9898" class="headerlink" title="安全问题"></a>安全问题</h2><p>通过拦截机制，在生产环境下，拦截API文档的URL.测试环境下，打开API文档的URL.</p>
+</li>
+</ul>
+<h2 id="u76F8_u5173_u4F9D_u8D56"><a href="#u76F8_u5173_u4F9D_u8D56" class="headerlink" title="相关依赖"></a>相关依赖</h2><figure class="highlight css"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">compile</span>("<span class="tag">io</span><span class="class">.springfox</span><span class="pseudo">:springfox-swagger2</span><span class="pseudo">:2</span><span class="class">.5</span><span class="class">.0</span>")</span><br><span class="line"><span class="tag">compile</span>("<span class="tag">io</span><span class="class">.springfox</span><span class="pseudo">:springfox-swagger-ui</span><span class="pseudo">:2</span><span class="class">.5</span><span class="class">.0</span>")</span><br></pre></td></tr></table></figure>
+<h2 id="u914D_u7F6E"><a href="#u914D_u7F6E" class="headerlink" title="配置"></a>配置</h2><figure class="highlight vbscript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> SwaggerDocumentationConfig &#123;</span><br><span class="line"></span><br><span class="line">    ApiInfo apiInfo() &#123;</span><br><span class="line">        return <span class="keyword">new</span> ApiInfoBuilder()</span><br><span class="line">            .title(<span class="string">"MY API"</span>)</span><br><span class="line">            .description(<span class="string">"Move your app forward with the MY API"</span>)</span><br><span class="line">            .license(<span class="string">"sanhao"</span>)</span><br><span class="line">            .licenseUrl(<span class="string">"sanhao"</span>)</span><br><span class="line">            .termsOfServiceUrl(<span class="string">"sanhao"</span>)</span><br><span class="line">            .version(<span class="string">"1.0.0"</span>)</span><br><span class="line">            .contact(<span class="keyword">new</span> Contact(<span class="string">"niejinping"</span>,<span class="string">"www.sanhao.com"</span>, <span class="string">"297206021@qq.com"</span>))</span><br><span class="line">            .build();</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    @Bean</span><br><span class="line">    <span class="keyword">public</span> Docket customImplementation()&#123;</span><br><span class="line">        return <span class="keyword">new</span> Docket(DocumentationType.SWAGGER_2)</span><br><span class="line">                .<span class="keyword">select</span>()</span><br><span class="line">                    .apis(RequestHandlerSelectors.basePackage(<span class="string">"com.niejinkun.springbootgradle.api"</span>))</span><br><span class="line">                    .build()</span><br><span class="line">                .directModelSubstitute(org.joda.<span class="built_in">time</span>.LocalDate.<span class="keyword">class</span>, java.sql.<span class="built_in">Date</span>.<span class="keyword">class</span>)</span><br><span class="line">                .directModelSubstitute(org.joda.<span class="built_in">time</span>.DateTime.<span class="keyword">class</span>, java.util.<span class="built_in">Date</span>.<span class="keyword">class</span>)</span><br><span class="line">                .apiInfo(apiInfo());</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h2 id="u5B89_u5168_u8BBE_u7F6E"><a href="#u5B89_u5168_u8BBE_u7F6E" class="headerlink" title="安全设置"></a>安全设置</h2><figure class="highlight sml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line">protected void configure(<span class="type">HttpSecurity</span> http) throws <span class="type">Exception</span> &#123;</span><br><span class="line">    http.authorizeRequests<span class="literal">()</span>.antMatchers(<span class="string">"/swagger-ui.html"</span>).authenticated<span class="literal">()</span>.<span class="keyword">and</span><span class="literal">()</span>.httpBasic<span class="literal">()</span>;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">if</span>(api_enable == <span class="literal">false</span>) &#123;</span><br><span class="line">        http.authorizeRequests<span class="literal">()</span>.antMatchers(<span class="string">"/swagger-ui.html"</span>).denyAll<span class="literal">()</span>;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    http.csrf<span class="literal">()</span>.disable<span class="literal">()</span>;</span><br><span class="line"></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">@<span class="type">Autowired</span></span><br><span class="line">public void configureGlobal(<span class="type">AuthenticationManagerBuilder</span> auth) throws <span class="type">Exception</span> &#123;</span><br><span class="line">    auth</span><br><span class="line">            .inMemoryAuthentication<span class="literal">()</span></span><br><span class="line">            .withUser(user).password(password).roles(<span class="string">"USER"</span>);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h2 id="API_u53D1_u5E03"><a href="#API_u53D1_u5E03" class="headerlink" title="API发布"></a>API发布</h2><p>使用注解即可完成API的发布</p>
+<ul>
+<li>ApiOperation : api基于说明</li>
+<li>ApiResponses : API响应结果说明</li>
+<li>ApiParam : API参数说明<figure class="highlight dart"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line"><span class="annotation">@RestController</span></span><br><span class="line"><span class="annotation">@RequestMapping</span>(<span class="string">"/api"</span>)</span><br><span class="line">public <span class="class"><span class="keyword">class</span> <span class="title">ApiController</span> </span>&#123;</span><br><span class="line">    <span class="annotation">@RequestMapping</span>(value = <span class="string">"user/&#123;name&#125;/&#123;password&#125;"</span>,method= RequestMethod.GET,produces = <span class="string">"application/json"</span>)</span><br><span class="line">    <span class="annotation">@ApiOperation</span>(value=<span class="string">"测试-user"</span>, notes=<span class="string">"获取用户名"</span>,response = User.<span class="keyword">class</span>)</span><br><span class="line">    <span class="annotation">@ApiResponses</span>(value = &#123;</span><br><span class="line">        <span class="annotation">@ApiResponse</span>(code = <span class="number">200</span>, message = <span class="string">"返回结果正常"</span>, response = User.<span class="keyword">class</span>),</span><br><span class="line">        <span class="annotation">@ApiResponse</span>(code = <span class="number">201</span>, message = <span class="string">"返回结果异常"</span>, response = User.<span class="keyword">class</span>) &#125;)</span><br><span class="line">    public User user(  <span class="annotation">@ApiParam</span>(required=<span class="keyword">true</span>, name=<span class="string">"name"</span>, value=<span class="string">"姓名"</span>) <span class="annotation">@PathVariable</span>(<span class="string">"name"</span>)<span class="built_in">String</span> name,</span><br><span class="line">                       <span class="annotation">@ApiParam</span>(required=<span class="keyword">true</span>, name=<span class="string">"password"</span>, value=<span class="string">"密码"</span>) <span class="annotation">@PathVariable</span>(<span class="string">"password"</span>)<span class="built_in">String</span> password</span><br><span class="line">    )&#123;</span><br><span class="line">        <span class="comment">// DO YOUR LOGIC HERE</span></span><br><span class="line">        <span class="keyword">return</span> <span class="keyword">new</span> User(<span class="number">1</span>,name,password);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="annotation">@ApiIgnore</span><span class="comment">//使用该注解忽略这个API</span></span><br><span class="line">    <span class="annotation">@RequestMapping</span>(value = <span class="string">"/ignore"</span>)</span><br><span class="line">    public <span class="built_in">String</span> ignore() &#123;</span><br><span class="line"></span><br><span class="line">        <span class="keyword">return</span> <span class="string">"ignore"</span>;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+</li>
+</ul>
+<h2 id="u6548_u679C_u56FE"><a href="#u6548_u679C_u56FE" class="headerlink" title="效果图"></a>效果图</h2><p>输入：<br><figure class="highlight groovy"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="string">http:</span><span class="comment">//localhost:8090/v1/api-docs</span></span><br></pre></td></tr></table></figure></p>
+<p>返回：josn格式API说明，可以有editor.swagger.io里面直接查看。<br>输入<br><figure class="highlight groovy"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="string">http:</span><span class="comment">//localhost:8090/v1/swagger-ui.html</span></span><br></pre></td></tr></table></figure></p>
+<p>返回API UI界面，非常的漂亮。</p>
+<h2 id="u5173_u4E8E_u5751"><a href="#u5173_u4E8E_u5751" class="headerlink" title="关于坑"></a>关于坑</h2><h3 id="u57511"><a href="#u57511" class="headerlink" title="坑1"></a>坑1</h3><p>API返回的结果是json格式，因此，需要json格式转换包<br><figure class="highlight stylus"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="title">compile</span><span class="params">(<span class="string">'org.codehaus.jackson:jackson-jaxrs:1.5.4'</span>)</span></span></span><br><span class="line"><span class="function"><span class="title">compile</span><span class="params">(<span class="string">'org.codehaus.jackson:jackson-mapper-asl:1.9.13'</span>)</span></span></span><br><span class="line"><span class="function"><span class="title">compile</span><span class="params">(<span class="string">'org.codehaus.jackson:jackson-core-asl:1.9.13'</span>)</span></span></span><br></pre></td></tr></table></figure></p>
+<h3 id="u57512"><a href="#u57512" class="headerlink" title="坑2"></a>坑2</h3><p>API反序列化对象是，必须设置getter/setter<br>如果model不设置getter/setter，会返回序列化异常</p>
+<h2 id="github"><a href="#github" class="headerlink" title="github"></a>github</h2><p> <a href="https://github.com/njkfei/springboot-api-docs" target="_blank" rel="external">https://github.com/njkfei/springboot-api-docs</a></p>
+	  
+
+	  <div>
+  		<center>
+		  <div class="pagination">
+<ul class="pagination">
+	
+	
+	
+	
+	
+	
+		
+		
+	
+		
+		
+	
+		
+		
+	
+		
+		
+	
+		
+		
+	
+		
+		
+	
+		
+		
+	
+		
+		
+			
+			
+		
+	
+		
+		
+			
+			
+			
+		
+		
+			
+		
+	
+		
+		
+			
+		
+	
+		
+		
+	
+		
+		
+	
+		
+		
+	
+		
+		
+	
+		
+		
+	
+		
+		
+	
+		
+		
+	
+		
+		
+	
+		
+		
+	
+		
+		
+	
+		
+		
+	
+		
+		
+	
+		
+		
+	
+		
+		
+	
+		
+		
+	
+		
+		
+	
+		
+		
+	
+		
+		
+	
+		
+		
+	
+		
+		
+	
+		
+		
+	
+		
+		
+	
+		
+		
+	
+		
+		
+	
+		
+		
+	
+		
+		
+	
+		
+		
+	
+		
+		
+	
+		
+		
+	
+		
+		
+	
+		
+		
+	
+		
+		
+	
+		
+		
+	
+		
+		
+	
+		
+		
+	
+		
+		
+	
+		
+		
+	
+		
+		
+	
+		
+		
+	
+		
+		
+	
+		
+		
+	
+		
+		
+	
+		
+		
+	
+		
+		
+	
+		
+		
+	
+		
+		
+	
+		
+		
+	
+		
+		
+	
+		
+		
+	
+		
+		
+	
+		
+		
+	
+		
+		
+	
+		
+		
+	
+		
+		
+	
+		
+		
+	
+		
+		
+	
+		
+		
+	
+		
+		
+	
+		
+		
+	
+		
+		
+	
+		
+		
+	
+		
+		
+	
+		
+		
+	
+		
+		
+	
+		
+		
+	
+		
+		
+	
+		
+		
+	
+		
+		
+	
+		
+		
+	
+		
+		
+	
+		
+		
+	
+		
+		
+	
+		
+		
+	
+		
+		
+	
+		
+		
+	
+		
+		
+	
+		
+		
+	
+		
+		
+	
+		
+		
+	
+		
+		
+	
+		
+		
+	
+		
+		
+	
+		
+		
+	
+		
+		
+	
+		
+		
+	
+		
+		
+	
+		
+		
+	
+		
+		
+	
+		
+		
+	
+		
+		
+	
+		
+		
+	
+		
+		
+	
+		
+		
+	
+		
+		
+	
+		
+		
+	
+		
+		
+	
+		
+		
+	
+		
+		
+	
+		
+		
+	
+		
+		
+	
+	
+	
+		<li class="prev disabled"><a><i class="fa fa-arrow-circle-o-left"></i>prev</a></li>
+	
+	<li><a href="/"><i class="fa fa-archive"></i>Home</a></li>
+	
+		<li class="next"><a href="/2016/08/24/java架构最佳实践/" class="alignright next">next<i class="fa fa-arrow-circle-o-right"></i></a></li>
+	
+</ul>
+</div>
+
+		</center>
+	  </div>
+	  
+	</div> <!-- col-md-9/col-md-12 -->
+	
+  </div><!-- row -->
+
+	</div>
+  </div>
+  <div class="container-narrow">
+	<footer> <p>
+  &copy; 2016 niejinping
+  
+      with help from <a href="http://zespia.tw/hexo/" target="_blank">Hexo</a> and <a href="http://getbootstrap.com/" target="_blank">Twitter Bootstrap</a>. Theme by <a href="http://github.com/wzpan/hexo-theme-wixo/">Wixo</a>.    
+</p> </footer>
+  </div> <!-- container-narrow -->
+  
+<a id="gotop" href="#">   
+  <span>▲</span> 
+</a>
+
+<script src="/js/jquery.imagesloaded.min.js"></script>
+<script src="/js/gallery.js"></script>
+<script src="/js/bootstrap.min.js"></script>
+<script src="/js/jquery.tableofcontents.min.js"></script>
+<script src="/js/tocgenerator.min.js"></script>
+<script src="/js/main.js"></script>
+
+
+
+
+<link rel="stylesheet" href="/fancybox/jquery.fancybox.css" media="screen" type="text/css">
+<script src="/fancybox/jquery.fancybox.pack.js"></script>
+<script type="text/javascript">
+(function($){
+  $('.fancybox').fancybox();
+})(jQuery);
+</script>
+
+
+<script>
+var _hmt = _hmt || [];
+(function() {
+  var hm = document.createElement("script");
+  hm.src = "//hm.baidu.com/hm.js?78cd2d23583461b225b36bbf47433d64";
+  var s = document.getElementsByTagName("script")[0]; 
+  s.parentNode.insertBefore(hm, s);
+})();
+</script>
+
+</body>
+</html>

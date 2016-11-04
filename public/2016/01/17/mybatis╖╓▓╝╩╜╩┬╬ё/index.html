@@ -1,0 +1,573 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+  <meta charset="utf-8">
+  
+  <title>mybatis分布式事务管理 | 游骑爬，生命在于折腾</title>
+  <meta name="author" content="niejinping">
+  
+  <meta name="description" content="学习总结，知识管理">
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+  <meta property="og:title" content="mybatis分布式事务管理"/>
+  <meta property="og:site_name" content="游骑爬，生命在于折腾"/>
+
+  
+    <meta property="og:image" content="undefined"/>
+  
+
+  
+    <link rel="alternative" href="/atom.xml" title="游骑爬，生命在于折腾" type="application/atom+xml">
+  
+  
+    <link href="/favicon.png" rel="icon">
+  
+  
+  <link rel="stylesheet" href="/css/bootstrap.min.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/css/font-awesome.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/css/style.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/css/highlight.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/css/google-fonts.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/css/responsive.css" media="screen" type="text/css">  
+  <link rel="stylesheet" href="/css/sidenav.css" media="screen" type="text/css">  
+  <!--[if lt IE 9]><script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script><![endif]-->
+
+  <script src="/js/jquery-2.0.3.min.js"></script>
+
+  <!-- analytics -->
+  
+<script type="text/javascript">
+var _gaq = _gaq || [];
+_gaq.push(['_setAccount', 'UA-72124819-1']);
+_gaq.push(['_trackPageview']);
+(function() {
+var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+
+ga.src = ('https:' == document.location.protocol ? 'https://' : 'http://') + 'stats.g.doubleclick.net/dc.js';
+
+var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+})();
+</script>
+
+
+</head>
+
+<body id="body" data-spy="scroll" data-target=".toc">
+  <div class="container" id="container">
+	<div class="content">
+	  <div class="page-header">		
+  <h1><a class="brand" href="/">游骑爬，生命在于折腾</a><span class="split"></span><span class="title">mybatis分布式事务管理</span><span class="date" id="title-date"><i class="fa fa-clock-o"></i> 2016-01-17</span></h1>
+</div>		
+
+<div class="row page">
+  <!-- cols -->	
+  
+  <div class="col-xs-12 col-sm-3 col-md-3 toc"> 
+	<!-- toc -->
+<script type="text/javascript">
+		jQuery(document).ready(function() {
+ 		   generateWikiTOC('.note', '.toc',  2 , 2 );
+		});
+</script>
+  </div><!-- col-md-3 -->
+  
+  
+
+  
+  <div class="col-xs-12 col-sm-9 col-md-9 note">
+	
+
+	  <!-- content -->
+	  <p>  <strong>mybatis</strong>提供了数据访问框架.相对hibernate，它更轻量化，相对jdbc，它更人性化．是java系访问数据库的最佳框架．mybatis的最佳实践，是与spring协同工作．<br>　下面以本人github项目<a href="https://github.com/njkfei/spring-jta-mybatis.git" target="_blank" rel="external">https://github.com/njkfei/spring-jta-mybatis.git</a>进行说明。<br> 该项目基于spring jdbctemplate atomikos 构建本项目,旨在学习分布式事务管理。下列均有所涉及：</p>
+<ul>
+<li>spring 提供框架管理功能。</li>
+<li>mybatis提供数据访问框架</li>
+<li>全部采用注解驱动</li>
+<li>atomikos提供分布式事务处理框架<br>基本思路是配置两个数据源，每个数据源使用atomikos提供的数据源接口，再配置相应的dao.最后再使用atomikos提供事务处理框架。<br> 本文以用户注册给送一张优惠券为例，进行说明。<br> 当用户注册时，向用户表接入用户数据。同时向优惠券表加入一条优惠券记录。用户表和优惠表分别在不同的数据库中。<h2 id="u5173_u952E_u4F9D_u8D56_u7BA1_u7406"><a href="#u5173_u952E_u4F9D_u8D56_u7BA1_u7406" class="headerlink" title="关键依赖管理"></a>关键依赖管理</h2><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line">&lt;dependency&gt;</span><br><span class="line">	&lt;groupId&gt;javax&lt;/groupId&gt;</span><br><span class="line">	&lt;artifactId&gt;javaee-api&lt;/artifactId&gt;</span><br><span class="line">	&lt;version&gt;<span class="number">7.0</span>&lt;/version&gt;</span><br><span class="line">&lt;/dependency&gt;</span><br><span class="line">&lt;dependency&gt;</span><br><span class="line">	&lt;groupId&gt;org.springframework.data&lt;/groupId&gt;</span><br><span class="line">	&lt;artifactId&gt;spring-data-jpa&lt;/artifactId&gt;</span><br><span class="line">	&lt;version&gt;<span class="number">1.8</span>.<span class="number">0</span>.RELEASE&lt;/version&gt;</span><br><span class="line">&lt;/dependency&gt;</span><br><span class="line">&lt;dependency&gt;</span><br><span class="line">	&lt;groupId&gt;com.atomikos&lt;/groupId&gt;</span><br><span class="line">	&lt;artifactId&gt;transactions-jdbc&lt;/artifactId&gt;</span><br><span class="line">	&lt;version&gt;<span class="number">4.0</span>.<span class="number">0</span>M4&lt;/version&gt;</span><br><span class="line">&lt;/dependency&gt;</span><br></pre></td></tr></table></figure>
+</li>
+</ul>
+<h2 id="u5173_u952E_u4EE3_u7801"><a href="#u5173_u952E_u4EE3_u7801" class="headerlink" title="关键代码"></a>关键代码</h2><h3 id="CouponDao"><a href="#CouponDao" class="headerlink" title="CouponDao"></a>CouponDao</h3> <figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">@Repository</span><br><span class="line">public interface CouponDao &#123;	</span><br><span class="line">	@Insert(<span class="string">"insert into coupon(username,type,value) values(#&#123;username&#125;,#&#123;type&#125;,#&#123;value&#125;)"</span>)</span><br><span class="line">	int insertCoupon(Coupon coupon);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h3 id="UserDao"><a href="#UserDao" class="headerlink" title="UserDao"></a>UserDao</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">public interface UserDao &#123;</span><br><span class="line">	@Insert(<span class="string">"insert into user2(username,password) values(#&#123;username&#125;,#&#123;password&#125;)"</span>)</span><br><span class="line">	int insertUser(User user);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h3 id="UserService"><a href="#UserService" class="headerlink" title="UserService"></a>UserService</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line">@Service(<span class="string">"userService"</span>)</span><br><span class="line">public class UserService &#123;</span><br><span class="line">	</span><br><span class="line">	@Autowired</span><br><span class="line">	@Qualifier(<span class="string">"userDao"</span>)</span><br><span class="line">	private UserDao userDao;</span><br><span class="line">	@Autowired</span><br><span class="line">	@Qualifier(<span class="string">"couponDao"</span>)</span><br><span class="line">	private CouponDao couponDao;</span><br><span class="line">	</span><br><span class="line">	@Transactional</span><br><span class="line">	public void save(User user,Coupon coupon)&#123;</span><br><span class="line">		userDao.insertUser(user);</span><br><span class="line">		couponDao.insertCoupon(coupon);</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h3 id="java_config_u914D_u7F6E"><a href="#java_config_u914D_u7F6E" class="headerlink" title="java config配置"></a>java config配置</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br><span class="line">101</span><br><span class="line">102</span><br><span class="line">103</span><br><span class="line">104</span><br><span class="line">105</span><br><span class="line">106</span><br><span class="line">107</span><br><span class="line">108</span><br><span class="line">109</span><br><span class="line">110</span><br><span class="line">111</span><br><span class="line">112</span><br><span class="line">113</span><br><span class="line">114</span><br><span class="line">115</span><br><span class="line">116</span><br><span class="line">117</span><br><span class="line">118</span><br><span class="line">119</span><br><span class="line">120</span><br><span class="line">121</span><br><span class="line">122</span><br><span class="line">123</span><br><span class="line">124</span><br><span class="line">125</span><br><span class="line">126</span><br><span class="line">127</span><br><span class="line">128</span><br><span class="line">129</span><br><span class="line">130</span><br><span class="line">131</span><br><span class="line">132</span><br><span class="line">133</span><br><span class="line">134</span><br><span class="line">135</span><br><span class="line">136</span><br><span class="line">137</span><br><span class="line">138</span><br><span class="line">139</span><br><span class="line">140</span><br><span class="line">141</span><br><span class="line">142</span><br><span class="line">143</span><br><span class="line">144</span><br><span class="line">145</span><br><span class="line">146</span><br><span class="line">147</span><br><span class="line">148</span><br><span class="line">149</span><br><span class="line">150</span><br><span class="line">151</span><br><span class="line">152</span><br><span class="line">153</span><br><span class="line">154</span><br><span class="line">155</span><br><span class="line">156</span><br><span class="line">157</span><br><span class="line">158</span><br><span class="line">159</span><br><span class="line">160</span><br><span class="line">161</span><br><span class="line">162</span><br><span class="line">163</span><br><span class="line">164</span><br><span class="line">165</span><br><span class="line">166</span><br><span class="line">167</span><br><span class="line">168</span><br><span class="line">169</span><br><span class="line">170</span><br><span class="line">171</span><br><span class="line">172</span><br><span class="line">173</span><br><span class="line">174</span><br><span class="line">175</span><br><span class="line">176</span><br><span class="line">177</span><br><span class="line">178</span><br><span class="line">179</span><br><span class="line">180</span><br><span class="line">181</span><br><span class="line">182</span><br><span class="line">183</span><br><span class="line">184</span><br><span class="line">185</span><br><span class="line">186</span><br><span class="line">187</span><br><span class="line">188</span><br><span class="line">189</span><br><span class="line">190</span><br><span class="line">191</span><br><span class="line">192</span><br><span class="line">193</span><br><span class="line">194</span><br><span class="line">195</span><br><span class="line">196</span><br><span class="line">197</span><br><span class="line">198</span><br><span class="line">199</span><br><span class="line">200</span><br><span class="line">201</span><br><span class="line">202</span><br><span class="line">203</span><br><span class="line">204</span><br><span class="line">205</span><br><span class="line">206</span><br><span class="line">207</span><br><span class="line">208</span><br><span class="line">209</span><br><span class="line">210</span><br><span class="line">211</span><br><span class="line">212</span><br><span class="line">213</span><br><span class="line">214</span><br><span class="line">215</span><br><span class="line">216</span><br></pre></td><td class="code"><pre><span class="line">package xyz.hollysys.spring.mybatis_super.config;</span><br><span class="line"></span><br><span class="line">import java.util.HashMap;</span><br><span class="line">import java.util.Map;</span><br><span class="line">import java.util.Properties;</span><br><span class="line"></span><br><span class="line">import javax.transaction.SystemException;</span><br><span class="line"></span><br><span class="line">import org.apache.ibatis.session.SqlSessionFactory;</span><br><span class="line">import org.apache.log4j.Logger;</span><br><span class="line">import org.mybatis.spring.SqlSessionFactoryBean;</span><br><span class="line">import org.mybatis.spring.mapper.MapperFactoryBean;</span><br><span class="line">import org.springframework.beans.factory.annotation.Value;</span><br><span class="line">import org.springframework.context.annotation.Bean;</span><br><span class="line">import org.springframework.context.annotation.ComponentScan;</span><br><span class="line">import org.springframework.context.annotation.Configuration;</span><br><span class="line">import org.springframework.context.annotation.PropertySource;</span><br><span class="line">import org.springframework.context.support.PropertySourcesPlaceholderConfigurer;</span><br><span class="line">import org.springframework.jdbc.core.JdbcTemplate;</span><br><span class="line">import org.springframework.transaction.annotation.EnableTransactionManagement;</span><br><span class="line">import org.springframework.transaction.jta.JtaTransactionManager;</span><br><span class="line"></span><br><span class="line">import com.atomikos.icatch.jta.UserTransactionImp;</span><br><span class="line">import com.atomikos.icatch.jta.UserTransactionManager;</span><br><span class="line">import com.atomikos.jdbc.AtomikosDataSourceBean;</span><br><span class="line">import com.mysql.jdbc.jdbc2.optional.MysqlXADataSource;</span><br><span class="line"></span><br><span class="line">import xyz.hollysys.spring.mybatis_super.dao.CouponDao;</span><br><span class="line">import xyz.hollysys.spring.mybatis_super.dao.UserDao;</span><br><span class="line"></span><br><span class="line">@Configuration</span><br><span class="line">@EnableTransactionManagement</span><br><span class="line">@ComponentScan(basePackages =&#123; <span class="string">"xyz.hollysys.spring.mybatis_super.service"</span>&#125;)</span><br><span class="line">@PropertySource(value = &#123; <span class="string">"classpath:jdbc.properties"</span>, <span class="string">"classpath:log4j.properties"</span> &#125;)</span><br><span class="line">public class MybatisConfiguration &#123;</span><br><span class="line">	static Logger logger = Logger.getLogger(MybatisConfiguration.class);</span><br><span class="line"></span><br><span class="line">	// master database</span><br><span class="line">	@Value(<span class="string">"<span class="variable">$&#123;jdbc.driverClassName:com.mysql.jdbc.Driver&#125;</span>"</span>)</span><br><span class="line">	private String driverClassName;</span><br><span class="line"></span><br><span class="line">	@Value(<span class="string">"<span class="variable">$&#123;jdbc.url:jdbc:mysql://localhost:3306/sanhao_test&#125;</span>"</span>)</span><br><span class="line">	private String url;</span><br><span class="line"></span><br><span class="line">	@Value(<span class="string">"<span class="variable">$&#123;jdbc.username:root&#125;</span>"</span>)</span><br><span class="line">	private String username;</span><br><span class="line"></span><br><span class="line">	@Value(<span class="string">"<span class="variable">$&#123;jdbc.password:root&#125;</span>"</span>)</span><br><span class="line">	private String password;</span><br><span class="line">	</span><br><span class="line">	// slave database</span><br><span class="line">	@Value(<span class="string">"<span class="variable">$&#123;jdbc2.driverClassName:com.mysql.jdbc.Driver&#125;</span>"</span>)</span><br><span class="line">	private String driverClassName2;</span><br><span class="line"></span><br><span class="line">	@Value(<span class="string">"<span class="variable">$&#123;jdbc2.url:jdbc:mysql://localhost:3306/test&#125;</span>"</span>)</span><br><span class="line">	private String url2;</span><br><span class="line"></span><br><span class="line">	@Value(<span class="string">"<span class="variable">$&#123;jdbc2.username:root&#125;</span>"</span>)</span><br><span class="line">	private String username2;</span><br><span class="line"></span><br><span class="line">	@Value(<span class="string">"<span class="variable">$&#123;jdbc2.password:root&#125;</span>"</span>)</span><br><span class="line">	private String password2;</span><br><span class="line"></span><br><span class="line">	</span><br><span class="line">	public static final String MAPPERS_PACKAGE_NAME = <span class="string">"xyz.hollysys.spring.mybatis_super.model"</span>;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">    //You need this</span><br><span class="line">    @Bean</span><br><span class="line">    public static PropertySourcesPlaceholderConfigurer <span class="function"><span class="title">propertySourcesPlaceholderConfigurer</span></span>() &#123;</span><br><span class="line">       <span class="built_in">return</span> new PropertySourcesPlaceholderConfigurer();</span><br><span class="line">    &#125;</span><br><span class="line">	</span><br><span class="line"></span><br><span class="line">	</span><br><span class="line">	@Bean(name=<span class="string">"master"</span>,initMethod = <span class="string">"init"</span>, destroyMethod = <span class="string">"close"</span>)</span><br><span class="line">	public AtomikosDataSourceBean <span class="function"><span class="title">AtomikosDataSourceA</span></span>()&#123;</span><br><span class="line">		AtomikosDataSourceBean bean =  new AtomikosDataSourceBean();</span><br><span class="line">		bean.setXaDataSourceClassName(MysqlXADataSource.class.getCanonicalName());</span><br><span class="line">		bean.setXaProperties(xaPropertiesA());</span><br><span class="line">		bean.setUniqueResourceName(<span class="string">"master"</span>);</span><br><span class="line">		bean.setM<span class="keyword">in</span>PoolSize(<span class="number">1</span>);</span><br><span class="line">		bean.setMaxPoolSize(<span class="number">3</span>);</span><br><span class="line">		bean.setMaxIdleTime(<span class="number">60</span>);</span><br><span class="line">		bean.setPoolSize(<span class="number">1</span>);</span><br><span class="line">		<span class="built_in">return</span> bean;</span><br><span class="line">		</span><br><span class="line">	&#125;</span><br><span class="line">	</span><br><span class="line">	@Bean(name=<span class="string">"slave"</span>,initMethod = <span class="string">"init"</span>, destroyMethod = <span class="string">"close"</span>)</span><br><span class="line">	public AtomikosDataSourceBean <span class="function"><span class="title">AtomikosDataSourceB</span></span>()&#123;</span><br><span class="line">		AtomikosDataSourceBean bean =  new AtomikosDataSourceBean();</span><br><span class="line">		bean.setXaDataSourceClassName(MysqlXADataSource.class.getCanonicalName());</span><br><span class="line">		bean.setXaProperties(xaPropertiesB());</span><br><span class="line">		bean.setUniqueResourceName(<span class="string">"slave"</span>);</span><br><span class="line">		bean.setM<span class="keyword">in</span>PoolSize(<span class="number">1</span>);</span><br><span class="line">		bean.setMaxPoolSize(<span class="number">3</span>);</span><br><span class="line">		bean.setMaxIdleTime(<span class="number">60</span>);</span><br><span class="line">		bean.setPoolSize(<span class="number">1</span>);</span><br><span class="line">		<span class="built_in">return</span> bean;</span><br><span class="line">		</span><br><span class="line">	&#125;</span><br><span class="line">	</span><br><span class="line">	@Bean</span><br><span class="line">	public Properties <span class="function"><span class="title">xaPropertiesA</span></span>() &#123;</span><br><span class="line">		Properties props = new Properties();</span><br><span class="line">		props.setProperty(<span class="string">"URL"</span>, url);</span><br><span class="line">		props.setProperty(<span class="string">"user"</span>, username);</span><br><span class="line">		props.setProperty(<span class="string">"password"</span>, password);</span><br><span class="line">		<span class="built_in">return</span> props;</span><br><span class="line">	&#125;	</span><br><span class="line">	</span><br><span class="line">	@Bean</span><br><span class="line">	public Properties <span class="function"><span class="title">xaPropertiesB</span></span>() &#123;</span><br><span class="line">		Properties props = new Properties();</span><br><span class="line">		props.setProperty(<span class="string">"URL"</span>, url2);</span><br><span class="line">		props.setProperty(<span class="string">"user"</span>, username2);</span><br><span class="line">		props.setProperty(<span class="string">"password"</span>, password2);</span><br><span class="line">		<span class="built_in">return</span> props;</span><br><span class="line">	&#125;</span><br><span class="line"></span><br><span class="line">	public Map&lt;Object, Object&gt; <span class="function"><span class="title">targetDataSourcesJta</span></span>() &#123;</span><br><span class="line">		Map&lt;Object, Object&gt; map = new HashMap&lt;Object, Object&gt;();</span><br><span class="line">		map.put(<span class="string">"master"</span>, AtomikosDataSourceA());</span><br><span class="line">		map.put(<span class="string">"slave"</span>, AtomikosDataSourceB());</span><br><span class="line">		</span><br><span class="line">		<span class="built_in">return</span> map;</span><br><span class="line">	&#125;</span><br><span class="line">	</span><br><span class="line">	@Bean(name=<span class="string">"jdbcTemplateA"</span>)</span><br><span class="line">	public JdbcTemplate <span class="function"><span class="title">jdbcTempalteA</span></span>()&#123;</span><br><span class="line">		JdbcTemplate template = new JdbcTemplate();</span><br><span class="line">		template.setDataSource(AtomikosDataSourceA());</span><br><span class="line">		<span class="built_in">return</span> template;</span><br><span class="line">	&#125;</span><br><span class="line">	</span><br><span class="line">	@Bean(name=<span class="string">"jdbcTemplateB"</span>)</span><br><span class="line">	public JdbcTemplate <span class="function"><span class="title">jdbcTempalteB</span></span>()&#123;</span><br><span class="line">		JdbcTemplate template = new JdbcTemplate();</span><br><span class="line">		template.setDataSource(AtomikosDataSourceB());</span><br><span class="line">		<span class="built_in">return</span> template;</span><br><span class="line">	&#125;</span><br><span class="line">	</span><br><span class="line">	public static final String MAPPERS_PACKAGE_NAME_2 = <span class="string">"xyz.hollysys.spring.mybatis_super.model.CouponDao"</span>;</span><br><span class="line">	@Bean(name = <span class="string">"jdbcmaster"</span>)</span><br><span class="line">	public SqlSessionFactoryBean sqlSessionFactoryA() throws Exception &#123;</span><br><span class="line">		SqlSessionFactoryBean sessionFactory = new SqlSessionFactoryBean();</span><br><span class="line">		sessionFactory.setDataSource(AtomikosDataSourceA());</span><br><span class="line">		sessionFactory.setTypeAliasesPackage(MAPPERS_PACKAGE_NAME);</span><br><span class="line">		<span class="built_in">return</span> sessionFactory;</span><br><span class="line">	&#125;</span><br><span class="line">	</span><br><span class="line">	</span><br><span class="line">	@Bean(name = <span class="string">"jdbcslave"</span>)</span><br><span class="line">	public SqlSessionFactoryBean sqlSessionFactoryB() throws Exception &#123;</span><br><span class="line">		SqlSessionFactoryBean sessionFactory = new SqlSessionFactoryBean();</span><br><span class="line">		sessionFactory.setDataSource(AtomikosDataSourceB());</span><br><span class="line">		sessionFactory.setTypeAliasesPackage(MAPPERS_PACKAGE_NAME);</span><br><span class="line">		<span class="built_in">return</span> sessionFactory;</span><br><span class="line">	&#125;</span><br><span class="line">	</span><br><span class="line">	@Bean(name = <span class="string">"userDao"</span>)</span><br><span class="line">	public MapperFactoryBean <span class="function"><span class="title">mapperFactoryBeanMaster</span></span>()&#123;</span><br><span class="line">		MapperFactoryBean mapper = new MapperFactoryBean();</span><br><span class="line">		try &#123;</span><br><span class="line">			mapper.setSqlSessionFactory( sqlSessionFactoryA().getObject());</span><br><span class="line">		&#125; catch (Exception e) &#123;</span><br><span class="line">			// TODO Auto-generated catch block</span><br><span class="line">			e.printStackTrace();</span><br><span class="line">		&#125;</span><br><span class="line">		mapper.setMapperInterface(UserDao.class);</span><br><span class="line">		<span class="built_in">return</span> mapper;</span><br><span class="line">	&#125;</span><br><span class="line">	</span><br><span class="line">	@Bean(name = <span class="string">"couponDao"</span>)</span><br><span class="line">	public MapperFactoryBean <span class="function"><span class="title">mapperFactoryBeanSlave</span></span>()&#123;</span><br><span class="line">		MapperFactoryBean mapper = new MapperFactoryBean();</span><br><span class="line">		try &#123;</span><br><span class="line">			mapper.setSqlSessionFactory(sqlSessionFactoryB().getObject());</span><br><span class="line">		&#125; catch (Exception e) &#123;</span><br><span class="line">			// TODO Auto-generated catch block</span><br><span class="line">			e.printStackTrace();</span><br><span class="line">		&#125;</span><br><span class="line">		mapper.setMapperInterface(CouponDao.class);</span><br><span class="line">		<span class="built_in">return</span> mapper;</span><br><span class="line">	&#125;</span><br><span class="line">	</span><br><span class="line">	@Bean</span><br><span class="line">	public UserTransactionManager <span class="function"><span class="title">userTransactionManager</span></span>()&#123;</span><br><span class="line">		UserTransactionManager userJta = new UserTransactionManager();</span><br><span class="line">		userJta.setForceShutdown(<span class="literal">true</span>);</span><br><span class="line">		</span><br><span class="line">		<span class="built_in">return</span> userJta;</span><br><span class="line">	&#125;</span><br><span class="line">	</span><br><span class="line">	@Bean</span><br><span class="line">	public UserTransactionImp <span class="function"><span class="title">userTransactionImp</span></span>()&#123;</span><br><span class="line">		UserTransactionImp userJtaImpl = new UserTransactionImp();</span><br><span class="line">		try &#123;</span><br><span class="line">			userJtaImpl.setTransactionTimeout(<span class="number">300</span>);</span><br><span class="line">		&#125; catch (SystemException e) &#123;</span><br><span class="line">			e.printStackTrace();</span><br><span class="line">		&#125;</span><br><span class="line">		<span class="built_in">return</span> userJtaImpl;</span><br><span class="line">	&#125;</span><br><span class="line">	</span><br><span class="line">	@Bean(name=<span class="string">"transactionManager"</span>)</span><br><span class="line">	public JtaTransactionManager <span class="function"><span class="title">jtaTransactionManager</span></span>()&#123;</span><br><span class="line">		logger.info(<span class="string">"transactionManager"</span>);</span><br><span class="line">		JtaTransactionManager jta = new JtaTransactionManager();</span><br><span class="line">		//jta.setTransactionManager(userTransactionManager());</span><br><span class="line">		jta.setUserTransaction(userTransactionImp());</span><br><span class="line">		<span class="built_in">return</span> jta;</span><br><span class="line">	&#125;</span><br><span class="line">	</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h3 id="u6D4B_u8BD5_u4EE3_u7801"><a href="#u6D4B_u8BD5_u4EE3_u7801" class="headerlink" title="测试代码"></a>测试代码</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line">public class App </span><br><span class="line">&#123;</span><br><span class="line">    public static void main(String args[])&#123;</span><br><span class="line">        AbstractApplicationContext  context = new AnnotationConfigApplicationContext(JdbcConfiguration.class);</span><br><span class="line">         </span><br><span class="line">        UserService userService = (UserService) context.getBean(<span class="string">"userService"</span>);</span><br><span class="line">        </span><br><span class="line">		User user=new User(<span class="string">"njp"</span>,<span class="string">"njp"</span>);</span><br><span class="line">		Coupon coupon = new Coupon(user.getUsername(),<span class="string">"weixin"</span>,<span class="number">100</span>);</span><br><span class="line">		userService.save(user,coupon);</span><br><span class="line">		</span><br><span class="line">        context.close();</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>本项目没有xml配置文件，全部以注解的方式，进行配置注入。</p>
+<h4 id="u4E2A_u4EBAblog_3A_wiki-niejinkun-com"><a href="#u4E2A_u4EBAblog_3A_wiki-niejinkun-com" class="headerlink" title="个人blog: wiki.niejinkun.com"></a>个人blog: <a href="http://wiki.niejinkun.com">wiki.niejinkun.com</a></h4>	  
+
+	  <div>
+  		<center>
+		  <div class="pagination">
+<ul class="pagination">
+	
+	
+	
+	
+	
+	
+		
+		
+	
+		
+		
+	
+		
+		
+	
+		
+		
+	
+		
+		
+	
+		
+		
+	
+		
+		
+	
+		
+		
+	
+		
+		
+	
+		
+		
+	
+		
+		
+	
+		
+		
+	
+		
+		
+	
+		
+		
+	
+		
+		
+	
+		
+		
+			
+		
+	
+		
+		
+	
+		
+		
+	
+		
+		
+			
+		
+	
+		
+		
+	
+		
+		
+	
+		
+		
+	
+		
+		
+	
+		
+		
+	
+		
+		
+	
+		
+		
+			
+		
+	
+		
+		
+	
+		
+		
+			
+		
+	
+		
+		
+			
+		
+	
+		
+		
+			
+		
+	
+		
+		
+			
+		
+	
+		
+		
+			
+		
+	
+		
+		
+			
+		
+	
+		
+		
+			
+		
+	
+		
+		
+			
+		
+	
+		
+		
+	
+		
+		
+	
+		
+		
+			
+		
+	
+		
+		
+	
+		
+		
+			
+		
+	
+		
+		
+			
+		
+	
+		
+		
+	
+		
+		
+	
+		
+		
+	
+		
+		
+	
+		
+		
+	
+		
+		
+	
+		
+		
+			
+		
+	
+		
+		
+	
+		
+		
+	
+		
+		
+	
+		
+		
+	
+		
+		
+	
+		
+		
+	
+		
+		
+	
+		
+		
+	
+		
+		
+	
+		
+		
+	
+		
+		
+	
+		
+		
+	
+		
+		
+	
+		
+		
+	
+		
+		
+	
+		
+		
+	
+		
+		
+			
+		
+	
+		
+		
+			
+		
+	
+		
+		
+			
+		
+	
+		
+		
+			
+		
+	
+		
+		
+			
+		
+	
+		
+		
+			
+		
+	
+		
+		
+			
+			
+		
+	
+		
+		
+	
+		
+		
+			
+			
+			
+		
+		
+	
+		
+		
+	
+		
+		
+	
+		
+		
+	
+		
+		
+			
+		
+	
+		
+		
+	
+		
+		
+			
+		
+	
+		
+		
+			
+		
+	
+		
+		
+	
+		
+		
+			
+		
+	
+		
+		
+	
+		
+		
+	
+		
+		
+	
+		
+		
+	
+		
+		
+	
+		
+		
+			
+		
+	
+		
+		
+	
+		
+		
+	
+		
+		
+			
+		
+	
+		
+		
+			
+		
+	
+		
+		
+	
+		
+		
+	
+		
+		
+	
+		
+		
+	
+		
+		
+			
+		
+	
+		
+		
+	
+		
+		
+	
+		
+		
+	
+		
+		
+	
+		
+		
+	
+		
+		
+	
+		
+		
+	
+		
+		
+			
+		
+	
+		
+		
+			
+		
+	
+		
+		
+			
+		
+	
+		
+		
+	
+		
+		
+	
+		
+		
+	
+	
+	
+		<li class="prev"><a href="/2016/01/17/jdbctemplate分布式事务/" class="alignleft prev"><i class="fa fa-arrow-circle-o-left"></i>prev</a></li>
+	
+	<li><a href="/"><i class="fa fa-archive"></i>Home</a></li>
+	
+		<li class="next"><a href="/2016/01/17/mybatis/" class="alignright next">next<i class="fa fa-arrow-circle-o-right"></i></a></li>
+	
+</ul>
+</div>
+
+		</center>
+	  </div>
+	  
+	</div> <!-- col-md-9/col-md-12 -->
+	
+  </div><!-- row -->
+
+	</div>
+  </div>
+  <div class="container-narrow">
+	<footer> <p>
+  &copy; 2016 niejinping
+  
+      with help from <a href="http://zespia.tw/hexo/" target="_blank">Hexo</a> and <a href="http://getbootstrap.com/" target="_blank">Twitter Bootstrap</a>. Theme by <a href="http://github.com/wzpan/hexo-theme-wixo/">Wixo</a>.    
+</p> </footer>
+  </div> <!-- container-narrow -->
+  
+<a id="gotop" href="#">   
+  <span>▲</span> 
+</a>
+
+<script src="/js/jquery.imagesloaded.min.js"></script>
+<script src="/js/gallery.js"></script>
+<script src="/js/bootstrap.min.js"></script>
+<script src="/js/jquery.tableofcontents.min.js"></script>
+<script src="/js/tocgenerator.min.js"></script>
+<script src="/js/main.js"></script>
+
+
+
+
+<link rel="stylesheet" href="/fancybox/jquery.fancybox.css" media="screen" type="text/css">
+<script src="/fancybox/jquery.fancybox.pack.js"></script>
+<script type="text/javascript">
+(function($){
+  $('.fancybox').fancybox();
+})(jQuery);
+</script>
+
+
+<script>
+var _hmt = _hmt || [];
+(function() {
+  var hm = document.createElement("script");
+  hm.src = "//hm.baidu.com/hm.js?78cd2d23583461b225b36bbf47433d64";
+  var s = document.getElementsByTagName("script")[0]; 
+  s.parentNode.insertBefore(hm, s);
+})();
+</script>
+
+</body>
+</html>

@@ -1,0 +1,568 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+  <meta charset="utf-8">
+  
+  <title>spring schedule 任务调度框架 | 游骑爬，生命在于折腾</title>
+  <meta name="author" content="niejinping">
+  
+  <meta name="description" content="学习总结，知识管理">
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+  <meta property="og:title" content="spring schedule 任务调度框架"/>
+  <meta property="og:site_name" content="游骑爬，生命在于折腾"/>
+
+  
+    <meta property="og:image" content="undefined"/>
+  
+
+  
+    <link rel="alternative" href="/atom.xml" title="游骑爬，生命在于折腾" type="application/atom+xml">
+  
+  
+    <link href="/favicon.png" rel="icon">
+  
+  
+  <link rel="stylesheet" href="/css/bootstrap.min.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/css/font-awesome.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/css/style.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/css/highlight.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/css/google-fonts.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/css/responsive.css" media="screen" type="text/css">  
+  <link rel="stylesheet" href="/css/sidenav.css" media="screen" type="text/css">  
+  <!--[if lt IE 9]><script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script><![endif]-->
+
+  <script src="/js/jquery-2.0.3.min.js"></script>
+
+  <!-- analytics -->
+  
+<script type="text/javascript">
+var _gaq = _gaq || [];
+_gaq.push(['_setAccount', 'UA-72124819-1']);
+_gaq.push(['_trackPageview']);
+(function() {
+var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+
+ga.src = ('https:' == document.location.protocol ? 'https://' : 'http://') + 'stats.g.doubleclick.net/dc.js';
+
+var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+})();
+</script>
+
+
+</head>
+
+<body id="body" data-spy="scroll" data-target=".toc">
+  <div class="container" id="container">
+	<div class="content">
+	  <div class="page-header">		
+  <h1><a class="brand" href="/">游骑爬，生命在于折腾</a><span class="split"></span><span class="title">spring schedule 任务调度框架</span><span class="date" id="title-date"><i class="fa fa-clock-o"></i> 2016-01-18</span></h1>
+</div>		
+
+<div class="row page">
+  <!-- cols -->	
+  
+  <div class="col-xs-12 col-sm-3 col-md-3 toc"> 
+	<!-- toc -->
+<script type="text/javascript">
+		jQuery(document).ready(function() {
+ 		   generateWikiTOC('.note', '.toc',  2 , 2 );
+		});
+</script>
+  </div><!-- col-md-3 -->
+  
+  
+
+  
+  <div class="col-xs-12 col-sm-9 col-md-9 note">
+	
+
+	  <!-- content -->
+	  <h2 id="u9879_u76EE_u7B80_u4ECB"><a href="#u9879_u76EE_u7B80_u4ECB" class="headerlink" title="项目简介"></a>项目简介</h2><p> 对于小批量的定时或批处理定时任务。spring @Scheduled非常合适。<br> spring定时任务或周期性任务调度框架学习，基于spring4构建本项目。</p>
+<h2 id="u5173_u952E_u6CE8_u89E3"><a href="#u5173_u952E_u6CE8_u89E3" class="headerlink" title="关键注解"></a>关键注解</h2><h3 id="@Scheduled"><a href="#@Scheduled" class="headerlink" title="@Scheduled"></a>@Scheduled</h3><p>@Scheduled注解非常强大，可以设置成定周期运行任务，也可以设置成类似于crontab的方式进行调度。</p>
+<h2 id="u9879_u76EE_u4F9D_u8D56"><a href="#u9879_u76EE_u4F9D_u8D56" class="headerlink" title="项目依赖"></a>项目依赖</h2><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line">&lt;properties&gt;</span><br><span class="line">  &lt;project.build.sourceEncoding&gt;UTF-<span class="number">8</span>&lt;/project.build.sourceEncoding&gt;</span><br><span class="line">    &lt;springframework.version&gt;<span class="number">4.2</span>.<span class="number">0</span>.RELEASE&lt;/springframework.version&gt;</span><br><span class="line">&lt;/properties&gt;</span><br><span class="line">&lt;dependencies&gt;</span><br><span class="line">       &lt;dependency&gt;</span><br><span class="line">          &lt;groupId&gt;org.springframework&lt;/groupId&gt;</span><br><span class="line">          &lt;artifactId&gt;spring-core&lt;/artifactId&gt;</span><br><span class="line">          &lt;version&gt;<span class="variable">$&#123;springframework.version&#125;</span>&lt;/version&gt;</span><br><span class="line">      &lt;/dependency&gt;</span><br><span class="line">       &lt;dependency&gt;</span><br><span class="line">          &lt;groupId&gt;org.springframework&lt;/groupId&gt;</span><br><span class="line">          &lt;artifactId&gt;spring-context&lt;/artifactId&gt;</span><br><span class="line">          &lt;version&gt;<span class="variable">$&#123;springframework.version&#125;</span>&lt;/version&gt;</span><br><span class="line">      &lt;/dependency&gt;</span><br><span class="line">&lt;/dependencies&gt;</span><br></pre></td></tr></table></figure>
+<h2 id="u56FA_u5B9A_u5468_u671F_u4EE3_u7801"><a href="#u56FA_u5B9A_u5468_u671F_u4EE3_u7801" class="headerlink" title="固定周期代码"></a>固定周期代码</h2><p>固定周期单位是毫秒<br><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">public class FixRateJob &#123;</span><br><span class="line">	@Scheduled(initialDelay=<span class="number">1000</span>, fixedRate=<span class="number">5000</span>)</span><br><span class="line">	public void <span class="function"><span class="title">doSomething</span></span>() &#123;</span><br><span class="line">	    // something that should execute periodically</span><br><span class="line">		System.out.println(<span class="string">"hello fixedRate job"</span>);</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<h2 id="crontab_u98CE_u683Cjob"><a href="#crontab_u98CE_u683Cjob" class="headerlink" title="crontab风格job"></a>crontab风格job</h2><p>直接在注解中设置crontab参数<br><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">public class CronJob &#123;</span><br><span class="line">	@Scheduled(cron=<span class="string">"*/5 * * * * MON-FRI"</span>)</span><br><span class="line">	public void <span class="function"><span class="title">doSomething</span></span>() &#123;</span><br><span class="line">	    // something that should execute periodically</span><br><span class="line">		System.out.println(<span class="string">"hello cron job"</span>);</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<h3 id="crontab_u98CE_u683Cjob2"><a href="#crontab_u98CE_u683Cjob2" class="headerlink" title="crontab风格job2"></a>crontab风格job2</h3><p>通过配置文件设置参数<br><figure class="highlight cs"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title">CronJobByProps</span> &#123;</span><br><span class="line">	@Scheduled(cron=<span class="string">"$&#123;app.cron:*/3 * * * * MON-FRI&#125;"</span>)</span><br><span class="line">	<span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">doSomething</span>(<span class="params"></span>) </span>&#123;</span><br><span class="line">	    <span class="comment">// something that should execute periodically</span></span><br><span class="line">		System.<span class="keyword">out</span>.println(<span class="keyword">new</span> Date() + <span class="string">"　==&gt; hello cron job by properties"</span>);</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<h2 id="u9879_u76EE_u914D_u7F6E"><a href="#u9879_u76EE_u914D_u7F6E" class="headerlink" title="项目配置"></a>项目配置</h2><p>通过注解来配置项目，比xml清爽多了。<br><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br></pre></td><td class="code"><pre><span class="line">@Configuration</span><br><span class="line">@EnableAsync</span><br><span class="line">@EnableScheduling</span><br><span class="line">@PropertySource(value = &#123; <span class="string">"classpath:app.properties"</span> &#125;, ignoreResourceNotFound = <span class="literal">true</span>)</span><br><span class="line">public class AppConfig &#123;</span><br><span class="line">	@Bean</span><br><span class="line">	public FixRateJob <span class="function"><span class="title">job</span></span>()&#123;</span><br><span class="line">		<span class="built_in">return</span> new FixRateJob();</span><br><span class="line">	&#125;</span><br><span class="line">	</span><br><span class="line">	@Bean</span><br><span class="line">	public CronJob <span class="function"><span class="title">cornJob</span></span>()&#123;</span><br><span class="line">		<span class="built_in">return</span> new CronJob();</span><br><span class="line">	&#125;</span><br><span class="line"></span><br><span class="line">	@Bean</span><br><span class="line">	public CronJobByProps <span class="function"><span class="title">propsJob</span></span>()&#123;</span><br><span class="line">		<span class="built_in">return</span> new CronJobByProps();</span><br><span class="line">	&#125;</span><br><span class="line"></span><br><span class="line">    @Bean</span><br><span class="line">    public static PropertySourcesPlaceholderConfigurer <span class="function"><span class="title">propertySourcesPlaceholderConfigurer</span></span>() &#123;</span><br><span class="line">       <span class="built_in">return</span> new PropertySourcesPlaceholderConfigurer();</span><br><span class="line">    &#125;</span><br></pre></td></tr></table></figure></p>
+<h2 id="u6D4B_u8BD5_u4EE3_u7801"><a href="#u6D4B_u8BD5_u4EE3_u7801" class="headerlink" title="测试代码"></a>测试代码</h2><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">public class AppMain &#123;</span><br><span class="line">	public static void main(String args[]) &#123;</span><br><span class="line">		AbstractApplicationContext context = new AnnotationConfigApplicationContext(AppConfig.class);</span><br><span class="line"></span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>本项目没有xml配置文件，全部以注解的方式，进行配置注入。</p>
+<h4 id="github_3A_https_3A//github-com/njkfei/spring-schedule-git"><a href="#github_3A_https_3A//github-com/njkfei/spring-schedule-git" class="headerlink" title="github: https://github.com/njkfei/spring-schedule.git"></a>github: <a href="https://github.com/njkfei/spring-schedule.git" target="_blank" rel="external">https://github.com/njkfei/spring-schedule.git</a></h4><h4 id="u9879_u76EE_u53C2_u8003_uFF1Awww-websystique-com"><a href="#u9879_u76EE_u53C2_u8003_uFF1Awww-websystique-com" class="headerlink" title="项目参考：www.websystique.com"></a>项目参考：<a href="http://www.websystique.com" target="_blank" rel="external">www.websystique.com</a></h4><h4 id="u4E2A_u4EBAblog_3A_wiki-niejinkun-com"><a href="#u4E2A_u4EBAblog_3A_wiki-niejinkun-com" class="headerlink" title="个人blog: wiki.niejinkun.com"></a>个人blog: <a href="http://wiki.niejinkun.com">wiki.niejinkun.com</a></h4>	  
+
+	  <div>
+  		<center>
+		  <div class="pagination">
+<ul class="pagination">
+	
+	
+	
+	
+	
+	
+		
+		
+	
+		
+		
+	
+		
+		
+	
+		
+		
+	
+		
+		
+	
+		
+		
+	
+		
+		
+	
+		
+		
+	
+		
+		
+	
+		
+		
+	
+		
+		
+	
+		
+		
+	
+		
+		
+	
+		
+		
+	
+		
+		
+	
+		
+		
+			
+		
+	
+		
+		
+	
+		
+		
+	
+		
+		
+			
+		
+	
+		
+		
+	
+		
+		
+	
+		
+		
+	
+		
+		
+	
+		
+		
+	
+		
+		
+	
+		
+		
+			
+		
+	
+		
+		
+	
+		
+		
+			
+		
+	
+		
+		
+			
+		
+	
+		
+		
+			
+		
+	
+		
+		
+			
+		
+	
+		
+		
+			
+		
+	
+		
+		
+			
+		
+	
+		
+		
+			
+		
+	
+		
+		
+			
+		
+	
+		
+		
+	
+		
+		
+	
+		
+		
+			
+		
+	
+		
+		
+	
+		
+		
+			
+		
+	
+		
+		
+			
+		
+	
+		
+		
+	
+		
+		
+	
+		
+		
+	
+		
+		
+	
+		
+		
+	
+		
+		
+	
+		
+		
+			
+		
+	
+		
+		
+	
+		
+		
+	
+		
+		
+	
+		
+		
+	
+		
+		
+	
+		
+		
+	
+		
+		
+	
+		
+		
+	
+		
+		
+	
+		
+		
+	
+		
+		
+	
+		
+		
+	
+		
+		
+	
+		
+		
+	
+		
+		
+	
+		
+		
+	
+		
+		
+			
+		
+	
+		
+		
+			
+		
+	
+		
+		
+			
+			
+		
+	
+		
+		
+			
+			
+			
+		
+		
+			
+		
+	
+		
+		
+			
+		
+	
+		
+		
+			
+		
+	
+		
+		
+	
+		
+		
+			
+		
+	
+		
+		
+	
+		
+		
+	
+		
+		
+	
+		
+		
+	
+		
+		
+			
+		
+	
+		
+		
+	
+		
+		
+			
+		
+	
+		
+		
+			
+		
+	
+		
+		
+	
+		
+		
+			
+		
+	
+		
+		
+	
+		
+		
+	
+		
+		
+	
+		
+		
+	
+		
+		
+	
+		
+		
+			
+		
+	
+		
+		
+	
+		
+		
+	
+		
+		
+			
+		
+	
+		
+		
+			
+		
+	
+		
+		
+	
+		
+		
+	
+		
+		
+	
+		
+		
+	
+		
+		
+			
+		
+	
+		
+		
+	
+		
+		
+	
+		
+		
+	
+		
+		
+	
+		
+		
+	
+		
+		
+	
+		
+		
+	
+		
+		
+			
+		
+	
+		
+		
+			
+		
+	
+		
+		
+			
+		
+	
+		
+		
+	
+		
+		
+	
+		
+		
+	
+	
+	
+		<li class="prev"><a href="/2016/01/18/springmvc-fileupload/" class="alignleft prev"><i class="fa fa-arrow-circle-o-left"></i>prev</a></li>
+	
+	<li><a href="/"><i class="fa fa-archive"></i>Home</a></li>
+	
+		<li class="next"><a href="/2016/01/18/spring-async/" class="alignright next">next<i class="fa fa-arrow-circle-o-right"></i></a></li>
+	
+</ul>
+</div>
+
+		</center>
+	  </div>
+	  
+	</div> <!-- col-md-9/col-md-12 -->
+	
+  </div><!-- row -->
+
+	</div>
+  </div>
+  <div class="container-narrow">
+	<footer> <p>
+  &copy; 2016 niejinping
+  
+      with help from <a href="http://zespia.tw/hexo/" target="_blank">Hexo</a> and <a href="http://getbootstrap.com/" target="_blank">Twitter Bootstrap</a>. Theme by <a href="http://github.com/wzpan/hexo-theme-wixo/">Wixo</a>.    
+</p> </footer>
+  </div> <!-- container-narrow -->
+  
+<a id="gotop" href="#">   
+  <span>▲</span> 
+</a>
+
+<script src="/js/jquery.imagesloaded.min.js"></script>
+<script src="/js/gallery.js"></script>
+<script src="/js/bootstrap.min.js"></script>
+<script src="/js/jquery.tableofcontents.min.js"></script>
+<script src="/js/tocgenerator.min.js"></script>
+<script src="/js/main.js"></script>
+
+
+
+
+<link rel="stylesheet" href="/fancybox/jquery.fancybox.css" media="screen" type="text/css">
+<script src="/fancybox/jquery.fancybox.pack.js"></script>
+<script type="text/javascript">
+(function($){
+  $('.fancybox').fancybox();
+})(jQuery);
+</script>
+
+
+<script>
+var _hmt = _hmt || [];
+(function() {
+  var hm = document.createElement("script");
+  hm.src = "//hm.baidu.com/hm.js?78cd2d23583461b225b36bbf47433d64";
+  var s = document.getElementsByTagName("script")[0]; 
+  s.parentNode.insertBefore(hm, s);
+})();
+</script>
+
+</body>
+</html>

@@ -1,0 +1,570 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+  <meta charset="utf-8">
+  
+  <title>android杂项 | 游骑爬，生命在于折腾</title>
+  <meta name="author" content="niejinping">
+  
+  <meta name="description" content="学习总结，知识管理">
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+  <meta property="og:title" content="android杂项"/>
+  <meta property="og:site_name" content="游骑爬，生命在于折腾"/>
+
+  
+    <meta property="og:image" content="undefined"/>
+  
+
+  
+    <link rel="alternative" href="/atom.xml" title="游骑爬，生命在于折腾" type="application/atom+xml">
+  
+  
+    <link href="/favicon.png" rel="icon">
+  
+  
+  <link rel="stylesheet" href="/css/bootstrap.min.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/css/font-awesome.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/css/style.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/css/highlight.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/css/google-fonts.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/css/responsive.css" media="screen" type="text/css">  
+  <link rel="stylesheet" href="/css/sidenav.css" media="screen" type="text/css">  
+  <!--[if lt IE 9]><script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script><![endif]-->
+
+  <script src="/js/jquery-2.0.3.min.js"></script>
+
+  <!-- analytics -->
+  
+<script type="text/javascript">
+var _gaq = _gaq || [];
+_gaq.push(['_setAccount', 'UA-72124819-1']);
+_gaq.push(['_trackPageview']);
+(function() {
+var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+
+ga.src = ('https:' == document.location.protocol ? 'https://' : 'http://') + 'stats.g.doubleclick.net/dc.js';
+
+var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+})();
+</script>
+
+
+</head>
+
+<body id="body" data-spy="scroll" data-target=".toc">
+  <div class="container" id="container">
+	<div class="content">
+	  <div class="page-header">		
+  <h1><a class="brand" href="/">游骑爬，生命在于折腾</a><span class="split"></span><span class="title">android杂项</span><span class="date" id="title-date"><i class="fa fa-clock-o"></i> 2016-02-17</span></h1>
+</div>		
+
+<div class="row page">
+  <!-- cols -->	
+  
+  
+
+  
+	<div class="col-md-12">
+	  
+
+	  <!-- content -->
+	  <h3 id="CONSUMING_REST_API_WITH_RETROFIT_2-0_IN_ANDROID"><a href="#CONSUMING_REST_API_WITH_RETROFIT_2-0_IN_ANDROID" class="headerlink" title="CONSUMING REST API WITH RETROFIT 2.0 IN ANDROID"></a>CONSUMING REST API WITH RETROFIT 2.0 IN ANDROID</h3><p><a href="http://www.iayon.com/consuming-rest-api-with-retrofit-2-0-in-android/" target="_blank" rel="external">参考</a><br><a href="http://square.github.io/" target="_blank" rel="external">类库</a><br><a href="http://square.github.io/retrofit/" target="_blank" rel="external">主页</a><br>Retrofit is a well-known open source networking library for Android platform from Square. It’s one of their very popular open source libraries in different platform and widely used by Android developers for it’s simplicity of use and faster performance than other available libraries used in network operations within Android apps.</p>
+<p>Current version of Retrofit is 2.0 . It’s still in Beta and published recently. So, in this moment there’s not too many resources available in internet for this latest version. There have been a number of big changes in this latest version comparing to version 1.9.0 which has been being in play for a while. So, this post is both for those who are thinking to use Retrofit in their next Android project and also those who wants to migrate to latest version of Retrofit from existing older versions. So, here we go…</p>
+<p>ADDING DEPENDENCIES</p>
+<p>Anyway, let’s begin with creating a new project in Android studio and open it’s build.gradle file. We need to add 3 dependencies in our build.gradle file. It needs some explanation because we didn’t need all those in previous versions.</p>
+<p>retrofit : It’s our main required library that will do our networking jobs.</p>
+<p>okhttp : okhttp is another http client library from Square. It does the http requests, sets headers and process responses etc under the hood. It was not essential in the previous versions. In fact, we were able to use some other http clients instead of okhttp within Retrofit. But in latest 2.0 , it has been added as a dependency.</p>
+<p>converter-gson : We know Gson is a library that can convert JSON objects to Java Objects and vice-versa. This converter-gson is used in Retrofit to convert http Responses into Java Objects. So, we get some hint that we’ll get API responses as our pre-defined Java Objects.</p>
+<p>So, finally after adding the above dependencies, our build.gradle dependencies will look like this</p>
+<p>compile ‘com.squareup.retrofit:retrofit:2.0.0-beta1’<br>compile ‘com.squareup.okhttp:okhttp:2.4.0’<br>compile ‘com.squareup.retrofit:converter-gson:2.0.0-beta1’<br>CREATE RESPONSE EQUIVALENT POJO CLASS</p>
+<p>For this example, we’ll use a simple Github API endpoint that searches a Name (say, tom) in Github. This api returns JSON response like following:</p>
+<p>{<br>  “total_count”: 29409,<br>  “incomplete_results”: false,<br>  “items”: [<br>    {<br>      “login”: “tom”,<br>      “id”: 748,<br>      “avatar_url”: “<a href="https://avatars.githubusercontent.com/u/748?v=3" target="_blank" rel="external">https://avatars.githubusercontent.com/u/748?v=3</a>“,<br>      “gravatar_id”: “”,<br>      “url”: “<a href="https://api.github.com/users/tom" target="_blank" rel="external">https://api.github.com/users/tom</a>“,<br>      “html_url”: “<a href="https://github.com/tom" target="_blank" rel="external">https://github.com/tom</a>“,<br>      “followers_url”: “<a href="https://api.github.com/users/tom/followers" target="_blank" rel="external">https://api.github.com/users/tom/followers</a>“,<br>      “following_url”: “<a href="https://api.github.com/users/tom/following{/other_user}" target="_blank" rel="external">https://api.github.com/users/tom/following{/other_user}</a>“,<br>      “gists_url”: “<a href="https://api.github.com/users/tom/gists{/gist_id}" target="_blank" rel="external">https://api.github.com/users/tom/gists{/gist_id}</a>“,<br>      “starred_url”: “<a href="https://api.github.com/users/tom/starred{/owner}{/repo}" target="_blank" rel="external">https://api.github.com/users/tom/starred{/owner}{/repo}</a>“,<br>      “subscriptions_url”: “<a href="https://api.github.com/users/tom/subscriptions" target="_blank" rel="external">https://api.github.com/users/tom/subscriptions</a>“,<br>      “organizations_url”: “<a href="https://api.github.com/users/tom/orgs" target="_blank" rel="external">https://api.github.com/users/tom/orgs</a>“,<br>      “repos_url”: “<a href="https://api.github.com/users/tom/repos" target="_blank" rel="external">https://api.github.com/users/tom/repos</a>“,<br>      “events_url”: “<a href="https://api.github.com/users/tom/events{/privacy}" target="_blank" rel="external">https://api.github.com/users/tom/events{/privacy}</a>“,<br>      “received_events_url”: “<a href="https://api.github.com/users/tom/received_events" target="_blank" rel="external">https://api.github.com/users/tom/received_events</a>“,<br>      “type”: “User”,<br>      “site_admin”: false,<br>      “score”: 56.1691<br>    }]<br>}<br>Now we have to write Java POJO Class equivalent to the above JSON Object. We can either write it ourself or there are many ways to generate it. I often use jsonschema2pojo to do such POJO class generation. It can generate POJO classes from JSON schema or JSON object. As it’s an easy operation, so we can skip this here.</p>
+<p>CONFIGURE RETROFIT</p>
+<p>Here comes the most important part that have some difference from the previous versions of Retrofit.</p>
+<p>DEFINE ENDPOINTS</p>
+<p>The most amazing feature of Retrofit is, We can define all the Request parameters, headers, Request Methods etc with special Retrofit annotations. And of course, with minimal amount of code. So, let’s see how to do it.</p>
+<p>We have to define all our API endpoints in an interface like the following.</p>
+<p>public interface GitApiInterface {</p>
+<pre><code>    @GET(&quot;/search/users&quot;)
+    Call&lt;GitResult&gt; getUsersNamedTom(@Query(&quot;q&quot;) String name);
+
+    @POST(&quot;/user/create&quot;)
+    Call&lt;Item&gt; createUser(@Body String name, @Body String email);
+
+    @PUT(&quot;/user/{id}/update&quot;)
+    Call&lt;Item&gt; updateUser(@Path(&quot;id&quot;) String id , @Body Item user);
+}
+</code></pre><p>Here, each endpoint specifies an annotation of the HTTP method (GET, POST, PUT, DELETE etc.). And each of these methods will be used to initiate the network call. In each method, we see some annotations about the parameters. The annotation @Query specifies a query parameter in the url (like, <a href="http://base_url?sort=desc&amp;limit=20" target="_blank" rel="external">http://base_url?sort=desc&amp;limit=20</a>).</p>
+<p>When @Path is used, that means there’s a variable parameter in the Url that will be replaced by the Argument supplied with the method call. In the above example, We see it in the PUT request where we call the updateUser method with userId which will be replaced here /user/{id}/update at the place of {id} at runtime. @Body annotation also about parameters that are sent with Request body in POST/PUT requests. More details will be found in Retrofit Documentation.</p>
+<p>Call instances in the above methods are new in Retrofit. In this latest version, it’s required to initiate the request. If it’s a synchronous request, then it’s fired by execute() method, for asynchronous calls enqueue method is used. We’ll see a bit later.</p>
+<p>SETUP RETROFIT</p>
+<p>Retrofit is the Class that makes our API interfaces into Callable objects. Remember, in the previous versions, RestAdapter Class was to used do this similar task. But in the version 2.0, there is no RestAdapter and many of it’s methods. We’ll use Retrofit Class to do the same.</p>
+<p>We can simply initiate Retrofit like this.</p>
+<p>private String baseUrl = “<a href="https://api.github.com" target="_blank" rel="external">https://api.github.com</a>“ ;<br>Retrofit client = new Retrofit.Builder()<br>                    .baseUrl(baseUrl)<br>                    .build()<br>But in our application, we need to configure some more things for some reason.</p>
+<p>CONVERTERS</p>
+<p>By default, Retrofit can only deserialize http Response into okhttp ResponseBody, so we need some way to get this Response as serialized Java Object. So, we’ll require Converters. Currently Retrofit supports 6 type of converters, we can use any of the following.</p>
+<p>Gson: com.squareup.retrofit:converter-gson<br>Jackson: com.squareup.retrofit:converter-jackson<br>Moshi: com.squareup.retrofit:converter-moshi<br>Protobuf: com.squareup.retrofit:converter-protobuf<br>Wire: com.squareup.retrofit:converter-wire<br>Simple XML: com.squareup.retrofit:converter-simplexml<br>In this example, we are using converter-gson. So, let’s add .addConverterFactory(GsonConverterFactory.create()) before .build() method in our Retrofit builder. Now, we’ll get Converted and serialized Response.</p>
+<p>USING REQUEST INTERCEPTORS</p>
+<p>Retrofit used to provide a Class called RequestInterceptor to intercept a request. But It’s not available in version 2.0 as all it’s HTTP connection layer has been moved to okhttp. Here’s an example how to use a RequestInterceptor.</p>
+<p>OkHttpClient okClient = new OkHttpClient();<br>okClient.interceptors().add(new Interceptor() {<br>            @Override<br>            public Response intercept(Chain chain) throws IOException {<br>                Response response = chain.proceed(chain.request());<br>                return response;<br>            }<br>        });</p>
+<p>Retrofit client = new Retrofit.Builder()<br>                .baseUrl(baseUrl)<br>                .client(okClient)<br>.addConverterFactory(GsonConverterFactory.create())<br>                .build();<br>So, in this stage, we are all done with configuring Retrofit for our application.</p>
+<p>MAKING NETWORK REQUESTS</p>
+<p>Now, we’ll move to our application logic. Let’s add necessary permission to our AndroidManifest.xml</p>
+<p><manifest xmlns:android="http://schemas.android.com/apk/res/android" <uses-permission="" android:name="android.permission.INTERNET"><br></manifest><br>Open our MainActivity.java file. We’ll call the methods from GitApiInterface from onCreate method of our Activity.</p>
+<p>GitApiInterface service = client.create(GitApiInterface.class);<br>Call<gitresult> call = service.getUsersNamedTom(“tom”);<br>call.enqueue(new Callback<gitresult>() {<br>     @Override<br>     public void onResponse(Response<gitresult> response) {<br>         if (response.isSuccess()) {<br>             // request successful (status code 200, 201)<br>             GitResult result = response.body();<br>         } else {<br>              //request not successful (like 400,401,403 etc)<br>              //Handle errors<br>         }<br>     }</gitresult></gitresult></gitresult></p>
+<pre><code>@Override
+public void onFailure(Throwable t) {
+
+}
+</code></pre><p>});<br>SAMPLE CODE</p>
+<p>I have written a simple Android app that demonstrates everything I have described above.It can be found in this Github Repository.</p>
+<p>CONCLUSION</p>
+<p>Retrofit 2.0 definitely has come with some big changes. For more detail on changes, please see their ChangeLog on Github.</p>
+	  
+
+	  <div>
+  		<center>
+		  <div class="pagination">
+<ul class="pagination">
+	
+	
+	
+	
+	
+	
+		
+		
+	
+		
+		
+	
+		
+		
+	
+		
+		
+	
+		
+		
+	
+		
+		
+	
+		
+		
+	
+		
+		
+	
+		
+		
+	
+		
+		
+	
+		
+		
+	
+		
+		
+	
+		
+		
+	
+		
+		
+	
+		
+		
+	
+		
+		
+	
+		
+		
+	
+		
+		
+	
+		
+		
+	
+		
+		
+	
+		
+		
+	
+		
+		
+	
+		
+		
+	
+		
+		
+	
+		
+		
+	
+		
+		
+	
+		
+		
+	
+		
+		
+	
+		
+		
+	
+		
+		
+	
+		
+		
+	
+		
+		
+	
+		
+		
+	
+		
+		
+	
+		
+		
+	
+		
+		
+	
+		
+		
+			
+		
+	
+		
+		
+	
+		
+		
+	
+		
+		
+	
+		
+		
+	
+		
+		
+			
+		
+	
+		
+		
+			
+		
+	
+		
+		
+			
+		
+	
+		
+		
+			
+		
+	
+		
+		
+			
+		
+	
+		
+		
+			
+		
+	
+		
+		
+	
+		
+		
+	
+		
+		
+			
+		
+	
+		
+		
+			
+		
+	
+		
+		
+			
+			
+		
+	
+		
+		
+	
+		
+		
+	
+		
+		
+	
+		
+		
+	
+		
+		
+	
+		
+		
+	
+		
+		
+	
+		
+		
+	
+		
+		
+	
+		
+		
+	
+		
+		
+	
+		
+		
+	
+		
+		
+	
+		
+		
+	
+		
+		
+	
+		
+		
+	
+		
+		
+	
+		
+		
+	
+		
+		
+	
+		
+		
+	
+		
+		
+	
+		
+		
+	
+		
+		
+	
+		
+		
+	
+		
+		
+	
+		
+		
+	
+		
+		
+			
+			
+			
+		
+		
+	
+		
+		
+	
+		
+		
+	
+		
+		
+	
+		
+		
+	
+		
+		
+	
+		
+		
+			
+		
+	
+		
+		
+	
+		
+		
+			
+		
+	
+		
+		
+	
+		
+		
+			
+		
+	
+		
+		
+			
+		
+	
+		
+		
+	
+		
+		
+	
+		
+		
+	
+		
+		
+	
+		
+		
+	
+		
+		
+	
+		
+		
+	
+		
+		
+	
+		
+		
+			
+		
+	
+		
+		
+			
+		
+	
+		
+		
+	
+		
+		
+	
+		
+		
+			
+		
+	
+		
+		
+	
+		
+		
+	
+		
+		
+	
+		
+		
+	
+		
+		
+	
+		
+		
+	
+		
+		
+	
+	
+	
+		<li class="prev"><a href="/2016/02/27/android-util/" class="alignleft prev"><i class="fa fa-arrow-circle-o-left"></i>prev</a></li>
+	
+	<li><a href="/"><i class="fa fa-archive"></i>Home</a></li>
+	
+		<li class="next"><a href="/2016/01/13/pay/" class="alignright next">next<i class="fa fa-arrow-circle-o-right"></i></a></li>
+	
+</ul>
+</div>
+
+		</center>
+	  </div>
+	  
+	</div> <!-- col-md-9/col-md-12 -->
+	
+  </div><!-- row -->
+
+	</div>
+  </div>
+  <div class="container-narrow">
+	<footer> <p>
+  &copy; 2016 niejinping
+  
+      with help from <a href="http://zespia.tw/hexo/" target="_blank">Hexo</a> and <a href="http://getbootstrap.com/" target="_blank">Twitter Bootstrap</a>. Theme by <a href="http://github.com/wzpan/hexo-theme-wixo/">Wixo</a>.    
+</p> </footer>
+  </div> <!-- container-narrow -->
+  
+<a id="gotop" href="#">   
+  <span>▲</span> 
+</a>
+
+<script src="/js/jquery.imagesloaded.min.js"></script>
+<script src="/js/gallery.js"></script>
+<script src="/js/bootstrap.min.js"></script>
+<script src="/js/jquery.tableofcontents.min.js"></script>
+<script src="/js/tocgenerator.min.js"></script>
+<script src="/js/main.js"></script>
+
+
+
+
+<link rel="stylesheet" href="/fancybox/jquery.fancybox.css" media="screen" type="text/css">
+<script src="/fancybox/jquery.fancybox.pack.js"></script>
+<script type="text/javascript">
+(function($){
+  $('.fancybox').fancybox();
+})(jQuery);
+</script>
+
+
+<script>
+var _hmt = _hmt || [];
+(function() {
+  var hm = document.createElement("script");
+  hm.src = "//hm.baidu.com/hm.js?78cd2d23583461b225b36bbf47433d64";
+  var s = document.getElementsByTagName("script")[0]; 
+  s.parentNode.insertBefore(hm, s);
+})();
+</script>
+
+</body>
+</html>

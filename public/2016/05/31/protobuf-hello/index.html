@@ -1,0 +1,492 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+  <meta charset="utf-8">
+  
+  <title>protocol buf netty 集成 | 游骑爬，生命在于折腾</title>
+  <meta name="author" content="niejinping">
+  
+  <meta name="description" content="学习总结，知识管理">
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+  <meta property="og:title" content="protocol buf netty 集成"/>
+  <meta property="og:site_name" content="游骑爬，生命在于折腾"/>
+
+  
+    <meta property="og:image" content="undefined"/>
+  
+
+  
+    <link rel="alternative" href="/atom.xml" title="游骑爬，生命在于折腾" type="application/atom+xml">
+  
+  
+    <link href="/favicon.png" rel="icon">
+  
+  
+  <link rel="stylesheet" href="/css/bootstrap.min.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/css/font-awesome.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/css/style.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/css/highlight.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/css/google-fonts.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/css/responsive.css" media="screen" type="text/css">  
+  <link rel="stylesheet" href="/css/sidenav.css" media="screen" type="text/css">  
+  <!--[if lt IE 9]><script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script><![endif]-->
+
+  <script src="/js/jquery-2.0.3.min.js"></script>
+
+  <!-- analytics -->
+  
+<script type="text/javascript">
+var _gaq = _gaq || [];
+_gaq.push(['_setAccount', 'UA-72124819-1']);
+_gaq.push(['_trackPageview']);
+(function() {
+var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+
+ga.src = ('https:' == document.location.protocol ? 'https://' : 'http://') + 'stats.g.doubleclick.net/dc.js';
+
+var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+})();
+</script>
+
+
+</head>
+
+<body id="body" data-spy="scroll" data-target=".toc">
+  <div class="container" id="container">
+	<div class="content">
+	  <div class="page-header">		
+  <h1><a class="brand" href="/">游骑爬，生命在于折腾</a><span class="split"></span><span class="title">protocol buf netty 集成</span><span class="date" id="title-date"><i class="fa fa-clock-o"></i> 2016-05-31</span></h1>
+</div>		
+
+<div class="row page">
+  <!-- cols -->	
+  
+  
+
+  
+	<div class="col-md-12">
+	  
+
+	  <!-- content -->
+	  <p> netty是高性能的异步io框架，阿里的dubbo,58系的scf和微博的motan的通信框架，都是选用了netty。<br> protoc buf是高性能的序列化方案。 因此，把他们集成在一起，非常地有必要了。<br> 通过netty，可以非常方便的构建高性能的后台服务。</p>
+<p>本demo分别来源于netty和pb的官方手册，目前集成的比较乱，以后应该会重新整理。</p>
+<h2 id="u4F9D_u8D56"><a href="#u4F9D_u8D56" class="headerlink" title="依赖"></a>依赖</h2><p>maven依赖<br>    <dependencies><br>        <dependency><br>            <groupid>io.netty</groupid><br>            <artifactid>netty-all</artifactid><br>            <version>4.0.23.Final</version><br>        </dependency><br>        <dependency><br>            <groupid>com.google.protobuf</groupid><br>            <artifactid>protobuf-java</artifactid><br>            <version>2.5.0</version><br>        </dependency><br>    </dependencies></p>
+<h2 id="u4EE3_u7801"><a href="#u4EE3_u7801" class="headerlink" title="代码"></a>代码</h2><h3 id="pb_server"><a href="#pb_server" class="headerlink" title="pb server"></a>pb server</h3><p>提供初始化功能<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">SubReqServer</span> </span>&#123; </span><br><span class="line">     <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">bind</span><span class="params">(<span class="keyword">int</span> port)</span> <span class="keyword">throws</span> Exception</span>&#123; </span><br><span class="line">         <span class="comment">// 创建两个线程组，一个用于服务器接收客户端连接，一个用于进行socketchannel的网络读写 </span></span><br><span class="line">         EventLoopGroup bossGroup = <span class="keyword">new</span> NioEventLoopGroup(); </span><br><span class="line">         EventLoopGroup workerGroup = <span class="keyword">new</span> NioEventLoopGroup(); </span><br><span class="line">  </span><br><span class="line">         <span class="keyword">try</span>&#123; </span><br><span class="line">             ServerBootstrap sb = <span class="keyword">new</span> ServerBootstrap(); </span><br><span class="line">             sb.group(bossGroup,workerGroup) </span><br><span class="line">                     .channel(NioServerSocketChannel.class) </span><br><span class="line">                     .option(ChannelOption.SO_BACKLOG,<span class="number">1024</span>) </span><br><span class="line">                     .childHandler(<span class="keyword">new</span> ChildChannelHandler()); </span><br><span class="line">  </span><br><span class="line">             ChannelFuture f = sb.bind(port).sync(); </span><br><span class="line">  </span><br><span class="line">             f.channel().closeFuture().sync(); </span><br><span class="line">         &#125;<span class="keyword">finally</span> &#123; </span><br><span class="line">             bossGroup.shutdownGracefully(); </span><br><span class="line">             workerGroup.shutdownGracefully(); </span><br><span class="line">         &#125; </span><br><span class="line">     &#125; </span><br><span class="line">  </span><br><span class="line">     <span class="keyword">private</span> <span class="class"><span class="keyword">class</span> <span class="title">ChildChannelHandler</span> <span class="keyword">extends</span> <span class="title">ChannelInitializer</span>&lt;<span class="title">SocketChannel</span>&gt;</span>&#123; </span><br><span class="line">  </span><br><span class="line">         <span class="function"><span class="keyword">protected</span> <span class="keyword">void</span> <span class="title">initChannel</span><span class="params">(SocketChannel socketChannel)</span> <span class="keyword">throws</span> Exception </span>&#123; </span><br><span class="line">             socketChannel.pipeline().addLast(<span class="keyword">new</span> ProtobufVarint32FrameDecoder()); </span><br><span class="line">             socketChannel.pipeline().addLast(<span class="keyword">new</span> ProtobufDecoder(SubscribeReqProto.SubscribeReq.getDefaultInstance())); </span><br><span class="line">             socketChannel.pipeline().addLast(<span class="keyword">new</span> ProtobufVarint32LengthFieldPrepender()); </span><br><span class="line">             socketChannel.pipeline().addLast(<span class="keyword">new</span> ProtobufEncoder()); </span><br><span class="line">             socketChannel.pipeline().addLast(<span class="keyword">new</span> SubReqServerHandler()); </span><br><span class="line">  </span><br><span class="line">         &#125; </span><br><span class="line">     &#125; </span><br><span class="line">  </span><br><span class="line">     <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> <span class="keyword">throws</span> Exception </span>&#123; </span><br><span class="line">         <span class="keyword">int</span> port = <span class="number">9999</span>; </span><br><span class="line">  </span><br><span class="line">         <span class="keyword">new</span> SubReqServer().bind(port); </span><br><span class="line">     &#125; </span><br><span class="line"> &#125;</span><br></pre></td></tr></table></figure></p>
+<h3 id="pb_server_handle"><a href="#pb_server_handle" class="headerlink" title="pb server handle"></a>pb server handle</h3><p>执行解码，业务逻辑功能。<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br></pre></td><td class="code"><pre><span class="line"><span class="annotation">@ChannelHandler</span>.Sharable </span><br><span class="line"> <span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">SubReqServerHandler</span> <span class="keyword">extends</span> <span class="title">ChannelInboundHandlerAdapter</span> </span>&#123; </span><br><span class="line">     <span class="keyword">private</span> <span class="keyword">int</span> count; </span><br><span class="line">     <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">channelRead</span><span class="params">(ChannelHandlerContext ctx, Object msg)</span> </span>&#123; <span class="comment">// (2) </span></span><br><span class="line">  </span><br><span class="line">         SubscribeReqProto.SubscribeReq req = (SubscribeReqProto.SubscribeReq)msg; </span><br><span class="line">  </span><br><span class="line">         <span class="keyword">if</span>(req.getUserName().equalsIgnoreCase(<span class="string">"njp"</span>))&#123; </span><br><span class="line">             System.out.println(<span class="string">"service accept client subscribe req : ["</span> + req.toString() + <span class="string">"]"</span>); </span><br><span class="line">             ctx.writeAndFlush(resp(req.getSubReqID())); </span><br><span class="line">         &#125; </span><br><span class="line">  </span><br><span class="line">  </span><br><span class="line">     &#125; </span><br><span class="line">  </span><br><span class="line">  </span><br><span class="line">     <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">channelReadComplete</span><span class="params">(ChannelHandlerContext ctx)</span> <span class="keyword">throws</span> Exception </span>&#123; </span><br><span class="line">         ctx.flush(); </span><br><span class="line">     &#125; </span><br><span class="line">  </span><br><span class="line">     <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">exceptionCaught</span><span class="params">(ChannelHandlerContext ctx, Throwable cause)</span> <span class="keyword">throws</span> Exception </span>&#123; </span><br><span class="line">         ctx.close(); </span><br><span class="line">     &#125; </span><br><span class="line">  </span><br><span class="line">     <span class="keyword">private</span> SubscribeRespProto.<span class="function">SubscribeResp <span class="title">resp</span><span class="params">(<span class="keyword">int</span> id)</span></span>&#123; </span><br><span class="line">         <span class="keyword">return</span>  SubscribeRespProto.SubscribeResp.newBuilder().setSubReqID(id) </span><br><span class="line">                 .setRespCode(<span class="number">0</span>) </span><br><span class="line">                 .setDesc(<span class="string">"netty book order succeed, 3 days later ,sent to the designated address;"</span>) </span><br><span class="line">                 .build(); </span><br><span class="line">     &#125; </span><br><span class="line"> &#125;</span><br></pre></td></tr></table></figure></p>
+<h3 id="pb_client"><a href="#pb_client" class="headerlink" title="pb client"></a>pb client</h3><p>提供客户端初始化功能<br><figure class="highlight cs"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title">SubReqClient</span> &#123; </span><br><span class="line">  </span><br><span class="line">     <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">connect</span>(<span class="params"><span class="keyword">int</span> port,String host</span>) throws InterruptedException </span>&#123; </span><br><span class="line">  </span><br><span class="line">         EventLoopGroup <span class="keyword">group</span> = <span class="keyword">new</span> NioEventLoopGroup(); </span><br><span class="line">  </span><br><span class="line">         Bootstrap sb = <span class="keyword">new</span> Bootstrap(); </span><br><span class="line">         <span class="keyword">try</span> &#123; </span><br><span class="line">             sb.<span class="keyword">group</span>(<span class="keyword">group</span>) </span><br><span class="line">                     .channel(NioSocketChannel.class) </span><br><span class="line">                     .handler(<span class="keyword">new</span> ChannelInitializer&lt;SocketChannel&gt;() &#123; </span><br><span class="line">                         <span class="function"><span class="keyword">protected</span> <span class="keyword">void</span> <span class="title">initChannel</span>(<span class="params">SocketChannel socketChannel</span>) throws Exception </span>&#123; </span><br><span class="line">                             socketChannel.pipeline().addLast(<span class="keyword">new</span> ProtobufVarint32FrameDecoder()); </span><br><span class="line">                             socketChannel.pipeline().addLast(<span class="keyword">new</span> ProtobufDecoder(SubscribeRespProto.SubscribeResp.getDefaultInstance())); </span><br><span class="line">                             socketChannel.pipeline().addLast(<span class="keyword">new</span> ProtobufVarint32LengthFieldPrepender()); </span><br><span class="line">                             socketChannel.pipeline().addLast(<span class="keyword">new</span> ProtobufEncoder()); </span><br><span class="line">                             socketChannel.pipeline().addLast(<span class="keyword">new</span> SubReqClientHandler()); </span><br><span class="line">                         &#125; </span><br><span class="line">                     &#125;); </span><br><span class="line">             ChannelFuture f = sb.connect(host,port).sync(); </span><br><span class="line">  </span><br><span class="line">             f.channel().closeFuture().sync(); </span><br><span class="line">         &#125;<span class="keyword">finally</span> &#123; </span><br><span class="line">             <span class="keyword">group</span>.shutdownGracefully(); </span><br><span class="line">         &#125; </span><br><span class="line">     &#125; </span><br><span class="line">  </span><br><span class="line">     <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span>(<span class="params">String[] args</span>)</span>&#123; </span><br><span class="line">         <span class="keyword">try</span> &#123; </span><br><span class="line">             <span class="keyword">new</span> SubReqClient().connect(<span class="number">9999</span>,<span class="string">"127.0.0.1"</span>); </span><br><span class="line">         &#125; <span class="keyword">catch</span> (InterruptedException e) &#123; </span><br><span class="line">             e.printStackTrace(); </span><br><span class="line">         &#125; </span><br><span class="line">     &#125; </span><br><span class="line"> &#125;</span><br></pre></td></tr></table></figure></p>
+<h3 id="pb_client_handle"><a href="#pb_client_handle" class="headerlink" title="pb client handle"></a>pb client handle</h3><p>执行pb编解码，业务逻辑功能。<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">SubReqClientHandler</span> <span class="keyword">extends</span> <span class="title">ChannelInboundHandlerAdapter</span></span>&#123; </span><br><span class="line">     <span class="keyword">private</span> <span class="keyword">final</span> String ECHO_REQ = <span class="string">"hi njp, welcome to netty. $_"</span>; </span><br><span class="line">     <span class="keyword">private</span> <span class="keyword">int</span> count; </span><br><span class="line">  </span><br><span class="line">     <span class="function"><span class="keyword">public</span> <span class="title">SubReqClientHandler</span><span class="params">()</span></span>&#123; </span><br><span class="line">  </span><br><span class="line">     &#125; </span><br><span class="line">  </span><br><span class="line">     <span class="annotation">@Override</span> </span><br><span class="line">     <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">channelActive</span><span class="params">(ChannelHandlerContext ctx)</span> </span>&#123; </span><br><span class="line">        <span class="keyword">for</span>(<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; <span class="number">10</span>; i++) </span><br><span class="line">            ctx.writeAndFlush(subReq(i)); </span><br><span class="line">     &#125; </span><br><span class="line">  </span><br><span class="line"> <span class="comment">/*    public void handlerAdded(ChannelHandlerContext channelHandlerContext) throws Exception &#123; </span><br><span class="line">         channelHandlerContext.writeAndFlush(firstMessage); </span><br><span class="line">     &#125;*/</span> </span><br><span class="line">  </span><br><span class="line">     <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">channelRead</span><span class="params">(ChannelHandlerContext ctx, Object msg)</span> </span>&#123; <span class="comment">// (2) </span></span><br><span class="line">  </span><br><span class="line">         System.out.println(<span class="string">"this is  : "</span> + ++count  + <span class="string">" times receive server: [ "</span>+ msg + </span><br><span class="line">                 <span class="string">" ]"</span>); </span><br><span class="line">  </span><br><span class="line">  </span><br><span class="line">     &#125; </span><br><span class="line">  </span><br><span class="line">     <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">exceptionCaught</span><span class="params">(ChannelHandlerContext channelHandlerContext, Throwable throwable)</span> <span class="keyword">throws</span> Exception </span>&#123; </span><br><span class="line">         channelHandlerContext.close(); </span><br><span class="line">     &#125; </span><br><span class="line">  </span><br><span class="line">     <span class="keyword">private</span> SubscribeReqProto.<span class="function">SubscribeReq <span class="title">subReq</span><span class="params">(<span class="keyword">int</span> id)</span></span>&#123; </span><br><span class="line">         List&lt;String&gt; address = <span class="keyword">new</span> ArrayList&lt;String&gt;(); </span><br><span class="line">         address.add(<span class="string">"beijing njp"</span>); </span><br><span class="line">         address.add(<span class="string">"shanghai njp"</span>); </span><br><span class="line">         <span class="keyword">return</span> </span><br><span class="line">                 SubscribeReqProto.SubscribeReq.newBuilder() </span><br><span class="line">                 .setSubReqID(id) </span><br><span class="line">                 .addAllAddress(address) </span><br><span class="line">                 .setProductName(<span class="string">"netty in action"</span>) </span><br><span class="line">                 .setUserName(<span class="string">"njp"</span>) </span><br><span class="line">                 .build(); </span><br><span class="line">     &#125; </span><br><span class="line"> &#125;</span><br></pre></td></tr></table></figure></p>
+<h2 id="github"><a href="#github" class="headerlink" title="github"></a>github</h2><p> <a href="https://github.com/njkfei/netty-pb-demo" target="_blank" rel="external">https://github.com/njkfei/netty-pb-demo</a></p>
+	  
+
+	  <div>
+  		<center>
+		  <div class="pagination">
+<ul class="pagination">
+	
+	
+	
+	
+	
+	
+		
+		
+	
+		
+		
+	
+		
+		
+	
+		
+		
+	
+		
+		
+	
+		
+		
+	
+		
+		
+	
+		
+		
+	
+		
+		
+	
+		
+		
+	
+		
+		
+	
+		
+		
+	
+		
+		
+	
+		
+		
+	
+		
+		
+			
+			
+		
+	
+		
+		
+	
+		
+		
+	
+		
+		
+	
+		
+		
+	
+		
+		
+	
+		
+		
+	
+		
+		
+	
+		
+		
+	
+		
+		
+	
+		
+		
+	
+		
+		
+	
+		
+		
+	
+		
+		
+	
+		
+		
+	
+		
+		
+	
+		
+		
+	
+		
+		
+	
+		
+		
+	
+		
+		
+	
+		
+		
+	
+		
+		
+	
+		
+		
+	
+		
+		
+	
+		
+		
+	
+		
+		
+	
+		
+		
+	
+		
+		
+	
+		
+		
+	
+		
+		
+	
+		
+		
+	
+		
+		
+	
+		
+		
+	
+		
+		
+	
+		
+		
+	
+		
+		
+	
+		
+		
+	
+		
+		
+	
+		
+		
+	
+		
+		
+	
+		
+		
+	
+		
+		
+	
+		
+		
+	
+		
+		
+	
+		
+		
+	
+		
+		
+	
+		
+		
+	
+		
+		
+	
+		
+		
+	
+		
+		
+	
+		
+		
+	
+		
+		
+	
+		
+		
+	
+		
+		
+	
+		
+		
+	
+		
+		
+	
+		
+		
+	
+		
+		
+	
+		
+		
+	
+		
+		
+	
+		
+		
+	
+		
+		
+	
+		
+		
+	
+		
+		
+	
+		
+		
+	
+		
+		
+	
+		
+		
+	
+		
+		
+	
+		
+		
+	
+		
+		
+	
+		
+		
+	
+		
+		
+	
+		
+		
+	
+		
+		
+	
+		
+		
+	
+		
+		
+	
+		
+		
+	
+		
+		
+	
+		
+		
+	
+		
+		
+	
+		
+		
+	
+		
+		
+	
+		
+		
+	
+		
+		
+	
+		
+		
+	
+		
+		
+	
+		
+		
+	
+		
+		
+	
+		
+		
+	
+		
+		
+	
+		
+		
+	
+		
+		
+	
+		
+		
+	
+		
+		
+	
+		
+		
+	
+		
+		
+	
+		
+		
+	
+	
+	
+		<li class="prev disabled"><a><i class="fa fa-arrow-circle-o-left"></i>prev</a></li>
+	
+	<li><a href="/"><i class="fa fa-archive"></i>Home</a></li>
+	
+		<li class="next disabled"><a>next<i class="fa fa-arrow-circle-o-right"></i></a></li>
+	
+</ul>
+</div>
+
+		</center>
+	  </div>
+	  
+	</div> <!-- col-md-9/col-md-12 -->
+	
+  </div><!-- row -->
+
+	</div>
+  </div>
+  <div class="container-narrow">
+	<footer> <p>
+  &copy; 2016 niejinping
+  
+      with help from <a href="http://zespia.tw/hexo/" target="_blank">Hexo</a> and <a href="http://getbootstrap.com/" target="_blank">Twitter Bootstrap</a>. Theme by <a href="http://github.com/wzpan/hexo-theme-wixo/">Wixo</a>.    
+</p> </footer>
+  </div> <!-- container-narrow -->
+  
+<a id="gotop" href="#">   
+  <span>▲</span> 
+</a>
+
+<script src="/js/jquery.imagesloaded.min.js"></script>
+<script src="/js/gallery.js"></script>
+<script src="/js/bootstrap.min.js"></script>
+<script src="/js/jquery.tableofcontents.min.js"></script>
+<script src="/js/tocgenerator.min.js"></script>
+<script src="/js/main.js"></script>
+
+
+
+
+<link rel="stylesheet" href="/fancybox/jquery.fancybox.css" media="screen" type="text/css">
+<script src="/fancybox/jquery.fancybox.pack.js"></script>
+<script type="text/javascript">
+(function($){
+  $('.fancybox').fancybox();
+})(jQuery);
+</script>
+
+
+<script>
+var _hmt = _hmt || [];
+(function() {
+  var hm = document.createElement("script");
+  hm.src = "//hm.baidu.com/hm.js?78cd2d23583461b225b36bbf47433d64";
+  var s = document.getElementsByTagName("script")[0]; 
+  s.parentNode.insertBefore(hm, s);
+})();
+</script>
+
+</body>
+</html>

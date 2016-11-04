@@ -1,0 +1,545 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+  <meta charset="utf-8">
+  
+  <title>三好网java实践之路 | 游骑爬，生命在于折腾</title>
+  <meta name="author" content="niejinping">
+  
+  <meta name="description" content="学习总结，知识管理">
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+  <meta property="og:title" content="三好网java实践之路"/>
+  <meta property="og:site_name" content="游骑爬，生命在于折腾"/>
+
+  
+    <meta property="og:image" content="undefined"/>
+  
+
+  
+    <link rel="alternative" href="/atom.xml" title="游骑爬，生命在于折腾" type="application/atom+xml">
+  
+  
+    <link href="/favicon.png" rel="icon">
+  
+  
+  <link rel="stylesheet" href="/css/bootstrap.min.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/css/font-awesome.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/css/style.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/css/highlight.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/css/google-fonts.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/css/responsive.css" media="screen" type="text/css">  
+  <link rel="stylesheet" href="/css/sidenav.css" media="screen" type="text/css">  
+  <!--[if lt IE 9]><script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script><![endif]-->
+
+  <script src="/js/jquery-2.0.3.min.js"></script>
+
+  <!-- analytics -->
+  
+<script type="text/javascript">
+var _gaq = _gaq || [];
+_gaq.push(['_setAccount', 'UA-72124819-1']);
+_gaq.push(['_trackPageview']);
+(function() {
+var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+
+ga.src = ('https:' == document.location.protocol ? 'https://' : 'http://') + 'stats.g.doubleclick.net/dc.js';
+
+var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+})();
+</script>
+
+
+</head>
+
+<body id="body" data-spy="scroll" data-target=".toc">
+  <div class="container" id="container">
+	<div class="content">
+	  <div class="page-header">		
+  <h1><a class="brand" href="/">游骑爬，生命在于折腾</a><span class="split"></span><span class="title">三好网java实践之路</span><span class="date" id="title-date"><i class="fa fa-clock-o"></i> 2016-04-30</span></h1>
+</div>		
+
+<div class="row page">
+  <!-- cols -->	
+  
+  
+
+  
+	<div class="col-md-12">
+	  
+
+	  <!-- content -->
+	  <h2 id="u4F18_u60E0_u5238_u6D3B_u52A8_u670D_u52A1"><a href="#u4F18_u60E0_u5238_u6D3B_u52A8_u670D_u52A1" class="headerlink" title="优惠券活动服务"></a>优惠券活动服务</h2><ul>
+<li>直接使用servlet,底层java api开发。</li>
+<li>使用spring,基于XML方式进行依赖注入</li>
+<li>使用反射进行API路由</li>
+<li>ORM采用MYBATIS</li>
+<li>使用MAVEN进行编译，打包</li>
+</ul>
+<h2 id="u77ED_u4FE1_u670D_u52A1"><a href="#u77ED_u4FE1_u670D_u52A1" class="headerlink" title="短信服务"></a>短信服务</h2><ul>
+<li>使用ACTIVEMQ进行异步化</li>
+<li>使用世纪，云片网络，创蓝，互亿等短信服务商</li>
+<li>使用spring,基于XML方式进行依赖注入</li>
+<li>使用责任链模式对短信服务商进行管理</li>
+<li>使用spring 基于java config进行管理（升级项目）</li>
+<li>ORM采用MYBATIS</li>
+</ul>
+<h2 id="u4F18_u60E0_u5238_u6279_u91CF_u7BA1_u7406"><a href="#u4F18_u60E0_u5238_u6279_u91CF_u7BA1_u7406" class="headerlink" title="优惠券批量管理"></a>优惠券批量管理</h2><ul>
+<li>使用spring job进行定时任务管理</li>
+<li>使用spring,基于XML方式进行依赖注入</li>
+<li>ORM采用MYBATIS</li>
+</ul>
+<h2 id="u97F3_u89C6_u9891_u670D_u52A1"><a href="#u97F3_u89C6_u9891_u670D_u52A1" class="headerlink" title="音视频服务"></a>音视频服务</h2><ul>
+<li>使用ACTIVEMQ进行异步化</li>
+<li>转码采用ffmpeg</li>
+<li>使用spring,基于XML方式进行依赖注入</li>
+<li>ORM采用MYBATIS</li>
+<li>提供音频转码，视频转码功能</li>
+<li>提供水印功能</li>
+<li>存储采用阿里云OSS</li>
+</ul>
+<h2 id="u63A8_u9001_u670D_u52A1"><a href="#u63A8_u9001_u670D_u52A1" class="headerlink" title="推送服务"></a>推送服务</h2><ul>
+<li>使用ACTIVEMQ进行异步化</li>
+<li>初始xml配置，后期java config管理BEAN</li>
+<li>使用BAIDU云推送服务进行推送管理</li>
+<li>同时支持教师，学生，IOS,ANDORID4种APP</li>
+<li>支持点推，全推功能</li>
+</ul>
+<h2 id="u5B66_u751F_uFF0C_u8001_u5E08_u6536_u652F_u7BA1_u7406"><a href="#u5B66_u751F_uFF0C_u8001_u5E08_u6536_u652F_u7BA1_u7406" class="headerlink" title="学生，老师收支管理"></a>学生，老师收支管理</h2><ul>
+<li>使用java config管理BEAN，更清爽</li>
+<li>ORM采用MYBATIS</li>
+<li>采用SPRING JOB进行定时任务批处理，定时时间可配置</li>
+<li>使用logback,代替log4j进行日志管理</li>
+</ul>
+<h2 id="u6559_u5E08_u5DE5_u4F5C_u5BA4_u6570_u636E_u6027_u80FD_u4F18_u5316"><a href="#u6559_u5E08_u5DE5_u4F5C_u5BA4_u6570_u636E_u6027_u80FD_u4F18_u5316" class="headerlink" title="教师工作室数据性能优化"></a>教师工作室数据性能优化</h2><ul>
+<li>第一次使用gradle进行编译，打包</li>
+<li>首次使用redis进行性能优化</li>
+<li>第一次使用springboot进行开发<br>*　支持全量倒数据，增加更新数据</li>
+</ul>
+<h2 id="u4E0B_u4E00_u6B65"><a href="#u4E0B_u4E00_u6B65" class="headerlink" title="下一步"></a>下一步</h2><h3 id="u96C6_u6210jekins"><a href="#u96C6_u6210jekins" class="headerlink" title="集成jekins"></a>集成jekins</h3><h2 id="u603B_u7ED3"><a href="#u603B_u7ED3" class="headerlink" title="总结"></a>总结</h2><h3 id="u5316_u7E41_u4E3A_u7B80"><a href="#u5316_u7E41_u4E3A_u7B80" class="headerlink" title="化繁为简"></a>化繁为简</h3><ul>
+<li>从maven走向gradle</li>
+<li>从XML走向JAVA CONFIG</li>
+</ul>
+<h3 id="u66F4_u5FEB"><a href="#u66F4_u5FEB" class="headerlink" title="更快"></a>更快</h3><ul>
+<li>从spring 到springboot</li>
+<li>从mybatis到spring data</li>
+<li>从ehcache到redis</li>
+<li>从log4j到logback（log4j死锁）</li>
+</ul>
+	  
+
+	  <div>
+  		<center>
+		  <div class="pagination">
+<ul class="pagination">
+	
+	
+	
+	
+	
+	
+		
+		
+	
+		
+		
+	
+		
+		
+	
+		
+		
+	
+		
+		
+	
+		
+		
+	
+		
+		
+	
+		
+		
+	
+		
+		
+	
+		
+		
+	
+		
+		
+	
+		
+		
+	
+		
+		
+	
+		
+		
+	
+		
+		
+	
+		
+		
+	
+		
+		
+	
+		
+		
+	
+		
+		
+	
+		
+		
+	
+		
+		
+			
+		
+	
+		
+		
+			
+			
+		
+	
+		
+		
+			
+			
+			
+		
+		
+	
+		
+		
+	
+		
+		
+	
+		
+		
+	
+		
+		
+	
+		
+		
+	
+		
+		
+	
+		
+		
+	
+		
+		
+	
+		
+		
+	
+		
+		
+	
+		
+		
+	
+		
+		
+	
+		
+		
+	
+		
+		
+	
+		
+		
+	
+		
+		
+	
+		
+		
+	
+		
+		
+	
+		
+		
+	
+		
+		
+	
+		
+		
+	
+		
+		
+	
+		
+		
+	
+		
+		
+	
+		
+		
+	
+		
+		
+	
+		
+		
+	
+		
+		
+	
+		
+		
+	
+		
+		
+	
+		
+		
+	
+		
+		
+	
+		
+		
+	
+		
+		
+	
+		
+		
+	
+		
+		
+	
+		
+		
+	
+		
+		
+	
+		
+		
+	
+		
+		
+	
+		
+		
+	
+		
+		
+	
+		
+		
+	
+		
+		
+	
+		
+		
+	
+		
+		
+	
+		
+		
+	
+		
+		
+	
+		
+		
+	
+		
+		
+	
+		
+		
+	
+		
+		
+	
+		
+		
+	
+		
+		
+	
+		
+		
+	
+		
+		
+	
+		
+		
+	
+		
+		
+	
+		
+		
+	
+		
+		
+	
+		
+		
+	
+		
+		
+	
+		
+		
+	
+		
+		
+	
+		
+		
+	
+		
+		
+	
+		
+		
+	
+		
+		
+	
+		
+		
+	
+		
+		
+	
+		
+		
+	
+		
+		
+	
+		
+		
+	
+		
+		
+	
+		
+		
+	
+		
+		
+	
+		
+		
+	
+		
+		
+	
+		
+		
+	
+		
+		
+	
+		
+		
+	
+		
+		
+	
+		
+		
+	
+		
+		
+	
+		
+		
+	
+		
+		
+	
+		
+		
+	
+	
+	
+		<li class="prev"><a href="/2016/05/03/yii2 ubuntu部署指南/" class="alignleft prev"><i class="fa fa-arrow-circle-o-left"></i>prev</a></li>
+	
+	<li><a href="/"><i class="fa fa-archive"></i>Home</a></li>
+	
+		<li class="next"><a href="/2016/04/30/yii2-redis-mysql集成指南/" class="alignright next">next<i class="fa fa-arrow-circle-o-right"></i></a></li>
+	
+</ul>
+</div>
+
+		</center>
+	  </div>
+	  
+	</div> <!-- col-md-9/col-md-12 -->
+	
+  </div><!-- row -->
+
+	</div>
+  </div>
+  <div class="container-narrow">
+	<footer> <p>
+  &copy; 2016 niejinping
+  
+      with help from <a href="http://zespia.tw/hexo/" target="_blank">Hexo</a> and <a href="http://getbootstrap.com/" target="_blank">Twitter Bootstrap</a>. Theme by <a href="http://github.com/wzpan/hexo-theme-wixo/">Wixo</a>.    
+</p> </footer>
+  </div> <!-- container-narrow -->
+  
+<a id="gotop" href="#">   
+  <span>▲</span> 
+</a>
+
+<script src="/js/jquery.imagesloaded.min.js"></script>
+<script src="/js/gallery.js"></script>
+<script src="/js/bootstrap.min.js"></script>
+<script src="/js/jquery.tableofcontents.min.js"></script>
+<script src="/js/tocgenerator.min.js"></script>
+<script src="/js/main.js"></script>
+
+
+
+
+<link rel="stylesheet" href="/fancybox/jquery.fancybox.css" media="screen" type="text/css">
+<script src="/fancybox/jquery.fancybox.pack.js"></script>
+<script type="text/javascript">
+(function($){
+  $('.fancybox').fancybox();
+})(jQuery);
+</script>
+
+
+<script>
+var _hmt = _hmt || [];
+(function() {
+  var hm = document.createElement("script");
+  hm.src = "//hm.baidu.com/hm.js?78cd2d23583461b225b36bbf47433d64";
+  var s = document.getElementsByTagName("script")[0]; 
+  s.parentNode.insertBefore(hm, s);
+})();
+</script>
+
+</body>
+</html>

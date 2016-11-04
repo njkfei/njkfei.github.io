@@ -1,0 +1,512 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+  <meta charset="utf-8">
+  
+  <title>grep使用 | 游骑爬，生命在于折腾</title>
+  <meta name="author" content="niejinping">
+  
+  <meta name="description" content="学习总结，知识管理">
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+  <meta property="og:title" content="grep使用"/>
+  <meta property="og:site_name" content="游骑爬，生命在于折腾"/>
+
+  
+    <meta property="og:image" content="undefined"/>
+  
+
+  
+    <link rel="alternative" href="/atom.xml" title="游骑爬，生命在于折腾" type="application/atom+xml">
+  
+  
+    <link href="/favicon.png" rel="icon">
+  
+  
+  <link rel="stylesheet" href="/css/bootstrap.min.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/css/font-awesome.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/css/style.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/css/highlight.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/css/google-fonts.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/css/responsive.css" media="screen" type="text/css">  
+  <link rel="stylesheet" href="/css/sidenav.css" media="screen" type="text/css">  
+  <!--[if lt IE 9]><script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script><![endif]-->
+
+  <script src="/js/jquery-2.0.3.min.js"></script>
+
+  <!-- analytics -->
+  
+<script type="text/javascript">
+var _gaq = _gaq || [];
+_gaq.push(['_setAccount', 'UA-72124819-1']);
+_gaq.push(['_trackPageview']);
+(function() {
+var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+
+ga.src = ('https:' == document.location.protocol ? 'https://' : 'http://') + 'stats.g.doubleclick.net/dc.js';
+
+var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+})();
+</script>
+
+
+</head>
+
+<body id="body" data-spy="scroll" data-target=".toc">
+  <div class="container" id="container">
+	<div class="content">
+	  <div class="page-header">		
+  <h1><a class="brand" href="/">游骑爬，生命在于折腾</a><span class="split"></span><span class="title">grep使用</span><span class="date" id="title-date"><i class="fa fa-clock-o"></i> 2016-01-21</span></h1>
+</div>		
+
+<div class="row page">
+  <!-- cols -->	
+  
+  
+
+  
+	<div class="col-md-12">
+	  
+
+	  <!-- content -->
+	  <p>   grep文件内搜索之瑞士军刀。</p>
+<h2 id="u5FFD_u7565_u5927_u5C0F_u5199_u5339_u914D_u884C"><a href="#u5FFD_u7565_u5927_u5C0F_u5199_u5339_u914D_u884C" class="headerlink" title="忽略大小写匹配行"></a>忽略大小写匹配行</h2><figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">$ grep -n -i <span class="string">"duration"</span> <span class="built_in">log</span>.info</span><br><span class="line"><span class="number">19</span>:  Duration: <span class="number">00</span>:<span class="number">00</span>:<span class="number">31.30</span>, start: <span class="number">0.000000</span>, bitrate: <span class="number">1685</span> kb/s</span><br></pre></td></tr></table></figure>
+<h2 id="u5FFD_u7565_u5927_u5C0F_u5199_u5339_u914D_u6570_u91CF"><a href="#u5FFD_u7565_u5927_u5C0F_u5199_u5339_u914D_u6570_u91CF" class="headerlink" title="忽略大小写匹配数量"></a>忽略大小写匹配数量</h2><figure class="highlight stylus"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">$ grep -c -<span class="tag">i</span> <span class="string">"duration"</span> log<span class="class">.info</span> </span><br><span class="line"><span class="number">1</span></span><br></pre></td></tr></table></figure>
+<h2 id="u6B63_u5219_u5339_u914D-_u5339_u914D_u5B57_u7B26"><a href="#u6B63_u5219_u5339_u914D-_u5339_u914D_u5B57_u7B26" class="headerlink" title="正则匹配-匹配字符"></a>正则匹配-匹配字符</h2><figure class="highlight markdown"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">$ egrep  -o  "[<span class="link_label">1-9</span>][<span class="link_reference">0-9</span>]+x[<span class="link_label">1-9</span>][<span class="link_reference">0-9</span>]+" log.info    </span><br><span class="line">856x480</span><br></pre></td></tr></table></figure>
+<h2 id="u6B63_u5219_u5339_u914D-_u5339_u914D_u884C"><a href="#u6B63_u5219_u5339_u914D-_u5339_u914D_u884C" class="headerlink" title="正则匹配-匹配行"></a>正则匹配-匹配行</h2><figure class="highlight markdown"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">$ egrep   "[<span class="link_label">1-9</span>][<span class="link_reference">0-9</span>]+x[<span class="link_label">1-9</span>][<span class="link_reference">0-9</span>]+" log.info    </span><br><span class="line"> Stream #0:0(und): Video: mpeg4 (Simple Profile) (mp4v / 0x7634706D), yuv420p, 856x480 [SAR 1:1 DAR 107:60], 1562 kb/s, 29.97 fps, 29.97 tbr, 30k tbn, 2997 tbc (default)</span><br></pre></td></tr></table></figure>
+<h2 id="u9644_u6D4B_u8BD5_u6587_u4EF6"><a href="#u9644_u6D4B_u8BD5_u6587_u4EF6" class="headerlink" title="附测试文件"></a>附测试文件</h2><p>log.info内容如下<br><figure class="highlight brainfuck"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">ffmpeg</span> <span class="comment">version</span> <span class="comment">N</span><span class="literal">-</span><span class="comment">62058</span><span class="literal">-</span><span class="comment">gfd2bcfc</span> <span class="comment">Copyright</span> <span class="comment">(c)</span> <span class="comment">2000</span><span class="literal">-</span><span class="comment">2014</span> <span class="comment">the</span> <span class="comment">FFmpeg</span> <span class="comment">developers</span></span><br><span class="line">  <span class="comment">built</span> <span class="comment">on</span> <span class="comment">Dec</span> <span class="comment">16</span> <span class="comment">2015</span> <span class="comment">14:44:57</span> <span class="comment">with</span> <span class="comment">gcc</span> <span class="comment">4</span><span class="string">.</span><span class="comment">4</span><span class="string">.</span><span class="comment">7</span> <span class="comment">(GCC)</span> <span class="comment">20120313</span> <span class="comment">(Red</span> <span class="comment">Hat</span> <span class="comment">4</span><span class="string">.</span><span class="comment">4</span><span class="string">.</span><span class="comment">7</span><span class="literal">-</span><span class="comment">16)</span></span><br><span class="line">  <span class="comment">configuration:</span> <span class="literal">-</span><span class="literal">-</span><span class="comment">enable</span><span class="literal">-</span><span class="comment">version3</span> <span class="literal">-</span><span class="literal">-</span><span class="comment">enable</span><span class="literal">-</span><span class="comment">libvpx</span> <span class="literal">-</span><span class="literal">-</span><span class="comment">enable</span><span class="literal">-</span><span class="comment">libfaac</span> <span class="literal">-</span><span class="literal">-</span><span class="comment">enable</span><span class="literal">-</span><span class="comment">libmp3lame</span> <span class="literal">-</span><span class="literal">-</span><span class="comment">enable</span><span class="literal">-</span><span class="comment">libvorbis</span> <span class="literal">-</span><span class="literal">-</span><span class="comment">enable</span><span class="literal">-</span><span class="comment">libx264</span> <span class="literal">-</span><span class="literal">-</span><span class="comment">enable</span><span class="literal">-</span><span class="comment">libxvid</span> <span class="literal">-</span><span class="literal">-</span><span class="comment">enable</span><span class="literal">-</span><span class="comment">shared</span> <span class="literal">-</span><span class="literal">-</span><span class="comment">enable</span><span class="literal">-</span><span class="comment">gpl</span> <span class="literal">-</span><span class="literal">-</span><span class="comment">enable</span><span class="literal">-</span><span class="comment">postproc</span> <span class="literal">-</span><span class="literal">-</span><span class="comment">enable</span><span class="literal">-</span><span class="comment">nonfree</span> <span class="literal">-</span><span class="literal">-</span><span class="comment">enable</span><span class="literal">-</span><span class="comment">avfilter</span> <span class="literal">-</span><span class="literal">-</span><span class="comment">enable</span><span class="literal">-</span><span class="comment">pthr</span></span><br><span class="line"><span class="comment">eads</span> <span class="literal">-</span><span class="literal">-</span><span class="comment">enable</span><span class="literal">-</span><span class="comment">libnut</span> <span class="literal">-</span><span class="literal">-</span><span class="comment">enable</span><span class="literal">-</span><span class="comment">libtheora</span></span><br><span class="line">  <span class="comment">libavutil</span>      <span class="comment">52</span><span class="string">.</span> <span class="comment">71</span><span class="string">.</span><span class="comment">100</span> <span class="comment">/</span> <span class="comment">52</span><span class="string">.</span> <span class="comment">71</span><span class="string">.</span><span class="comment">100</span></span><br><span class="line">  <span class="comment">libavcodec</span>     <span class="comment">55</span><span class="string">.</span> <span class="comment">56</span><span class="string">.</span><span class="comment">107</span> <span class="comment">/</span> <span class="comment">55</span><span class="string">.</span> <span class="comment">56</span><span class="string">.</span><span class="comment">107</span></span><br><span class="line">  <span class="comment">libavformat</span>    <span class="comment">55</span><span class="string">.</span> <span class="comment">36</span><span class="string">.</span><span class="comment">101</span> <span class="comment">/</span> <span class="comment">55</span><span class="string">.</span> <span class="comment">36</span><span class="string">.</span><span class="comment">101</span></span><br><span class="line">  <span class="comment">libavdevice</span>    <span class="comment">55</span><span class="string">.</span> <span class="comment">11</span><span class="string">.</span><span class="comment">100</span> <span class="comment">/</span> <span class="comment">55</span><span class="string">.</span> <span class="comment">11</span><span class="string">.</span><span class="comment">100</span></span><br><span class="line">  <span class="comment">libavfilter</span>     <span class="comment">4</span><span class="string">.</span>  <span class="comment">3</span><span class="string">.</span><span class="comment">100</span> <span class="comment">/</span>  <span class="comment">4</span><span class="string">.</span>  <span class="comment">3</span><span class="string">.</span><span class="comment">100</span></span><br><span class="line">  <span class="comment">libswscale</span>      <span class="comment">2</span><span class="string">.</span>  <span class="comment">6</span><span class="string">.</span><span class="comment">100</span> <span class="comment">/</span>  <span class="comment">2</span><span class="string">.</span>  <span class="comment">6</span><span class="string">.</span><span class="comment">100</span></span><br><span class="line">  <span class="comment">libswresample</span>   <span class="comment">0</span><span class="string">.</span> <span class="comment">18</span><span class="string">.</span><span class="comment">100</span> <span class="comment">/</span>  <span class="comment">0</span><span class="string">.</span> <span class="comment">18</span><span class="string">.</span><span class="comment">100</span></span><br><span class="line">  <span class="comment">libpostproc</span>    <span class="comment">52</span><span class="string">.</span>  <span class="comment">3</span><span class="string">.</span><span class="comment">100</span> <span class="comment">/</span> <span class="comment">52</span><span class="string">.</span>  <span class="comment">3</span><span class="string">.</span><span class="comment">100</span></span><br><span class="line"><span class="comment">Input</span> <span class="comment">#0</span><span class="string">,</span> <span class="comment">mov</span><span class="string">,</span><span class="comment">mp4</span><span class="string">,</span><span class="comment">m4a</span><span class="string">,</span><span class="comment">3gp</span><span class="string">,</span><span class="comment">3g2</span><span class="string">,</span><span class="comment">mj2</span><span class="string">,</span> <span class="comment">from</span> <span class="comment">'hechang</span><span class="string">.</span><span class="comment">mp4':</span></span><br><span class="line">  <span class="comment">Metadata:</span></span><br><span class="line">    <span class="comment">major_brand</span>     <span class="comment">:</span> <span class="comment">isom</span></span><br><span class="line">    <span class="comment">minor_version</span>   <span class="comment">:</span> <span class="comment">1</span></span><br><span class="line">    <span class="comment">compatible_brands:</span> <span class="comment">isom</span></span><br><span class="line">    <span class="comment">creation_time</span>   <span class="comment">:</span> <span class="comment">2016</span><span class="literal">-</span><span class="comment">01</span><span class="literal">-</span><span class="comment">19</span> <span class="comment">06:10:23</span></span><br><span class="line">    <span class="comment">encoder</span>         <span class="comment">:</span> <span class="comment">FormatFactory</span> <span class="comment">:</span> <span class="comment">www</span><span class="string">.</span><span class="comment">pcfreetime</span><span class="string">.</span><span class="comment">com</span></span><br><span class="line">  <span class="comment">Duration:</span> <span class="comment">00:00:31</span><span class="string">.</span><span class="comment">30</span><span class="string">,</span> <span class="comment">start:</span> <span class="comment">0</span><span class="string">.</span><span class="comment">000000</span><span class="string">,</span> <span class="comment">bitrate:</span> <span class="comment">1685</span> <span class="comment">kb/s</span></span><br><span class="line">    <span class="comment">Stream</span> <span class="comment">#0:0(und):</span> <span class="comment">Video:</span> <span class="comment">mpeg4</span> <span class="comment">(Simple</span> <span class="comment">Profile)</span> <span class="comment">(mp4v</span> <span class="comment">/</span> <span class="comment">0x7634706D)</span><span class="string">,</span> <span class="comment">yuv420p</span><span class="string">,</span> <span class="comment">856x480</span> <span class="title">[</span><span class="comment">SAR</span> <span class="comment">1:1</span> <span class="comment">DAR</span> <span class="comment">107:60</span><span class="title">]</span><span class="string">,</span> <span class="comment">1562</span> <span class="comment">kb/s</span><span class="string">,</span> <span class="comment">29</span><span class="string">.</span><span class="comment">97</span> <span class="comment">fps</span><span class="string">,</span> <span class="comment">29</span><span class="string">.</span><span class="comment">97</span> <span class="comment">tbr</span><span class="string">,</span> <span class="comment">30k</span> <span class="comment">tbn</span><span class="string">,</span> <span class="comment">2997</span> <span class="comment">tbc</span> <span class="comment">(default)</span></span><br><span class="line">    <span class="comment">Metadata:</span></span><br><span class="line">      <span class="comment">creation_time</span>   <span class="comment">:</span> <span class="comment">2016</span><span class="literal">-</span><span class="comment">01</span><span class="literal">-</span><span class="comment">19</span> <span class="comment">06:10:23</span></span><br><span class="line">      <span class="comment">handler_name</span>    <span class="comment">:</span> <span class="comment">video</span></span><br><span class="line">    <span class="comment">Stream</span> <span class="comment">#0:1(und):</span> <span class="comment">Audio:</span> <span class="comment">aac</span> <span class="comment">(mp4a</span> <span class="comment">/</span> <span class="comment">0x6134706D)</span><span class="string">,</span> <span class="comment">44100</span> <span class="comment">Hz</span><span class="string">,</span> <span class="comment">stereo</span><span class="string">,</span> <span class="comment">fltp</span><span class="string">,</span> <span class="comment">125</span> <span class="comment">kb/s</span> <span class="comment">(default)</span></span><br><span class="line">    <span class="comment">Metadata:</span></span><br><span class="line">      <span class="comment">creation_time</span>   <span class="comment">:</span> <span class="comment">2016</span><span class="literal">-</span><span class="comment">01</span><span class="literal">-</span><span class="comment">19</span> <span class="comment">06:10:23</span></span><br><span class="line">      <span class="comment">handler_name</span>    <span class="comment">:</span> <span class="comment">sound</span></span><br><span class="line"><span class="title">[</span><span class="comment">NULL</span> <span class="comment">@</span> <span class="comment">0x129dee0</span><span class="title">]</span> <span class="comment">Unable</span> <span class="comment">to</span> <span class="comment">find</span> <span class="comment">a</span> <span class="comment">suitable</span> <span class="comment">output</span> <span class="comment">format</span> <span class="comment">for</span> <span class="comment">'2'</span></span><br><span class="line"><span class="comment">2:</span> <span class="comment">Invalid</span> <span class="comment">argument</span></span><br></pre></td></tr></table></figure></p>
+	  
+
+	  <div>
+  		<center>
+		  <div class="pagination">
+<ul class="pagination">
+	
+	
+	
+	
+	
+	
+		
+		
+	
+		
+		
+	
+		
+		
+	
+		
+		
+	
+		
+		
+	
+		
+		
+	
+		
+		
+	
+		
+		
+	
+		
+		
+	
+		
+		
+	
+		
+		
+	
+		
+		
+	
+		
+		
+	
+		
+		
+	
+		
+		
+	
+		
+		
+	
+		
+		
+	
+		
+		
+			
+		
+	
+		
+		
+	
+		
+		
+	
+		
+		
+	
+		
+		
+	
+		
+		
+	
+		
+		
+	
+		
+		
+	
+		
+		
+	
+		
+		
+	
+		
+		
+	
+		
+		
+	
+		
+		
+	
+		
+		
+	
+		
+		
+	
+		
+		
+	
+		
+		
+	
+		
+		
+	
+		
+		
+			
+		
+	
+		
+		
+	
+		
+		
+	
+		
+		
+			
+		
+	
+		
+		
+	
+		
+		
+	
+		
+		
+	
+		
+		
+	
+		
+		
+	
+		
+		
+	
+		
+		
+	
+		
+		
+	
+		
+		
+	
+		
+		
+	
+		
+		
+	
+		
+		
+	
+		
+		
+	
+		
+		
+	
+		
+		
+	
+		
+		
+	
+		
+		
+			
+		
+	
+		
+		
+	
+		
+		
+	
+		
+		
+	
+		
+		
+	
+		
+		
+	
+		
+		
+			
+			
+		
+	
+		
+		
+	
+		
+		
+	
+		
+		
+	
+		
+		
+	
+		
+		
+	
+		
+		
+	
+		
+		
+	
+		
+		
+	
+		
+		
+	
+		
+		
+	
+		
+		
+	
+		
+		
+	
+		
+		
+	
+		
+		
+	
+		
+		
+	
+		
+		
+	
+		
+		
+	
+		
+		
+	
+		
+		
+	
+		
+		
+	
+		
+		
+	
+		
+		
+			
+			
+			
+		
+		
+	
+		
+		
+	
+		
+		
+			
+		
+	
+		
+		
+	
+		
+		
+	
+		
+		
+	
+		
+		
+	
+		
+		
+	
+		
+		
+	
+		
+		
+			
+		
+	
+		
+		
+	
+		
+		
+	
+		
+		
+	
+		
+		
+	
+		
+		
+	
+		
+		
+	
+		
+		
+	
+		
+		
+			
+		
+	
+		
+		
+			
+		
+	
+		
+		
+	
+		
+		
+			
+		
+	
+		
+		
+	
+		
+		
+	
+		
+		
+	
+		
+		
+	
+		
+		
+	
+		
+		
+			
+		
+	
+	
+	
+		<li class="prev"><a href="/2016/01/26/linux-split/" class="alignleft prev"><i class="fa fa-arrow-circle-o-left"></i>prev</a></li>
+	
+	<li><a href="/"><i class="fa fa-archive"></i>Home</a></li>
+	
+		<li class="next"><a href="/2016/01/08/im/" class="alignright next">next<i class="fa fa-arrow-circle-o-right"></i></a></li>
+	
+</ul>
+</div>
+
+		</center>
+	  </div>
+	  
+	</div> <!-- col-md-9/col-md-12 -->
+	
+  </div><!-- row -->
+
+	</div>
+  </div>
+  <div class="container-narrow">
+	<footer> <p>
+  &copy; 2016 niejinping
+  
+      with help from <a href="http://zespia.tw/hexo/" target="_blank">Hexo</a> and <a href="http://getbootstrap.com/" target="_blank">Twitter Bootstrap</a>. Theme by <a href="http://github.com/wzpan/hexo-theme-wixo/">Wixo</a>.    
+</p> </footer>
+  </div> <!-- container-narrow -->
+  
+<a id="gotop" href="#">   
+  <span>▲</span> 
+</a>
+
+<script src="/js/jquery.imagesloaded.min.js"></script>
+<script src="/js/gallery.js"></script>
+<script src="/js/bootstrap.min.js"></script>
+<script src="/js/jquery.tableofcontents.min.js"></script>
+<script src="/js/tocgenerator.min.js"></script>
+<script src="/js/main.js"></script>
+
+
+
+
+<link rel="stylesheet" href="/fancybox/jquery.fancybox.css" media="screen" type="text/css">
+<script src="/fancybox/jquery.fancybox.pack.js"></script>
+<script type="text/javascript">
+(function($){
+  $('.fancybox').fancybox();
+})(jQuery);
+</script>
+
+
+<script>
+var _hmt = _hmt || [];
+(function() {
+  var hm = document.createElement("script");
+  hm.src = "//hm.baidu.com/hm.js?78cd2d23583461b225b36bbf47433d64";
+  var s = document.getElementsByTagName("script")[0]; 
+  s.parentNode.insertBefore(hm, s);
+})();
+</script>
+
+</body>
+</html>

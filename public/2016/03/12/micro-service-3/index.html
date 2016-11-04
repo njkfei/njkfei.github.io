@@ -1,0 +1,620 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+  <meta charset="utf-8">
+  
+  <title>微服务系列3-进程间通信 | 游骑爬，生命在于折腾</title>
+  <meta name="author" content="niejinping">
+  
+  <meta name="description" content="学习总结，知识管理">
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+  <meta property="og:title" content="微服务系列3-进程间通信"/>
+  <meta property="og:site_name" content="游骑爬，生命在于折腾"/>
+
+  
+    <meta property="og:image" content="undefined"/>
+  
+
+  
+    <link rel="alternative" href="/atom.xml" title="游骑爬，生命在于折腾" type="application/atom+xml">
+  
+  
+    <link href="/favicon.png" rel="icon">
+  
+  
+  <link rel="stylesheet" href="/css/bootstrap.min.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/css/font-awesome.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/css/style.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/css/highlight.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/css/google-fonts.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/css/responsive.css" media="screen" type="text/css">  
+  <link rel="stylesheet" href="/css/sidenav.css" media="screen" type="text/css">  
+  <!--[if lt IE 9]><script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script><![endif]-->
+
+  <script src="/js/jquery-2.0.3.min.js"></script>
+
+  <!-- analytics -->
+  
+<script type="text/javascript">
+var _gaq = _gaq || [];
+_gaq.push(['_setAccount', 'UA-72124819-1']);
+_gaq.push(['_trackPageview']);
+(function() {
+var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+
+ga.src = ('https:' == document.location.protocol ? 'https://' : 'http://') + 'stats.g.doubleclick.net/dc.js';
+
+var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+})();
+</script>
+
+
+</head>
+
+<body id="body" data-spy="scroll" data-target=".toc">
+  <div class="container" id="container">
+	<div class="content">
+	  <div class="page-header">		
+  <h1><a class="brand" href="/">游骑爬，生命在于折腾</a><span class="split"></span><span class="title">微服务系列3-进程间通信</span><span class="date" id="title-date"><i class="fa fa-clock-o"></i> 2016-03-12</span></h1>
+</div>		
+
+<div class="row page">
+  <!-- cols -->	
+  
+  
+
+  
+	<div class="col-md-12">
+	  
+
+	  <!-- content -->
+	  <ul>
+<li>微服务简介</li>
+<li>构建微服务：使用API网关</li>
+<li>构造微服务：微服务架构中的进程间通信</li>
+<li>微服务架构的服务发现</li>
+<li>面向微服务的事件驱动数据管理</li>
+<li>微服务部署选型</li>
+</ul>
+<h2 id="u5F15_u8A00"><a href="#u5F15_u8A00" class="headerlink" title="引言"></a>引言</h2><p>  在单体应用中，组件之间调用另外一个组件的功能是通过语言级别的方法或函数调用完成．然后，基于微服务的应用，分布式系统运行在不同的机器之上．每个服务实例一般是一个进程．因此，服务之间通过进程间通信IPC的机器进行通信．<br>  如下图所示．<br>  <img src="/" alt="pics"></p>
+<p>  后面我们将讨论进行间通信技术，在此之前，我们先看一个设计方面的议题．</p>
+<h2 id="u4EA4_u4E92_u98CE_u683C"><a href="#u4EA4_u4E92_u98CE_u683C" class="headerlink" title="交互风格"></a>交互风格</h2><p> 当我们在服务之间选择进程间通信机制相互访问时，先看看服务之间是如何交互的．<br> 在服务之间客户端与服务器有多种风格的交互方式．它们可以被规纳为2个维度．<br> 第一个维度通过交互是1对1还是1对多进行划分.</p>
+<ul>
+<li>1对1 每个客户端的请求被一个服务实例所处理</li>
+<li>1对多 每个请求被多个服务实例所处理.<br>第二个维度是根据是否是同步还是异步来划分.</li>
+<li>同步 - 客户端期待在确定的时间内获得来自服务端的响应.在等待的过程中,客户端将会阻塞住.</li>
+<li><p>异步 -客户端不会阻塞等待服务端的响应.</p>
+<p>如下所示.</p>
+</li>
+</ul>
+<table>
+<thead>
+<tr>
+<th>Tables</th>
+<th style="text-align:center">一对一</th>
+<th style="text-align:right">一对多</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>同步</td>
+<td style="text-align:center">请求/响应</td>
+<td style="text-align:right">-</td>
+</tr>
+<tr>
+<td>异步</td>
+<td style="text-align:center">通知 请求/异步响应</td>
+<td style="text-align:right">发布/订阅 发布/异步响应</td>
+</tr>
+</tbody>
+</table>
+<h3 id="u4E00_u5BF9_u4E00_u4EA4_u4E92"><a href="#u4E00_u5BF9_u4E00_u4EA4_u4E92" class="headerlink" title="一对一交互"></a>一对一交互</h3><p>一对一交互有下面３种风格：</p>
+<ul>
+<li>请求/响应: 客户端发送请求，等待响应．客户端在期望的时间窗口内阻塞等待响应．在基于线程的应用中，线程将产生请求，并阻塞等待响应．</li>
+<li>通知（一次请求）：客户端发送请求给服务．但不服务方进行响应．</li>
+<li>请求/异步响应:客户端发送请求给服务，但是响应是异步的．此时客户端不会进行阻塞．</li>
+</ul>
+<h3 id="u4E00_u5BF9_u591A_u4EA4_u4E92"><a href="#u4E00_u5BF9_u591A_u4EA4_u4E92" class="headerlink" title="一对多交互"></a>一对多交互</h3><p>一对多交互有如下类型：</p>
+<ul>
+<li>发布/订阅：客户端发布一个通知消息．这个通知消息可以被０或者多个订阅服务所消费．</li>
+<li>发布/异步响应：客户端发布一个请求消息，然后在一定时间范围内等待多个服务在响应．<br>　通知每个服务会使用上述交互风格中的一个或多个．对于一些服务,一个IPC机制就足够了．但是另一引动服务可能需要使用多种IPC机制．下图展示了打车应用中乘客请求打车中的交互．</li>
+</ul>
+<p><img src="/" alt="pics"></p>
+<p>上述服务包含了通知，请求/响应，发布/订阅等交互方式．例如，乘客通过手机发送一个<strong>通知</strong>给旅行管理服务请求打车，旅行管理服务将通过<strong>请求/响应</strong>的方式调用乘客管理服务验证乘客的身份，然后旅行管理服务创建<strong>行程单</strong>，再通过<strong>发布/订阅</strong>的方式发送给调度服务，调度服务再选择中可用的司机给乘客．</p>
+<p>看完了交互风格，咱们再看一下如何定义API.</p>
+<h2 id="API_u5B9A_u4E49"><a href="#API_u5B9A_u4E49" class="headerlink" title="API定义"></a>API定义</h2><p>服务API是连接服务和客户端之间的纽带．不管你采用何种IPC机制．你必须通过某种接口定义语言IDL精确的定义服务的API.<br>服务定义，API先行．你首先开始定义服务接口，然后与客户端工程师进行评审．服务定义完成后，再开始进行服务实现的迭代开发．<br>提供进行API设计，将加速构建服务的过程，并且容易满足客户端的需求．<br>在后文将提到，API的定义，依赖于你所采用的IPC机制．</p>
+<ul>
+<li>如果采用消息机制，那么API应包括消息通道和消息类型．</li>
+<li>如果采用HTTP协议，那么API应包括URL和请求与响应的参数．</li>
+</ul>
+<h2 id="API_u6F14_u5316"><a href="#API_u6F14_u5316" class="headerlink" title="API演化"></a>API演化</h2><p>随着时间的推移，API将不可避免的变化，在单体应用中，当API变化时，一般可以通过修改更新函数调用处代码完成．但是，微服务应用相对比较困难．你不能强制所有客户端进行升级来适应你的服务．因此，你应该增加部署新版本的服务使得新版本服务可以同步运行．这里很重点一点就是你必须要有一个策略来处理此类问题．<br>如此处理API的变化问题，如果一些变化很小，那么应向后兼容以前的版本．例如，增加请求的属性参数或响应参数．<br>你应该坚持客户端与服务端之间保持<strong>鲁棒原则</strong>．如果客户端使用老的API也能在新服务下正常工作．服务端提供默认值给缺失参数的客户请求．并且客户端忽略响应中的多余数据．</p>
+<p>然而，有时候，你必须做为重点且不兼容的API变化，因为你不能强制客户端立即升级．服务端必须在一段时间内支持老的版本．如果你采用基于HTTP机制如REST请求，一个方法不是在请求URL中加上版本号．每个服务实例可以同时处理多个版本．另外一种可选的方案是，你可以部署不同的实体来处理不同的版本．</p>
+<h2 id="u5904_u7406_u5C40_u90E8_u5931_u6548"><a href="#u5904_u7406_u5C40_u90E8_u5931_u6548" class="headerlink" title="处理局部失效"></a>处理局部失效</h2><p>由于客户端和服务端是独立且隔离的进程，出于服务宕机或者服务升级的原因，．服务可能没有各客户端请求回复响应．或者由于负载加大，导致服务响应时间延长．<br>比如说，在产品详情页的场景中，我们想象一下，如果推荐服务不可用，一个原生的客户端可能阻塞等待响应．</p>
+<p>处理局部失败的方法：</p>
+<ul>
+<li>网络超时：等待响应时，不进行阻塞，而是通过超时机制保持资源不被占用．</li>
+<li>限制外部请求的数量：对于特定的服务，限制外部请求的数量．当超过请求上限时，服务立即向客户端回复不可用．</li>
+<li>断路器模式：通过根踪统计请求的正确和错误响应的数据，如果错误数超过了配置的上限，那么断路器，使得后续的请求立即失效．如果大量的请求失效．就建议使服务不可用，这样发送给请求将变得无效．当客户端请求成功后，再重新关闭断路器．</li>
+<li>采用回退机制：当请求失败时，提供回退的逻辑．例如，返回缓存的数据．或者提供默认值．比如，返回一个固定的推荐信息(热门商品也行啊)．</li>
+</ul>
+<h2 id="IPC_u6280_u672F"><a href="#IPC_u6280_u672F" class="headerlink" title="IPC技术"></a>IPC技术</h2><p>　对于IPC,这里有很多不同的IPC技术可以供选择．选择列表如下：</p>
+<ul>
+<li>同步通信．如Thrift或REST</li>
+<li>异步通信：基于消息机制的AMQP或STOMP.<br>对于通信的内容，也有不同的格式．从易于理解的可读性的JSON或XML,到使用二进制协议(通常意味着高效)如Protocal Buffer或Avro．</li>
+</ul>
+<h3 id="u57FA_u4E8E_u6D88_u606F_u7684_u5F02_u6B65_u901A_u4FE1"><a href="#u57FA_u4E8E_u6D88_u606F_u7684_u5F02_u6B65_u901A_u4FE1" class="headerlink" title="基于消息的异步通信"></a>基于消息的异步通信</h3><p>当使用异步消息时进行异步信息交换时，客户端通过消息将请求发送给服务，如果服务准备好了回复，将发送一条另外的消息给客户端．因为通信是异步的，客户端不需要阻塞等待响应．<br>消息由消息头(如发送方的元数据)和消息体组成．消息通过<strong>通道</strong>进行传输．消息生产者可以发送消息给通道．消息消费者可以从通道中接收消息．<br>这里有两种类型的通道：</p>
+<ul>
+<li>点对点</li>
+<li>发布－订阅<br>点对点通道传输的消息，仅可以被一个消费者从通道中读取．使用点对点通道的服务是前面所述的一对一交互模式．<br>发布－订阅通道可以将消息发送给所以关注消费者的服务．使用发布订阅通道的服务是前面所述的一对多交互模式．<br>下面的图示展示了打车应用　中使用的发布订阅通道．<br><img src="/" alt="pics"></li>
+</ul>
+<p>当一个行程单创建时，旅行服务发布一个行程消息到通道中．调度服务订阅从通道中获取消息，然后找出合适的司机，然后将派单信息发送到通道之中．这时候，订阅了派单信息的消息推送服务中通道中取出消息，再发送给司机和乘客．</p>
+<h4 id="u6D88_u606F_u9009_u578B_uFF1A"><a href="#u6D88_u606F_u9009_u578B_uFF1A" class="headerlink" title="消息选型："></a>消息选型：</h4><p>消息系统有很多种，你最好选择支持多种语言的消息系统．<br>一些消息系统支持标准协议，如AMQP或STOMP.<br>一些消息系统是私有协议，但已经文档化，有很多开源消息系统如RabbitMQ,Apache Kafka,Apache ActiveMQ和NSQ.<br>在高级别上，这些消息系统支持各种消息和通道．它们都朝着可靠，高性能，可伸缩方向发展．</p>
+<h4 id="u4F7F_u7528_u6D88_u606F_u7684_u4F18_u70B9"><a href="#u4F7F_u7528_u6D88_u606F_u7684_u4F18_u70B9" class="headerlink" title="使用消息的优点"></a>使用消息的优点</h4><ul>
+<li>客户端与服务端解藕　：　客户端发送消息给相应的通道即可，不需要关心服务实例的位置．不需要使用发现机制确定服务实例的位置．</li>
+<li>消息缓冲　：在请求/响应式协议(如HTTP)中，客户端和服务端在交换信息期间必须同时在线．相反，消息代码缓冲消息，直到消息被消费者所处理．举个例子，在线商城应用中，当订单被创建时，如果订单处理系统不可用，订单信息可以缓存起来，当订单处理系统恢复后，可以继续完成处理．</li>
+<li>客户端－服务端柔性交互：</li>
+</ul>
+<h4 id="u6D88_u606F_u7CFB_u7EDF_u7684_u7F3A_u70B9"><a href="#u6D88_u606F_u7CFB_u7EDF_u7684_u7F3A_u70B9" class="headerlink" title="消息系统的缺点"></a>消息系统的缺点</h4><ul>
+<li>额外的运维复杂性　：　消息系统是一种系统组件，它需要被安装，配置和运维．而且应保证消息系统的高可用性．否则如果消息系统是单点的话，则存在单点故障，系统的可靠性会产生影响．</li>
+<li>相对请求响应方式复杂些．不展开描述</li>
+</ul>
+<h3 id="u8BF7_u6C42/_u54CD_u5E94_u5F0F_u540C_u6B65IPC"><a href="#u8BF7_u6C42/_u54CD_u5E94_u5F0F_u540C_u6B65IPC" class="headerlink" title="请求/响应式同步IPC"></a>请求/响应式同步IPC</h3><p>当使用请求/响应式同步IPC机制时，客户端发送请求给服务端，服务端处理请求，然后发送响应给客户端．通常大部分客户端，是由线程阻塞来等待响应．也有些客户端通过事件驱动的异步机制来等待响应．这可能是通过<strong>Futures</strong>或<strong>Rx</strong>观察者来封装实现．这里有很多协议可以选择，两种流行的协议是REST和Thrift.</p>
+<h4 id="REST"><a href="#REST" class="headerlink" title="REST"></a>REST</h4><p>没必要展开了，很多地方地介绍．</p>
+<h4 id="Thrift"><a href="#Thrift" class="headerlink" title="Thrift"></a>Thrift</h4><p>支持多种语言，自动生成代码．over</p>
+<h3 id="u6D88_u606F_u7F16_u7801"><a href="#u6D88_u606F_u7F16_u7801" class="headerlink" title="消息编码"></a>消息编码</h3><h4 id="JSON"><a href="#JSON" class="headerlink" title="JSON"></a>JSON</h4><h4 id="XML"><a href="#XML" class="headerlink" title="XML"></a>XML</h4><h4 id="Protocal_Buffer"><a href="#Protocal_Buffer" class="headerlink" title="Protocal Buffer"></a>Protocal Buffer</h4><p>推荐JSON,如果对性能要求高，则推荐PB.</p>
+<h2 id="u603B_u7ED3"><a href="#u603B_u7ED3" class="headerlink" title="总结"></a>总结</h2><p> 当你采用微服务时，进程间通信不可避免．在设计进程间通信时，需要考虑下面几点：</p>
+<ul>
+<li>服务间如何交互？</li>
+<li>如何设计API？</li>
+<li>如何应用API演化？</li>
+<li>如何处理失效？</li>
+</ul>
+<p>这里有两种进程间通信机制，同步请求响应和异步消息机制．在后面的文章中，我们将看看服务发现的问题．</p>
+	  
+
+	  <div>
+  		<center>
+		  <div class="pagination">
+<ul class="pagination">
+	
+	
+	
+	
+	
+	
+		
+		
+	
+		
+		
+	
+		
+		
+	
+		
+		
+	
+		
+		
+	
+		
+		
+	
+		
+		
+	
+		
+		
+	
+		
+		
+	
+		
+		
+	
+		
+		
+	
+		
+		
+	
+		
+		
+	
+		
+		
+	
+		
+		
+	
+		
+		
+	
+		
+		
+	
+		
+		
+	
+		
+		
+	
+		
+		
+	
+		
+		
+	
+		
+		
+	
+		
+		
+	
+		
+		
+	
+		
+		
+	
+		
+		
+	
+		
+		
+	
+		
+		
+	
+		
+		
+	
+		
+		
+	
+		
+		
+	
+		
+		
+	
+		
+		
+	
+		
+		
+	
+		
+		
+	
+		
+		
+	
+		
+		
+			
+		
+	
+		
+		
+	
+		
+		
+	
+		
+		
+	
+		
+		
+	
+		
+		
+			
+		
+	
+		
+		
+			
+			
+		
+	
+		
+		
+			
+			
+			
+		
+		
+			
+		
+	
+		
+		
+			
+		
+	
+		
+		
+			
+		
+	
+		
+		
+	
+		
+		
+	
+		
+		
+			
+		
+	
+		
+		
+			
+		
+	
+		
+		
+			
+		
+	
+		
+		
+	
+		
+		
+	
+		
+		
+	
+		
+		
+	
+		
+		
+	
+		
+		
+	
+		
+		
+	
+		
+		
+	
+		
+		
+	
+		
+		
+	
+		
+		
+	
+		
+		
+	
+		
+		
+	
+		
+		
+	
+		
+		
+	
+		
+		
+	
+		
+		
+	
+		
+		
+	
+		
+		
+	
+		
+		
+	
+		
+		
+	
+		
+		
+	
+		
+		
+	
+		
+		
+	
+		
+		
+	
+		
+		
+	
+		
+		
+			
+		
+	
+		
+		
+	
+		
+		
+	
+		
+		
+	
+		
+		
+	
+		
+		
+	
+		
+		
+	
+		
+		
+			
+		
+	
+		
+		
+	
+		
+		
+			
+		
+	
+		
+		
+	
+		
+		
+			
+		
+	
+		
+		
+			
+		
+	
+		
+		
+	
+		
+		
+	
+		
+		
+	
+		
+		
+	
+		
+		
+	
+		
+		
+	
+		
+		
+	
+		
+		
+	
+		
+		
+			
+		
+	
+		
+		
+			
+		
+	
+		
+		
+	
+		
+		
+	
+		
+		
+			
+		
+	
+		
+		
+	
+		
+		
+	
+		
+		
+	
+		
+		
+	
+		
+		
+	
+		
+		
+	
+		
+		
+	
+	
+	
+		<li class="prev"><a href="/2016/03/12/micro-service-4/" class="alignleft prev"><i class="fa fa-arrow-circle-o-left"></i>prev</a></li>
+	
+	<li><a href="/"><i class="fa fa-archive"></i>Home</a></li>
+	
+		<li class="next"><a href="/2016/03/11/how-to-adopt-microservices/" class="alignright next">next<i class="fa fa-arrow-circle-o-right"></i></a></li>
+	
+</ul>
+</div>
+
+		</center>
+	  </div>
+	  
+	</div> <!-- col-md-9/col-md-12 -->
+	
+  </div><!-- row -->
+
+	</div>
+  </div>
+  <div class="container-narrow">
+	<footer> <p>
+  &copy; 2016 niejinping
+  
+      with help from <a href="http://zespia.tw/hexo/" target="_blank">Hexo</a> and <a href="http://getbootstrap.com/" target="_blank">Twitter Bootstrap</a>. Theme by <a href="http://github.com/wzpan/hexo-theme-wixo/">Wixo</a>.    
+</p> </footer>
+  </div> <!-- container-narrow -->
+  
+<a id="gotop" href="#">   
+  <span>▲</span> 
+</a>
+
+<script src="/js/jquery.imagesloaded.min.js"></script>
+<script src="/js/gallery.js"></script>
+<script src="/js/bootstrap.min.js"></script>
+<script src="/js/jquery.tableofcontents.min.js"></script>
+<script src="/js/tocgenerator.min.js"></script>
+<script src="/js/main.js"></script>
+
+
+
+
+<link rel="stylesheet" href="/fancybox/jquery.fancybox.css" media="screen" type="text/css">
+<script src="/fancybox/jquery.fancybox.pack.js"></script>
+<script type="text/javascript">
+(function($){
+  $('.fancybox').fancybox();
+})(jQuery);
+</script>
+
+
+<script>
+var _hmt = _hmt || [];
+(function() {
+  var hm = document.createElement("script");
+  hm.src = "//hm.baidu.com/hm.js?78cd2d23583461b225b36bbf47433d64";
+  var s = document.getElementsByTagName("script")[0]; 
+  s.parentNode.insertBefore(hm, s);
+})();
+</script>
+
+</body>
+</html>

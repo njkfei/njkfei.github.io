@@ -1,0 +1,519 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+  <meta charset="utf-8">
+  
+  <title>如何采用微服务 | 游骑爬，生命在于折腾</title>
+  <meta name="author" content="niejinping">
+  
+  <meta name="description" content="学习总结，知识管理">
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+  <meta property="og:title" content="如何采用微服务"/>
+  <meta property="og:site_name" content="游骑爬，生命在于折腾"/>
+
+  
+    <meta property="og:image" content="undefined"/>
+  
+
+  
+    <link rel="alternative" href="/atom.xml" title="游骑爬，生命在于折腾" type="application/atom+xml">
+  
+  
+    <link href="/favicon.png" rel="icon">
+  
+  
+  <link rel="stylesheet" href="/css/bootstrap.min.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/css/font-awesome.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/css/style.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/css/highlight.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/css/google-fonts.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/css/responsive.css" media="screen" type="text/css">  
+  <link rel="stylesheet" href="/css/sidenav.css" media="screen" type="text/css">  
+  <!--[if lt IE 9]><script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script><![endif]-->
+
+  <script src="/js/jquery-2.0.3.min.js"></script>
+
+  <!-- analytics -->
+  
+<script type="text/javascript">
+var _gaq = _gaq || [];
+_gaq.push(['_setAccount', 'UA-72124819-1']);
+_gaq.push(['_trackPageview']);
+(function() {
+var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+
+ga.src = ('https:' == document.location.protocol ? 'https://' : 'http://') + 'stats.g.doubleclick.net/dc.js';
+
+var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+})();
+</script>
+
+
+</head>
+
+<body id="body" data-spy="scroll" data-target=".toc">
+  <div class="container" id="container">
+	<div class="content">
+	  <div class="page-header">		
+  <h1><a class="brand" href="/">游骑爬，生命在于折腾</a><span class="split"></span><span class="title">如何采用微服务</span><span class="date" id="title-date"><i class="fa fa-clock-o"></i> 2016-03-11</span></h1>
+</div>		
+
+<div class="row page">
+  <!-- cols -->	
+  
+  
+
+  
+	<div class="col-md-12">
+	  
+
+	  <!-- content -->
+	  <h2 id="1__u5F15_u8A00"><a href="#1__u5F15_u8A00" class="headerlink" title="1　引言"></a>1　引言</h2><p>　微服务已成为构建应用的新标准．基于微服务的软件设计将复杂应用分解为细小，敏捷，独立的组件．从而加速推向市场．<br>　微服务维护简单，利于持续集成．</p>
+<h2 id="2__u5FAE_u670D_u52A1"><a href="#2__u5FAE_u670D_u52A1" class="headerlink" title="2　微服务"></a>2　微服务</h2><h3 id="2-1__u4EC0_u4E48_u662F_u5FAE_u670D_u52A1"><a href="#2-1__u4EC0_u4E48_u662F_u5FAE_u670D_u52A1" class="headerlink" title="2.1　什么是微服务"></a>2.1　什么是微服务</h3><h3 id="2-2__u5173_u952E_u4F18_u70B9"><a href="#2-2__u5173_u952E_u4F18_u70B9" class="headerlink" title="2.2　关键优点"></a>2.2　关键优点</h3><h3 id="2-3__u5173_u4E8ESOA_2C_u9762_u5411_u670D_u52A1_u7684_u67B6_u6784"><a href="#2-3__u5173_u4E8ESOA_2C_u9762_u5411_u670D_u52A1_u7684_u67B6_u6784" class="headerlink" title="2.3　关于SOA,面向服务的架构"></a>2.3　关于SOA,面向服务的架构</h3><h3 id="2-4__u5176_u5B83_u89E3_u85D5_u6280_u672F"><a href="#2-4__u5176_u5B83_u89E3_u85D5_u6280_u672F" class="headerlink" title="2.4　其它解藕技术"></a>2.4　其它解藕技术</h3><h3 id="2-5__u6CA1_u6709_u94F6_u5F39"><a href="#2-5__u6CA1_u6709_u94F6_u5F39" class="headerlink" title="2.5　没有银弹"></a>2.5　没有银弹</h3><h3 id="2-6__u5C0F_u7ED3"><a href="#2-6__u5C0F_u7ED3" class="headerlink" title="2.6　小结"></a>2.6　小结</h3><h2 id="3__u96C6_u6210"><a href="#3__u96C6_u6210" class="headerlink" title="3　集成"></a>3　集成</h2><h3 id="3-1__u7406_u60F3_u7684_u96C6_u6210_u6280_u672F"><a href="#3-1__u7406_u60F3_u7684_u96C6_u6210_u6280_u672F" class="headerlink" title="3.1　理想的集成技术"></a>3.1　理想的集成技术</h3><h3 id="3-2__u4E0E_u5BA2_u6237_u5BF9_u63A5"><a href="#3-2__u4E0E_u5BA2_u6237_u5BF9_u63A5" class="headerlink" title="3.2　与客户对接"></a>3.2　与客户对接</h3><h3 id="3-3__u5171_u4EAB_u6570_u636E_u5E93"><a href="#3-3__u5171_u4EAB_u6570_u636E_u5E93" class="headerlink" title="3.3　共享数据库"></a>3.3　共享数据库</h3><h3 id="3-4__u540C_u6B65_VS__u5F02_u6B65"><a href="#3-4__u540C_u6B65_VS__u5F02_u6B65" class="headerlink" title="3.4　同步　VS 异步"></a>3.4　同步　VS 异步</h3><h3 id="3-5__u8FDC_u7A0B_u8FC7_u7A0B_u8C03_u7528RPC"><a href="#3-5__u8FDC_u7A0B_u8FC7_u7A0B_u8C03_u7528RPC" class="headerlink" title="3.5　远程过程调用RPC"></a>3.5　远程过程调用RPC</h3><h3 id="3-6_REST"><a href="#3-6_REST" class="headerlink" title="3.6　REST"></a>3.6　REST</h3><h3 id="3-7__u57FA_u4E8E_u4E8B_u4EF6_u534F_u4F5C_u5B9E_u73B0_u5F02_u6B65"><a href="#3-7__u57FA_u4E8E_u4E8B_u4EF6_u534F_u4F5C_u5B9E_u73B0_u5F02_u6B65" class="headerlink" title="3.7　基于事件协作实现异步"></a>3.7　基于事件协作实现异步</h3><h3 id="3-8__u57FA_u4E8E_u72B6_u6001_u673A_u7684_u670D_u52A1"><a href="#3-8__u57FA_u4E8E_u72B6_u6001_u673A_u7684_u670D_u52A1" class="headerlink" title="3.8　基于状态机的服务"></a>3.8　基于状态机的服务</h3><h3 id="3-9__u53CD_u5E94_u5F0F_u6269_u5C55"><a href="#3-9__u53CD_u5E94_u5F0F_u6269_u5C55" class="headerlink" title="3.9　反应式扩展"></a>3.9　反应式扩展</h3><h3 id="3-10__u5728_u5FAE_u670D_u52A1_u4E16_u754C_u4E2D_u4EE3_u7801_u590D_u7528_u7684_u98CE_u9669"><a href="#3-10__u5728_u5FAE_u670D_u52A1_u4E16_u754C_u4E2D_u4EE3_u7801_u590D_u7528_u7684_u98CE_u9669" class="headerlink" title="3.10　在微服务世界中代码复用的风险"></a>3.10　在微服务世界中代码复用的风险</h3><h3 id="3-11__u901A_u8FC7_u5F15_u7528_u8BBF_u95EE"><a href="#3-11__u901A_u8FC7_u5F15_u7528_u8BBF_u95EE" class="headerlink" title="3.11　通过引用访问"></a>3.11　通过引用访问</h3><h3 id="3-12__u7248_u672C_u5316"><a href="#3-12__u7248_u672C_u5316" class="headerlink" title="3.12　版本化"></a>3.12　版本化</h3><h3 id="3-13__u7528_u6237_u63A5_u53E3"><a href="#3-13__u7528_u6237_u63A5_u53E3" class="headerlink" title="3.13　用户接口"></a>3.13　用户接口</h3><h3 id="3-14__u4E0E_u7B2C_u4E09_u65B9_u8F6F_u4EF6_u96C6_u6210"><a href="#3-14__u4E0E_u7B2C_u4E09_u65B9_u8F6F_u4EF6_u96C6_u6210" class="headerlink" title="3.14　与第三方软件集成"></a>3.14　与第三方软件集成</h3><h3 id="3-15__u5C0F_u7ED3"><a href="#3-15__u5C0F_u7ED3" class="headerlink" title="3.15　小结"></a>3.15　小结</h3><h2 id="4__u4F38_u7F29_u5FAE_u670D_u52A1"><a href="#4__u4F38_u7F29_u5FAE_u670D_u52A1" class="headerlink" title="4　伸缩微服务"></a>4　伸缩微服务</h2><h3 id="4-1__u968F_u65F6_u4F1A_u5931_u6548"><a href="#4-1__u968F_u65F6_u4F1A_u5931_u6548" class="headerlink" title="4.1　随时会失效"></a>4.1　随时会失效</h3><h3 id="4-2__u529F_u80FD_u964D_u7EA7"><a href="#4-2__u529F_u80FD_u964D_u7EA7" class="headerlink" title="4.2　功能降级"></a>4.2　功能降级</h3><h3 id="4-3__u67B6_u6784_u5B89_u5168_u63AA_u65BD"><a href="#4-3__u67B6_u6784_u5B89_u5168_u63AA_u65BD" class="headerlink" title="4.3　架构安全措施"></a>4.3　架构安全措施</h3><h3 id="4-4__u53CD_u8106_u5F31_u7684_u7EC4_u7EC7"><a href="#4-4__u53CD_u8106_u5F31_u7684_u7EC4_u7EC7" class="headerlink" title="4.4　反脆弱的组织"></a>4.4　反脆弱的组织</h3><h3 id="4-5__u5E42_u7B49_u6027"><a href="#4-5__u5E42_u7B49_u6027" class="headerlink" title="4.5　幂等性"></a>4.5　幂等性</h3><h3 id="4-6__u4F38_u7F29_u5316"><a href="#4-6__u4F38_u7F29_u5316" class="headerlink" title="4.6　伸缩化"></a>4.6　伸缩化</h3><h3 id="4-7__u6570_u636E_u5E93_u4F38_u7F29"><a href="#4-7__u6570_u636E_u5E93_u4F38_u7F29" class="headerlink" title="4.7　数据库伸缩"></a>4.7　数据库伸缩</h3><h3 id="4-8__u7F13_u5B58"><a href="#4-8__u7F13_u5B58" class="headerlink" title="4.8　缓存"></a>4.8　缓存</h3><h3 id="4-9__u5199_u7F13_u5B58_uFF08_u6DD8_u6C70_u7F13_u5B58_uFF09"><a href="#4-9__u5199_u7F13_u5B58_uFF08_u6DD8_u6C70_u7F13_u5B58_uFF09" class="headerlink" title="4.9　写缓存（淘汰缓存）"></a>4.9　写缓存（淘汰缓存）</h3><h3 id="4-10__u81EA_u52A8_u4F38_u7F29"><a href="#4-10__u81EA_u52A8_u4F38_u7F29" class="headerlink" title="4.10　自动伸缩"></a>4.10　自动伸缩</h3><h3 id="4-11_CAP_u7406_u8BBA"><a href="#4-11_CAP_u7406_u8BBA" class="headerlink" title="4.11　CAP理论"></a>4.11　CAP理论</h3><h3 id="4-12__u670D_u52A1_u53D1_u73B0"><a href="#4-12__u670D_u52A1_u53D1_u73B0" class="headerlink" title="4.12　服务发现"></a>4.12　服务发现</h3><h3 id="4-13__u52A8_u6001_u670D_u52A1_u6CE8_u518C"><a href="#4-13__u52A8_u6001_u670D_u52A1_u6CE8_u518C" class="headerlink" title="4.13　动态服务注册"></a>4.13　动态服务注册</h3><h3 id="4-14__u670D_u52A1_u6587_u6863_u5316"><a href="#4-14__u670D_u52A1_u6587_u6863_u5316" class="headerlink" title="4.14　服务文档化"></a>4.14　服务文档化</h3><h3 id="4-15__u81EA_u63CF_u8FF0_u7CFB_u7EDF"><a href="#4-15__u81EA_u63CF_u8FF0_u7CFB_u7EDF" class="headerlink" title="4.15　自描述系统"></a>4.15　自描述系统</h3><h3 id="4-16__u5C0F_u7ED3"><a href="#4-16__u5C0F_u7ED3" class="headerlink" title="4.16　小结"></a>4.16　小结</h3>	  
+
+	  <div>
+  		<center>
+		  <div class="pagination">
+<ul class="pagination">
+	
+	
+	
+	
+	
+	
+		
+		
+	
+		
+		
+	
+		
+		
+	
+		
+		
+	
+		
+		
+	
+		
+		
+	
+		
+		
+	
+		
+		
+	
+		
+		
+	
+		
+		
+	
+		
+		
+	
+		
+		
+	
+		
+		
+	
+		
+		
+	
+		
+		
+	
+		
+		
+	
+		
+		
+	
+		
+		
+	
+		
+		
+	
+		
+		
+	
+		
+		
+	
+		
+		
+	
+		
+		
+	
+		
+		
+	
+		
+		
+	
+		
+		
+	
+		
+		
+	
+		
+		
+	
+		
+		
+	
+		
+		
+	
+		
+		
+	
+		
+		
+	
+		
+		
+	
+		
+		
+	
+		
+		
+	
+		
+		
+	
+		
+		
+			
+		
+	
+		
+		
+	
+		
+		
+	
+		
+		
+	
+		
+		
+	
+		
+		
+			
+		
+	
+		
+		
+			
+		
+	
+		
+		
+			
+			
+		
+	
+		
+		
+			
+			
+			
+		
+		
+			
+		
+	
+		
+		
+			
+		
+	
+		
+		
+	
+		
+		
+	
+		
+		
+			
+		
+	
+		
+		
+			
+		
+	
+		
+		
+			
+		
+	
+		
+		
+	
+		
+		
+	
+		
+		
+	
+		
+		
+	
+		
+		
+	
+		
+		
+	
+		
+		
+	
+		
+		
+	
+		
+		
+	
+		
+		
+	
+		
+		
+	
+		
+		
+	
+		
+		
+	
+		
+		
+	
+		
+		
+	
+		
+		
+	
+		
+		
+	
+		
+		
+	
+		
+		
+	
+		
+		
+	
+		
+		
+	
+		
+		
+	
+		
+		
+	
+		
+		
+	
+		
+		
+	
+		
+		
+	
+		
+		
+			
+		
+	
+		
+		
+	
+		
+		
+	
+		
+		
+	
+		
+		
+	
+		
+		
+	
+		
+		
+	
+		
+		
+			
+		
+	
+		
+		
+	
+		
+		
+			
+		
+	
+		
+		
+	
+		
+		
+			
+		
+	
+		
+		
+			
+		
+	
+		
+		
+	
+		
+		
+	
+		
+		
+	
+		
+		
+	
+		
+		
+	
+		
+		
+	
+		
+		
+	
+		
+		
+	
+		
+		
+			
+		
+	
+		
+		
+			
+		
+	
+		
+		
+	
+		
+		
+	
+		
+		
+			
+		
+	
+		
+		
+	
+		
+		
+	
+		
+		
+	
+		
+		
+	
+		
+		
+	
+		
+		
+	
+		
+		
+	
+	
+	
+		<li class="prev"><a href="/2016/03/12/micro-service-3/" class="alignleft prev"><i class="fa fa-arrow-circle-o-left"></i>prev</a></li>
+	
+	<li><a href="/"><i class="fa fa-archive"></i>Home</a></li>
+	
+		<li class="next"><a href="/2016/03/11/micro-service-2/" class="alignright next">next<i class="fa fa-arrow-circle-o-right"></i></a></li>
+	
+</ul>
+</div>
+
+		</center>
+	  </div>
+	  
+	</div> <!-- col-md-9/col-md-12 -->
+	
+  </div><!-- row -->
+
+	</div>
+  </div>
+  <div class="container-narrow">
+	<footer> <p>
+  &copy; 2016 niejinping
+  
+      with help from <a href="http://zespia.tw/hexo/" target="_blank">Hexo</a> and <a href="http://getbootstrap.com/" target="_blank">Twitter Bootstrap</a>. Theme by <a href="http://github.com/wzpan/hexo-theme-wixo/">Wixo</a>.    
+</p> </footer>
+  </div> <!-- container-narrow -->
+  
+<a id="gotop" href="#">   
+  <span>▲</span> 
+</a>
+
+<script src="/js/jquery.imagesloaded.min.js"></script>
+<script src="/js/gallery.js"></script>
+<script src="/js/bootstrap.min.js"></script>
+<script src="/js/jquery.tableofcontents.min.js"></script>
+<script src="/js/tocgenerator.min.js"></script>
+<script src="/js/main.js"></script>
+
+
+
+
+<link rel="stylesheet" href="/fancybox/jquery.fancybox.css" media="screen" type="text/css">
+<script src="/fancybox/jquery.fancybox.pack.js"></script>
+<script type="text/javascript">
+(function($){
+  $('.fancybox').fancybox();
+})(jQuery);
+</script>
+
+
+<script>
+var _hmt = _hmt || [];
+(function() {
+  var hm = document.createElement("script");
+  hm.src = "//hm.baidu.com/hm.js?78cd2d23583461b225b36bbf47433d64";
+  var s = document.getElementsByTagName("script")[0]; 
+  s.parentNode.insertBefore(hm, s);
+})();
+</script>
+
+</body>
+</html>

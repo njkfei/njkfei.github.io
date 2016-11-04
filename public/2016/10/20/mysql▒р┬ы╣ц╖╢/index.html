@@ -1,0 +1,577 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+  <meta charset="utf-8">
+  
+  <title>MySql编码规范 | 游骑爬，生命在于折腾</title>
+  <meta name="author" content="niejinping">
+  
+  <meta name="description" content="学习总结，知识管理">
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+  <meta property="og:title" content="MySql编码规范"/>
+  <meta property="og:site_name" content="游骑爬，生命在于折腾"/>
+
+  
+    <meta property="og:image" content="undefined"/>
+  
+
+  
+    <link rel="alternative" href="/atom.xml" title="游骑爬，生命在于折腾" type="application/atom+xml">
+  
+  
+    <link href="/favicon.png" rel="icon">
+  
+  
+  <link rel="stylesheet" href="/css/bootstrap.min.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/css/font-awesome.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/css/style.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/css/highlight.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/css/google-fonts.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/css/responsive.css" media="screen" type="text/css">  
+  <link rel="stylesheet" href="/css/sidenav.css" media="screen" type="text/css">  
+  <!--[if lt IE 9]><script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script><![endif]-->
+
+  <script src="/js/jquery-2.0.3.min.js"></script>
+
+  <!-- analytics -->
+  
+<script type="text/javascript">
+var _gaq = _gaq || [];
+_gaq.push(['_setAccount', 'UA-72124819-1']);
+_gaq.push(['_trackPageview']);
+(function() {
+var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+
+ga.src = ('https:' == document.location.protocol ? 'https://' : 'http://') + 'stats.g.doubleclick.net/dc.js';
+
+var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+})();
+</script>
+
+
+</head>
+
+<body id="body" data-spy="scroll" data-target=".toc">
+  <div class="container" id="container">
+	<div class="content">
+	  <div class="page-header">		
+  <h1><a class="brand" href="/">游骑爬，生命在于折腾</a><span class="split"></span><span class="title">MySql编码规范</span><span class="date" id="title-date"><i class="fa fa-clock-o"></i> 2016-10-20</span></h1>
+</div>		
+
+<div class="row page">
+  <!-- cols -->	
+  
+  <div class="col-xs-12 col-sm-3 col-md-3 toc"> 
+	<!-- toc -->
+<script type="text/javascript">
+		jQuery(document).ready(function() {
+ 		   generateWikiTOC('.note', '.toc',  2 , 2 );
+		});
+</script>
+  </div><!-- col-md-3 -->
+  
+  
+
+  
+  <div class="col-xs-12 col-sm-9 col-md-9 note">
+	
+
+	  <!-- content -->
+	  <h2 id="u524D_u8A00"><a href="#u524D_u8A00" class="headerlink" title="前言"></a>前言</h2><ul>
+<li>mysql是互联网事实上的标准</li>
+<li>mysql性能对付中小型网站足够了，在没有到性能瓶颈前，可以先不上缓存系统。</li>
+<li>MySQL的查询速度依赖良好的索引设计，因此索引对于高性能至关重要。合理的索引会加快查询速度，不合理的索引会降低速度。</li>
+</ul>
+<h2 id="u89C4_u5219"><a href="#u89C4_u5219" class="headerlink" title="规则"></a>规则</h2><h3 id="u8868_u8BBE_u8BA1"><a href="#u8868_u8BBE_u8BA1" class="headerlink" title="表设计"></a>表设计</h3><ol>
+<li>库名、表名、字段名必须使用小写字母，“_”分割。</li>
+<li>库名、表名、字段名必须不超过12个字符。</li>
+<li>库名、表名、字段名见名知意,建议使用名词而不是动词。</li>
+<li>强制使用InnoDB存储引擎。</li>
+<li>必须有惟一键</li>
+<li>存储精确浮点数必须使用DECIMAL替代FLOAT和DOUBLE。</li>
+<li>建议使用UNSIGNED存储非负数值。</li>
+<li>建议使用INT UNSIGNED存储IPV4。</li>
+<li>整形定义中不添加长度，比如使用INT，而不是INT(4)。</li>
+<li>使用短数据类型，比如取值范围为0-80时，使用TINYINT UNSIGNED。</li>
+<li>不建议使用ENUM类型，使用TINYINT来代替。</li>
+<li>尽可能不使用TEXT、BLOB类型。</li>
+<li>VARCHAR(N)，N表示的是字符数不是字节数，比如VARCHAR(255)，可以最大可存储255个汉字，需要根据实际的宽度来选择N。<br>. VARCHAR(N)，N尽可能小，因为MySQL一个表中所有的VARCHAR字段最大长度是65535个字节，进行排序和创建临时表一类的内存操作时，会使用N的长度申请内存。</li>
+<li>表字符集选择UTF8。</li>
+<li>使用VARBINARY存储变长字符串。</li>
+<li>存储年使用YEAR类型。</li>
+<li>存储日期使用DATE类型。</li>
+<li>存储时间（精确到秒）建议使用TIMESTAMP类型，因为TIMESTAMP使用4字节，DATETIME使用8个字节。</li>
+<li>建议字段定义为NOT NULL。</li>
+<li>将过大字段拆分到其他表中。</li>
+<li>禁止在数据库中使用VARBINARY、BLOB存储图片、文件等。</li>
+<li>表结构变更需要通知DBA审核。</li>
+</ol>
+<h3 id="u7D22_u5F15"><a href="#u7D22_u5F15" class="headerlink" title="索引"></a>索引</h3><ol>
+<li>非唯一索引必须按照“idx<em>字段名称</em>字段名称[_字段名]”进行命名。</li>
+<li>唯一索引必须按照“uniq<em>字段名称</em>字段名称[_字段名]”进行命名。</li>
+<li>索引名称必须使用小写。</li>
+<li>索引中的字段数建议不超过5个。</li>
+<li>单张表的索引数量控制在5个以内。</li>
+<li>唯一键由3个以下字段组成，并且字段都是整形时，使用唯一键作为主键。</li>
+<li>没有唯一键或者唯一键不符合5中的条件时，使用自增（或者通过发号器获取）id作为主键。</li>
+<li>唯一键不和主键重复。</li>
+<li>索引字段的顺序需要考虑字段值去重之后的个数，个数多的放在前面。</li>
+<li>ORDER BY，GROUP BY，DISTINCT的字段需要添加在索引的后面。</li>
+<li>使用EXPLAIN判断SQL语句是否合理使用索引，尽量避免extra列出现：Using File Sort，Using Temporary。</li>
+<li>UPDATE、DELETE语句需要根据WHERE条件添加索引。</li>
+<li>不建议使用%前缀模糊查询，例如LIKE “%weibo”。</li>
+<li>对长度过长的VARCHAR字段建立索引时，添加crc32或者MD5 </li>
+<li>Hash字段，对Hash字段建立索引。</li>
+<li>合理创建联合索引（避免冗余），(a,b,c) 相当于 (a) 、(a,b) 、(a,b,c)。</li>
+<li>合理利用覆盖索引。</li>
+<li>SQL变更需要确认索引是否需要变更并通知DBA。</li>
+</ol>
+<h3 id="SQL_u8BED_u53E5"><a href="#SQL_u8BED_u53E5" class="headerlink" title="SQL语句"></a>SQL语句</h3><ol>
+<li>使用prepared statement，可以提供性能并且避免SQL注入。</li>
+<li>SQL语句中IN包含的值不应过多。</li>
+<li>UPDATE、DELETE语句不使用LIMIT。</li>
+<li>WHERE条件中必须使用合适的类型，避免MySQL进行隐式类型转化。</li>
+<li>SELECT语句只获取需要的字段。</li>
+<li>SELECT、INSERT语句必须显式的指明字段名称，不使用SELECT *，不使用INSERT INTO table()。</li>
+<li>使用SELECT column_name1, column_name2 FROM table WHERE [condition]而不是SELECT column_name1 FROM table WHERE [condition]和SELECT column_name2 FROM table WHERE [condition]。</li>
+<li>WHERE条件中的非等值条件（IN、BETWEEN、&lt;、&lt;=、&gt;、&gt;=）会导致后面的条件使用不了索引。</li>
+<li>避免在SQL语句进行数学运算或者函数运算，容易将业务逻辑和DB耦合在一起。</li>
+<li>INSERT语句使用batch提交（INSERT INTO table VALUES(),(),()……），values的个数不应过多。</li>
+<li>避免使用存储过程、触发器、函数等，容易将业务逻辑和DB耦合在一起，并且MySQL的存储过程、触发器、函数中存在一定的bug。</li>
+<li>避免使用JOIN。</li>
+<li>使用合理的SQL语句减少与数据库的交互次数。</li>
+<li>不使用ORDER BY RAND()，使用其他方法替换。</li>
+<li>建议使用合理的分页方式以提高分页的效率。</li>
+<li>统计表中记录数时使用COUNT(*)，而不是COUNT(primary_key)和COUNT(1)。</li>
+<li>禁止在从库上执行后台管理和统计类型功能的QUERY。</li>
+</ol>
+<h3 id="u6563_u8868"><a href="#u6563_u8868" class="headerlink" title="散表"></a>散表</h3><ol>
+<li>对于字段类型简单，字段数不多表，单表数据量建议控制在5000w以下。</li>
+<li>可以结合使用hash1、range、lookup table进行散表。</li>
+<li>散表如果使用md5（或者类似的hash算法）进行散表，表名后缀使用16进制，比如user_ff。</li>
+<li>推荐使用CRC32求余（或者类似的算术算法）进行散表，表名后缀使用数字，数字必须从0开始并等宽，比如散100张表，后缀从00-99。</li>
+<li>使用时间散表，表名后缀必须使用特定格式，比如按日散表user_20110209、按月散表user_201102。</li>
+</ol>
+<h3 id="u5176_u4ED6"><a href="#u5176_u4ED6" class="headerlink" title="其他"></a>其他</h3><ol>
+<li>批量导入、导出数据需要DBA进行审查，并在执行过程中观察服务。</li>
+<li>批量更新数据，如update,delete 操作，需要DBA进行审查，并在执行过程中观察服务。</li>
+<li>产品出现非数据库平台运维导致的问题和故障时，如前端被抓站，请及时通知DBA，便于维护服务稳定。</li>
+<li>业务部门程序出现bug等影响数据库服务的问题,请及时通知DBA，便于维护服务稳定。</li>
+<li>业务部门推广活动，请提前通知DBA进行服务和访问评估。</li>
+<li>如果出现业务部门人为误操作导致数据丢失，需要恢复数据，请在第一时间通知DBA，并提供准确时间，误操作语句等重要线索。</li>
+</ol>
+<h2 id="u611F_u8C22"><a href="#u611F_u8C22" class="headerlink" title="感谢"></a>感谢</h2><p><a href="http://www.imcjd.com/?p=1237" target="_blank" rel="external">MySQL开发规范</a></p>
+	  
+
+	  <div>
+  		<center>
+		  <div class="pagination">
+<ul class="pagination">
+	
+	
+	
+	
+	
+	
+		
+		
+	
+		
+		
+	
+		
+		
+	
+		
+		
+	
+		
+		
+			
+			
+		
+	
+		
+		
+	
+		
+		
+	
+		
+		
+	
+		
+		
+	
+		
+		
+	
+		
+		
+	
+		
+		
+	
+		
+		
+	
+		
+		
+	
+		
+		
+	
+		
+		
+	
+		
+		
+	
+		
+		
+	
+		
+		
+	
+		
+		
+	
+		
+		
+	
+		
+		
+	
+		
+		
+	
+		
+		
+	
+		
+		
+	
+		
+		
+	
+		
+		
+	
+		
+		
+	
+		
+		
+	
+		
+		
+	
+		
+		
+	
+		
+		
+	
+		
+		
+	
+		
+		
+	
+		
+		
+	
+		
+		
+	
+		
+		
+	
+		
+		
+	
+		
+		
+	
+		
+		
+	
+		
+		
+	
+		
+		
+	
+		
+		
+	
+		
+		
+	
+		
+		
+	
+		
+		
+	
+		
+		
+	
+		
+		
+	
+		
+		
+	
+		
+		
+	
+		
+		
+	
+		
+		
+	
+		
+		
+	
+		
+		
+	
+		
+		
+	
+		
+		
+	
+		
+		
+	
+		
+		
+	
+		
+		
+	
+		
+		
+	
+		
+		
+	
+		
+		
+	
+		
+		
+	
+		
+		
+	
+		
+		
+	
+		
+		
+	
+		
+		
+	
+		
+		
+	
+		
+		
+	
+		
+		
+	
+		
+		
+	
+		
+		
+	
+		
+		
+	
+		
+		
+	
+		
+		
+	
+		
+		
+	
+		
+		
+	
+		
+		
+	
+		
+		
+	
+		
+		
+	
+		
+		
+	
+		
+		
+	
+		
+		
+	
+		
+		
+	
+		
+		
+	
+		
+		
+	
+		
+		
+	
+		
+		
+	
+		
+		
+	
+		
+		
+	
+		
+		
+	
+		
+		
+	
+		
+		
+	
+		
+		
+	
+		
+		
+	
+		
+		
+	
+		
+		
+	
+		
+		
+	
+		
+		
+	
+		
+		
+	
+		
+		
+	
+		
+		
+	
+		
+		
+	
+		
+		
+	
+		
+		
+	
+		
+		
+	
+		
+		
+	
+		
+		
+	
+		
+		
+	
+		
+		
+	
+		
+		
+	
+	
+	
+		<li class="prev disabled"><a><i class="fa fa-arrow-circle-o-left"></i>prev</a></li>
+	
+	<li><a href="/"><i class="fa fa-archive"></i>Home</a></li>
+	
+		<li class="next disabled"><a>next<i class="fa fa-arrow-circle-o-right"></i></a></li>
+	
+</ul>
+</div>
+
+		</center>
+	  </div>
+	  
+	</div> <!-- col-md-9/col-md-12 -->
+	
+  </div><!-- row -->
+
+	</div>
+  </div>
+  <div class="container-narrow">
+	<footer> <p>
+  &copy; 2016 niejinping
+  
+      with help from <a href="http://zespia.tw/hexo/" target="_blank">Hexo</a> and <a href="http://getbootstrap.com/" target="_blank">Twitter Bootstrap</a>. Theme by <a href="http://github.com/wzpan/hexo-theme-wixo/">Wixo</a>.    
+</p> </footer>
+  </div> <!-- container-narrow -->
+  
+<a id="gotop" href="#">   
+  <span>▲</span> 
+</a>
+
+<script src="/js/jquery.imagesloaded.min.js"></script>
+<script src="/js/gallery.js"></script>
+<script src="/js/bootstrap.min.js"></script>
+<script src="/js/jquery.tableofcontents.min.js"></script>
+<script src="/js/tocgenerator.min.js"></script>
+<script src="/js/main.js"></script>
+
+
+
+
+<link rel="stylesheet" href="/fancybox/jquery.fancybox.css" media="screen" type="text/css">
+<script src="/fancybox/jquery.fancybox.pack.js"></script>
+<script type="text/javascript">
+(function($){
+  $('.fancybox').fancybox();
+})(jQuery);
+</script>
+
+
+<script>
+var _hmt = _hmt || [];
+(function() {
+  var hm = document.createElement("script");
+  hm.src = "//hm.baidu.com/hm.js?78cd2d23583461b225b36bbf47433d64";
+  var s = document.getElementsByTagName("script")[0]; 
+  s.parentNode.insertBefore(hm, s);
+})();
+</script>
+
+</body>
+</html>

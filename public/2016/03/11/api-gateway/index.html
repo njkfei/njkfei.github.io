@@ -1,0 +1,559 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+  <meta charset="utf-8">
+  
+  <title>服务化－API网关 | 游骑爬，生命在于折腾</title>
+  <meta name="author" content="niejinping">
+  
+  <meta name="description" content="学习总结，知识管理">
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+  <meta property="og:title" content="服务化－API网关"/>
+  <meta property="og:site_name" content="游骑爬，生命在于折腾"/>
+
+  
+    <meta property="og:image" content="undefined"/>
+  
+
+  
+    <link rel="alternative" href="/atom.xml" title="游骑爬，生命在于折腾" type="application/atom+xml">
+  
+  
+    <link href="/favicon.png" rel="icon">
+  
+  
+  <link rel="stylesheet" href="/css/bootstrap.min.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/css/font-awesome.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/css/style.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/css/highlight.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/css/google-fonts.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/css/responsive.css" media="screen" type="text/css">  
+  <link rel="stylesheet" href="/css/sidenav.css" media="screen" type="text/css">  
+  <!--[if lt IE 9]><script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script><![endif]-->
+
+  <script src="/js/jquery-2.0.3.min.js"></script>
+
+  <!-- analytics -->
+  
+<script type="text/javascript">
+var _gaq = _gaq || [];
+_gaq.push(['_setAccount', 'UA-72124819-1']);
+_gaq.push(['_trackPageview']);
+(function() {
+var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+
+ga.src = ('https:' == document.location.protocol ? 'https://' : 'http://') + 'stats.g.doubleclick.net/dc.js';
+
+var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+})();
+</script>
+
+
+</head>
+
+<body id="body" data-spy="scroll" data-target=".toc">
+  <div class="container" id="container">
+	<div class="content">
+	  <div class="page-header">		
+  <h1><a class="brand" href="/">游骑爬，生命在于折腾</a><span class="split"></span><span class="title">服务化－API网关</span><span class="date" id="title-date"><i class="fa fa-clock-o"></i> 2016-03-11</span></h1>
+</div>		
+
+<div class="row page">
+  <!-- cols -->	
+  
+  
+
+  
+	<div class="col-md-12">
+	  
+
+	  <!-- content -->
+	  <h2 id="1__u80CC_u666F"><a href="#1__u80CC_u666F" class="headerlink" title="1　背景"></a>1　背景</h2><p>　假设你正在使用微服务的模式构建一个在线商城，并且你正在实现产品的详情页面，你需要开发多个版本的产品详情页面用户接口，如下所示．</p>
+<ul>
+<li>对于桌面应用或移动浏览器，基于HTML5/JS UI提供接口．HTML通过服务端web应用产生．</li>
+<li>对于原生android或iPhone APP,通过REST APIR提供接口．<br>　此外，在线商城必须通过REST风格的API向第三方应用提供产品详情页信息．<br>　产品详情UI将展示很多关于产品的信息．例如<a href="/www.z.cn">亚马逊</a>的详情页通过<em>POJOS</em>展示．</li>
+<li>书的基本信息，例如书名，作者，价格等</li>
+<li>您的购买历史</li>
+<li>购买选项</li>
+<li>购买这本书的用户经常买的其它书本</li>
+<li>购买这本书的用户经常买的其它类目商品</li>
+<li>用户浏览商品信息</li>
+<li>销售榜单</li>
+<li>……<br>  因为使用微服务模式，所以在线商城将分解为多个服务．例如：</li>
+<li>产品信息服务：关于产品的基本信息，如标题，作者等</li>
+<li>价格服务：产品价格</li>
+<li>订单服务：订单购买历史</li>
+<li>库存服务: 商品是否于可售</li>
+<li>预览服务：客户预览信息<br>　因此，为了显示商品详情信息，你将访问多个服务，最后汇集所需要的产品信息．
+　　</li>
+</ul>
+<h2 id="2__u95EE_u9898_u6765_u4E86"><a href="#2__u95EE_u9898_u6765_u4E86" class="headerlink" title="2　问题来了"></a>2　问题来了</h2><pre><code>客户端如何访问这些服务呢？
+</code></pre><h2 id="3__u73B0_u72B6"><a href="#3__u73B0_u72B6" class="headerlink" title="3　现状"></a>3　现状</h2><ul>
+<li>微服务提供给客户端的粒度经常是不同的．微服务通常提供细粒度的API.这意味着客户端需要与多个微服务进行交互．如前所述，客户端所需要的产品详情信息，需要从多个服务中进行聚合．</li>
+<li>不同的客户端需要不同的数据，例如桌面端需要的数据，比移动端需要的数据，要更多更丰富．</li>
+<li>不同类型客户端之间网络性能的差异．例如，移动网络通常与固网相比，速率更低，延时更高．另外，WAN通过比LAN速率要慢，这意味着移动端对网络性能的要求要比服务端web应用更高．服务端web应用可以多次访问服务，而不会影响用户体验，但移动端去并非如此．</li>
+<li>服务实例的数量和他们的位置（host:port）会经常变化</li>
+<li>拆分服务将是长期的过程，应对客户端透明</li>
+</ul>
+<h2 id="4__u89E3_u51B3_u65B9_u6848"><a href="#4__u89E3_u51B3_u65B9_u6848" class="headerlink" title="4　解决方案"></a>4　解决方案</h2><p>实现一个针对客户端的单一入口API网关，是解决服务化的必经之路．API网关处理客户端的请求．这些请求可以通过简单的代理或路由到具体的服务．API网关暴露不同的API给客户端，例如netfix api网关运行客户端适配代码，从而给不同的客户端提供合适的服务．</p>
+<p>API网关同时提供安全服务，例如，验证客户请求的身份是否合法．</p>
+<pre><code>![pics](imgs/arch/service/apigateway/apigateway.jpg)
+</code></pre><h2 id="5__u7ED3_u8BBA"><a href="#5__u7ED3_u8BBA" class="headerlink" title="5　结论"></a>5　结论</h2><h3 id="5-1__u4F18_u52BF"><a href="#5-1__u4F18_u52BF" class="headerlink" title="5.1　优势"></a>5.1　优势</h3><p>　使用API网关，将带来如下好处．</p>
+<ul>
+<li>将客户端与组成应用的众多微服务进行隔离</li>
+<li>将客户端与服务实例地址进行隔离</li>
+<li>为每种客户端提供最理想的API</li>
+<li>减少请求数量．API网关使得客户端仅需要一次访问，就可以从众多的微服务中获取聚合后的数据．提高了用户体验．API网关是移动应用的必经这路．</li>
+<li>简化业务逻辑变动和升级<h3 id="5-2__u7F3A_u9677"><a href="#5-2__u7F3A_u9677" class="headerlink" title="5.2　缺陷"></a>5.2　缺陷</h3>  当然，API网关有如下缺陷．</li>
+<li>复杂度增加：API网关需要不断开发，升级，部署和管理．</li>
+<li>增加响应时间，因为API网关需要多次访问微服务．</li>
+<li>如何实现API网关？采用可以伸缩的处理高性能负载的事件驱动/响应式方法是最佳方案．例如，在JVM上，基于NIO库的Netty,Spring Reactor等等．Node.JS是另一种方案．</li>
+</ul>
+	  
+
+	  <div>
+  		<center>
+		  <div class="pagination">
+<ul class="pagination">
+	
+	
+	
+	
+	
+	
+		
+		
+	
+		
+		
+	
+		
+		
+	
+		
+		
+	
+		
+		
+	
+		
+		
+	
+		
+		
+	
+		
+		
+	
+		
+		
+	
+		
+		
+	
+		
+		
+	
+		
+		
+	
+		
+		
+	
+		
+		
+	
+		
+		
+	
+		
+		
+	
+		
+		
+	
+		
+		
+	
+		
+		
+	
+		
+		
+	
+		
+		
+	
+		
+		
+	
+		
+		
+	
+		
+		
+	
+		
+		
+	
+		
+		
+	
+		
+		
+	
+		
+		
+	
+		
+		
+	
+		
+		
+	
+		
+		
+	
+		
+		
+	
+		
+		
+	
+		
+		
+	
+		
+		
+	
+		
+		
+	
+		
+		
+			
+		
+	
+		
+		
+	
+		
+		
+	
+		
+		
+	
+		
+		
+	
+		
+		
+			
+		
+	
+		
+		
+			
+		
+	
+		
+		
+			
+		
+	
+		
+		
+			
+		
+	
+		
+		
+			
+			
+		
+	
+		
+		
+			
+			
+			
+		
+		
+	
+		
+		
+	
+		
+		
+			
+		
+	
+		
+		
+			
+		
+	
+		
+		
+			
+		
+	
+		
+		
+	
+		
+		
+	
+		
+		
+	
+		
+		
+	
+		
+		
+	
+		
+		
+	
+		
+		
+	
+		
+		
+	
+		
+		
+	
+		
+		
+	
+		
+		
+	
+		
+		
+	
+		
+		
+	
+		
+		
+	
+		
+		
+	
+		
+		
+	
+		
+		
+	
+		
+		
+	
+		
+		
+	
+		
+		
+	
+		
+		
+	
+		
+		
+	
+		
+		
+	
+		
+		
+	
+		
+		
+	
+		
+		
+	
+		
+		
+			
+		
+	
+		
+		
+	
+		
+		
+	
+		
+		
+	
+		
+		
+	
+		
+		
+	
+		
+		
+	
+		
+		
+			
+		
+	
+		
+		
+	
+		
+		
+			
+		
+	
+		
+		
+	
+		
+		
+			
+		
+	
+		
+		
+			
+		
+	
+		
+		
+	
+		
+		
+	
+		
+		
+	
+		
+		
+	
+		
+		
+	
+		
+		
+	
+		
+		
+	
+		
+		
+	
+		
+		
+			
+		
+	
+		
+		
+			
+		
+	
+		
+		
+	
+		
+		
+	
+		
+		
+			
+		
+	
+		
+		
+	
+		
+		
+	
+		
+		
+	
+		
+		
+	
+		
+		
+	
+		
+		
+	
+		
+		
+	
+	
+	
+		<li class="prev"><a href="/2016/03/11/micro-service-2/" class="alignleft prev"><i class="fa fa-arrow-circle-o-left"></i>prev</a></li>
+	
+	<li><a href="/"><i class="fa fa-archive"></i>Home</a></li>
+	
+		<li class="next"><a href="/2016/03/10/micro-service-1/" class="alignright next">next<i class="fa fa-arrow-circle-o-right"></i></a></li>
+	
+</ul>
+</div>
+
+		</center>
+	  </div>
+	  
+	</div> <!-- col-md-9/col-md-12 -->
+	
+  </div><!-- row -->
+
+	</div>
+  </div>
+  <div class="container-narrow">
+	<footer> <p>
+  &copy; 2016 niejinping
+  
+      with help from <a href="http://zespia.tw/hexo/" target="_blank">Hexo</a> and <a href="http://getbootstrap.com/" target="_blank">Twitter Bootstrap</a>. Theme by <a href="http://github.com/wzpan/hexo-theme-wixo/">Wixo</a>.    
+</p> </footer>
+  </div> <!-- container-narrow -->
+  
+<a id="gotop" href="#">   
+  <span>▲</span> 
+</a>
+
+<script src="/js/jquery.imagesloaded.min.js"></script>
+<script src="/js/gallery.js"></script>
+<script src="/js/bootstrap.min.js"></script>
+<script src="/js/jquery.tableofcontents.min.js"></script>
+<script src="/js/tocgenerator.min.js"></script>
+<script src="/js/main.js"></script>
+
+
+
+
+<link rel="stylesheet" href="/fancybox/jquery.fancybox.css" media="screen" type="text/css">
+<script src="/fancybox/jquery.fancybox.pack.js"></script>
+<script type="text/javascript">
+(function($){
+  $('.fancybox').fancybox();
+})(jQuery);
+</script>
+
+
+<script>
+var _hmt = _hmt || [];
+(function() {
+  var hm = document.createElement("script");
+  hm.src = "//hm.baidu.com/hm.js?78cd2d23583461b225b36bbf47433d64";
+  var s = document.getElementsByTagName("script")[0]; 
+  s.parentNode.insertBefore(hm, s);
+})();
+</script>
+
+</body>
+</html>

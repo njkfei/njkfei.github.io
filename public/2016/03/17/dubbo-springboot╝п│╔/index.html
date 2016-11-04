@@ -1,0 +1,570 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+  <meta charset="utf-8">
+  
+  <title>dubbo-springboot集成 | 游骑爬，生命在于折腾</title>
+  <meta name="author" content="niejinping">
+  
+  <meta name="description" content="学习总结，知识管理">
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+  <meta property="og:title" content="dubbo-springboot集成"/>
+  <meta property="og:site_name" content="游骑爬，生命在于折腾"/>
+
+  
+    <meta property="og:image" content="undefined"/>
+  
+
+  
+    <link rel="alternative" href="/atom.xml" title="游骑爬，生命在于折腾" type="application/atom+xml">
+  
+  
+    <link href="/favicon.png" rel="icon">
+  
+  
+  <link rel="stylesheet" href="/css/bootstrap.min.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/css/font-awesome.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/css/style.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/css/highlight.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/css/google-fonts.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/css/responsive.css" media="screen" type="text/css">  
+  <link rel="stylesheet" href="/css/sidenav.css" media="screen" type="text/css">  
+  <!--[if lt IE 9]><script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script><![endif]-->
+
+  <script src="/js/jquery-2.0.3.min.js"></script>
+
+  <!-- analytics -->
+  
+<script type="text/javascript">
+var _gaq = _gaq || [];
+_gaq.push(['_setAccount', 'UA-72124819-1']);
+_gaq.push(['_trackPageview']);
+(function() {
+var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+
+ga.src = ('https:' == document.location.protocol ? 'https://' : 'http://') + 'stats.g.doubleclick.net/dc.js';
+
+var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+})();
+</script>
+
+
+</head>
+
+<body id="body" data-spy="scroll" data-target=".toc">
+  <div class="container" id="container">
+	<div class="content">
+	  <div class="page-header">		
+  <h1><a class="brand" href="/">游骑爬，生命在于折腾</a><span class="split"></span><span class="title">dubbo-springboot集成</span><span class="date" id="title-date"><i class="fa fa-clock-o"></i> 2016-03-17</span></h1>
+</div>		
+
+<div class="row page">
+  <!-- cols -->	
+  
+  
+
+  
+	<div class="col-md-12">
+	  
+
+	  <!-- content -->
+	  <h2 id="u80CC_u666F"><a href="#u80CC_u666F" class="headerlink" title="背景"></a>背景</h2><p>　前面有文章介绍dubbo和spring3 javaconfig集成．这一篇，将介绍dubbo与springboot集成．通过springboot内置的tomcat或<br>jetty容器．可以实现单包部署．相对dubbo和spring3 javaconfig集成，springboot集成更爽．</p>
+<h2 id="u96C6_u6210_u65B9_u6CD5"><a href="#u96C6_u6210_u65B9_u6CD5" class="headerlink" title="集成方法"></a>集成方法</h2><h1 id="springboot-dubbo-provider"><a href="#springboot-dubbo-provider" class="headerlink" title="springboot-dubbo-provider"></a>springboot-dubbo-provider</h1><p>spring boot 与dubbo进行集成．<br>搞通之后，觉得很简单，在搞通之前，有不少坑．主要还是依赖问题和配置问题．</p>
+<h2 id="maven_u914D_u7F6E"><a href="#maven_u914D_u7F6E" class="headerlink" title="maven配置"></a>maven配置</h2><h3 id="u52A0_u5165spring_boot_u4F9D_u8D56"><a href="#u52A0_u5165spring_boot_u4F9D_u8D56" class="headerlink" title="加入spring boot依赖"></a>加入spring boot依赖</h3><p>原来的配置，配置为允许自动配置<br><figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><span class="line">	<span class="tag">&lt;<span class="title">parent</span>&gt;</span></span><br><span class="line">		<span class="tag">&lt;<span class="title">groupId</span>&gt;</span>org.springframework.boot<span class="tag">&lt;/<span class="title">groupId</span>&gt;</span></span><br><span class="line">		<span class="tag">&lt;<span class="title">artifactId</span>&gt;</span>spring-boot-starter-parent<span class="tag">&lt;/<span class="title">artifactId</span>&gt;</span></span><br><span class="line">		<span class="tag">&lt;<span class="title">version</span>&gt;</span>1.3.3.RELEASE<span class="tag">&lt;/<span class="title">version</span>&gt;</span></span><br><span class="line">	<span class="tag">&lt;/<span class="title">parent</span>&gt;</span></span><br><span class="line">		</span><br><span class="line">	<span class="tag">&lt;<span class="title">dependencies</span>&gt;</span></span><br><span class="line">	<span class="comment">&lt;!--  spring boot --&gt;</span></span><br><span class="line">			<span class="tag">&lt;<span class="title">dependency</span>&gt;</span></span><br><span class="line">			<span class="tag">&lt;<span class="title">groupId</span>&gt;</span>org.springframework.boot<span class="tag">&lt;/<span class="title">groupId</span>&gt;</span></span><br><span class="line">			<span class="tag">&lt;<span class="title">artifactId</span>&gt;</span>spring-boot-starter-web<span class="tag">&lt;/<span class="title">artifactId</span>&gt;</span></span><br><span class="line">		<span class="tag">&lt;/<span class="title">dependency</span>&gt;</span></span><br><span class="line">		<span class="tag">&lt;<span class="title">dependency</span>&gt;</span></span><br><span class="line">			<span class="tag">&lt;<span class="title">groupId</span>&gt;</span>org.springframework.boot<span class="tag">&lt;/<span class="title">groupId</span>&gt;</span></span><br><span class="line">			<span class="tag">&lt;<span class="title">artifactId</span>&gt;</span>spring-boot-starter-tomcat<span class="tag">&lt;/<span class="title">artifactId</span>&gt;</span></span><br><span class="line">			<span class="tag">&lt;<span class="title">scope</span>&gt;</span>provided<span class="tag">&lt;/<span class="title">scope</span>&gt;</span></span><br><span class="line">		<span class="tag">&lt;/<span class="title">dependency</span>&gt;</span></span><br><span class="line">				<span class="comment">&lt;!--添加适用于生产环境的功能，如性能指标和监测等功能。 --&gt;</span></span><br><span class="line">		<span class="tag">&lt;<span class="title">dependency</span>&gt;</span></span><br><span class="line">			<span class="tag">&lt;<span class="title">groupId</span>&gt;</span>org.springframework.boot<span class="tag">&lt;/<span class="title">groupId</span>&gt;</span></span><br><span class="line">			<span class="tag">&lt;<span class="title">artifactId</span>&gt;</span>spring-boot-starter-actuator<span class="tag">&lt;/<span class="title">artifactId</span>&gt;</span></span><br><span class="line">		<span class="tag">&lt;/<span class="title">dependency</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="title">dependencies</span>&gt;</span></span><br></pre></td></tr></table></figure></p>
+<h3 id="u52A0_u5165_u6253_u5305_u63D2_u4EF6"><a href="#u52A0_u5165_u6253_u5305_u63D2_u4EF6" class="headerlink" title="加入打包插件"></a>加入打包插件</h3><figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="title">plugin</span>&gt;</span></span><br><span class="line">	<span class="tag">&lt;<span class="title">groupId</span>&gt;</span>org.springframework.boot<span class="tag">&lt;/<span class="title">groupId</span>&gt;</span></span><br><span class="line">	<span class="tag">&lt;<span class="title">artifactId</span>&gt;</span>spring-boot-maven-plugin<span class="tag">&lt;/<span class="title">artifactId</span>&gt;</span></span><br><span class="line">	<span class="tag">&lt;<span class="title">version</span>&gt;</span>1.3.3.RELEASE<span class="tag">&lt;/<span class="title">version</span>&gt;</span></span><br><span class="line">	<span class="tag">&lt;<span class="title">executions</span>&gt;</span></span><br><span class="line">		<span class="tag">&lt;<span class="title">execution</span>&gt;</span></span><br><span class="line">			<span class="tag">&lt;<span class="title">goals</span>&gt;</span></span><br><span class="line">				<span class="tag">&lt;<span class="title">goal</span>&gt;</span>repackage<span class="tag">&lt;/<span class="title">goal</span>&gt;</span></span><br><span class="line">			<span class="tag">&lt;/<span class="title">goals</span>&gt;</span></span><br><span class="line">		<span class="tag">&lt;/<span class="title">execution</span>&gt;</span></span><br><span class="line">	<span class="tag">&lt;/<span class="title">executions</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="title">plugin</span>&gt;</span></span><br></pre></td></tr></table></figure>
+<h2 id="u52A0_u5165_u914D_u7F6E"><a href="#u52A0_u5165_u914D_u7F6E" class="headerlink" title="加入配置"></a>加入配置</h2><p>下面的注解一句都不能少，少了就会报错．<br><figure class="highlight groovy"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="annotation">@SpringBootApplication</span></span><br><span class="line"><span class="annotation">@EnableAutoConfiguration</span>(exclude=&#123;DataSourceAutoConfiguration.<span class="keyword">class</span>&#125;)</span><br><span class="line"><span class="annotation">@Import</span>(&#123;OrderServiceConfig.<span class="keyword">class</span>,MybatisConfiguration.<span class="keyword">class</span>&#125;)</span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">App</span> </span><br><span class="line">&#123;</span></span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">static</span> <span class="typename">void</span> main( String[] args )</span><br><span class="line">    &#123;</span><br><span class="line">    	 SpringApplication.run(App.<span class="keyword">class</span>, args);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>如果少了<br><figure class="highlight crystal"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="variable">@Import</span>(&#123;<span class="constant">OrderServiceConfig</span>.<span class="keyword">class</span>,<span class="constant">MybatisConfiguration</span>.<span class="keyword">class</span>&#125;)</span><br></pre></td></tr></table></figure></p>
+<p>则无法暴露dubbo服务．<br><figure class="highlight stylus"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">Caused by: org<span class="class">.springframework</span><span class="class">.boot</span><span class="class">.autoconfigure</span><span class="class">.jdbc</span><span class="class">.DataSourceProperties</span><span class="variable">$DataSourceBeanCreationException</span>: Cannot determine embedded database driver class <span class="keyword">for</span> database type NONE. If you want an <span class="tag">em</span></span><br><span class="line">bedded database please put <span class="tag">a</span> supported one on the classpath. If you have database settings to be loaded from <span class="tag">a</span> particular profile you may need to active it (no profiles are currently active).</span><br><span class="line">        at org<span class="class">.springframework</span><span class="class">.boot</span><span class="class">.autoconfigure</span><span class="class">.jdbc</span><span class="class">.DataSourceProperties</span><span class="class">.getDriverClassName</span>(DataSourceProperties<span class="class">.java</span>:<span class="number">180</span>)</span><br><span class="line">        at org<span class="class">.springframework</span><span class="class">.boot</span><span class="class">.autoconfigure</span><span class="class">.jdbc</span><span class="class">.DataSourceAutoConfiguration</span><span class="variable">$NonEmbeddedConfiguration</span>.<span class="function"><span class="title">dataSource</span><span class="params">(DataSourceAutoConfiguration.java:<span class="number">121</span>)</span></span></span><br><span class="line">        at sun<span class="class">.reflect</span><span class="class">.NativeMethodAccessorImpl</span><span class="class">.invoke0</span>(Native Method)</span><br><span class="line">        at sun<span class="class">.reflect</span><span class="class">.NativeMethodAccessorImpl</span><span class="class">.invoke</span>(Unknown Source)</span><br><span class="line">        at sun<span class="class">.reflect</span><span class="class">.DelegatingMethodAccessorImpl</span><span class="class">.invoke</span>(Unknown Source)</span><br><span class="line">        at java<span class="class">.lang</span><span class="class">.reflect</span><span class="class">.Method</span><span class="class">.invoke</span>(Unknown Source)</span><br><span class="line">        at org<span class="class">.springframework</span><span class="class">.beans</span><span class="class">.factory</span><span class="class">.support</span><span class="class">.SimpleInstantiationStrategy</span><span class="class">.instantiate</span>(SimpleInstantiationStrategy<span class="class">.java</span>:<span class="number">162</span>)</span><br><span class="line">        ... <span class="number">38</span> more</span><br></pre></td></tr></table></figure></p>
+<figure class="highlight stylus"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 后面经实测，这句可以去掉</span></span><br><span class="line">@<span class="function"><span class="title">EnableAutoConfiguration</span><span class="params">(exclude=&#123;DataSourceAutoConfiguration.class&#125;)</span></span></span><br></pre></td></tr></table></figure>
+<h2 id="u7F16_u8BD1"><a href="#u7F16_u8BD1" class="headerlink" title="编译"></a>编译</h2><figure class="highlight armasm"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">mvn </span>clean install</span><br></pre></td></tr></table></figure>
+<h2 id="u8FD0_u884C"><a href="#u8FD0_u884C" class="headerlink" title="运行"></a>运行</h2><figure class="highlight css"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">java</span> <span class="tag">-jar</span> <span class="tag">target</span>\<span class="tag">dataservice-provider-0</span><span class="class">.0</span><span class="class">.1-SNAPSHOT</span><span class="class">.jar</span></span><br></pre></td></tr></table></figure>
+<h2 id="u6CE8_u610F_u4E8B_u9879"><a href="#u6CE8_u610F_u4E8B_u9879" class="headerlink" title="注意事项"></a>注意事项</h2><h3 id="u52A0_u5165_u76D1_u63A7_u4E2D_u5FC3_u540E_uFF0C_u65E0_u6CD5_u663E_u793A_u7EDF_u8BA1_u6570_u636E"><a href="#u52A0_u5165_u76D1_u63A7_u4E2D_u5FC3_u540E_uFF0C_u65E0_u6CD5_u663E_u793A_u7EDF_u8BA1_u6570_u636E" class="headerlink" title="加入监控中心后，无法显示统计数据"></a>加入监控中心后，无法显示统计数据</h3><p>解雇方案：<br>需要在服务端开启监控配置。<br>修改两个地方：<br>配置监控信息<br><figure class="highlight smali"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">@Bean(name=<span class="string">"registry"</span><span class="function">)</span><span class="keyword"></span><br><span class="line">public</span> RegistryConfig<span class="function"> registry(</span><span class="function">)</span>&#123;&#125;</span><br><span class="line"></span><br><span class="line">@Bean<span class="keyword"></span><br><span class="line">public</span> MonitorConfig<span class="function"> monitor(</span><span class="function">)</span>&#123;</span><br><span class="line">    MonitorConfig<span class="instruction"> monitor </span>=<span class="instruction"> new </span>MonitorConfig(<span class="function">)</span>;</span><br><span class="line">   <span class="function"> monitor.setProtocol(</span><span class="string">"registry"</span><span class="function">)</span>;</span><br><span class="line">   <span class="instruction"> return </span>monitor;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>将服务加入监控<br><figure class="highlight css"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="at_rule">@<span class="keyword">Bean</span></span><br><span class="line">public ServiceConfg <span class="function">serviceConfg</span>()</span>&#123;</span><br><span class="line">    ....</span><br><span class="line">    <span class="tag">service</span><span class="class">.setMonitor</span>(<span class="tag">dubboConfig</span><span class="class">.monitor</span>());)</span><br><span class="line">    ....</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<h2 id="u7ED3_u8BBA"><a href="#u7ED3_u8BBA" class="headerlink" title="结论"></a>结论</h2><h3 id="u4F18_u70B9"><a href="#u4F18_u70B9" class="headerlink" title="优点"></a>优点</h3><ul>
+<li>部署简单</li>
+</ul>
+<h2 id="github"><a href="#github" class="headerlink" title="github"></a>github</h2><p>示例已上传至github.<br>路径为：</p>
+<ul>
+<li><a href="https://github.com/njkfei/springboot-dubbo-provider.git" target="_blank" rel="external">dubbo服务提供者</a></li>
+<li><a href="https://github.com/njkfei/dubbo-consumer.git" target="_blank" rel="external">dubbo服务消费者</a></li>
+</ul>
+	  
+
+	  <div>
+  		<center>
+		  <div class="pagination">
+<ul class="pagination">
+	
+	
+	
+	
+	
+	
+		
+		
+	
+		
+		
+	
+		
+		
+	
+		
+		
+	
+		
+		
+	
+		
+		
+	
+		
+		
+	
+		
+		
+	
+		
+		
+	
+		
+		
+	
+		
+		
+	
+		
+		
+	
+		
+		
+	
+		
+		
+	
+		
+		
+	
+		
+		
+			
+		
+	
+		
+		
+	
+		
+		
+	
+		
+		
+			
+		
+	
+		
+		
+	
+		
+		
+	
+		
+		
+	
+		
+		
+	
+		
+		
+	
+		
+		
+	
+		
+		
+			
+		
+	
+		
+		
+	
+		
+		
+			
+		
+	
+		
+		
+			
+		
+	
+		
+		
+			
+		
+	
+		
+		
+			
+		
+	
+		
+		
+			
+		
+	
+		
+		
+			
+		
+	
+		
+		
+			
+		
+	
+		
+		
+			
+		
+	
+		
+		
+	
+		
+		
+	
+		
+		
+			
+		
+	
+		
+		
+	
+		
+		
+			
+			
+		
+	
+		
+		
+			
+			
+			
+		
+		
+	
+		
+		
+	
+		
+		
+	
+		
+		
+	
+		
+		
+	
+		
+		
+	
+		
+		
+			
+		
+	
+		
+		
+	
+		
+		
+	
+		
+		
+	
+		
+		
+	
+		
+		
+	
+		
+		
+	
+		
+		
+	
+		
+		
+	
+		
+		
+	
+		
+		
+	
+		
+		
+	
+		
+		
+	
+		
+		
+	
+		
+		
+	
+		
+		
+	
+		
+		
+	
+		
+		
+			
+		
+	
+		
+		
+			
+		
+	
+		
+		
+			
+		
+	
+		
+		
+			
+		
+	
+		
+		
+			
+		
+	
+		
+		
+			
+		
+	
+		
+		
+			
+		
+	
+		
+		
+	
+		
+		
+			
+		
+	
+		
+		
+	
+		
+		
+	
+		
+		
+	
+		
+		
+	
+		
+		
+			
+		
+	
+		
+		
+	
+		
+		
+			
+		
+	
+		
+		
+			
+		
+	
+		
+		
+	
+		
+		
+			
+		
+	
+		
+		
+	
+		
+		
+	
+		
+		
+	
+		
+		
+	
+		
+		
+	
+		
+		
+			
+		
+	
+		
+		
+	
+		
+		
+	
+		
+		
+			
+		
+	
+		
+		
+			
+		
+	
+		
+		
+	
+		
+		
+	
+		
+		
+	
+		
+		
+	
+		
+		
+			
+		
+	
+		
+		
+	
+		
+		
+	
+		
+		
+	
+		
+		
+	
+		
+		
+	
+		
+		
+	
+		
+		
+	
+		
+		
+			
+		
+	
+		
+		
+			
+		
+	
+		
+		
+			
+		
+	
+		
+		
+	
+		
+		
+	
+		
+		
+	
+	
+	
+		<li class="prev"><a href="/2016/03/17/spring-boot-mybatis集成/" class="alignleft prev"><i class="fa fa-arrow-circle-o-left"></i>prev</a></li>
+	
+	<li><a href="/"><i class="fa fa-archive"></i>Home</a></li>
+	
+		<li class="next"><a href="/2016/03/14/dubbo_spring3实战/" class="alignright next">next<i class="fa fa-arrow-circle-o-right"></i></a></li>
+	
+</ul>
+</div>
+
+		</center>
+	  </div>
+	  
+	</div> <!-- col-md-9/col-md-12 -->
+	
+  </div><!-- row -->
+
+	</div>
+  </div>
+  <div class="container-narrow">
+	<footer> <p>
+  &copy; 2016 niejinping
+  
+      with help from <a href="http://zespia.tw/hexo/" target="_blank">Hexo</a> and <a href="http://getbootstrap.com/" target="_blank">Twitter Bootstrap</a>. Theme by <a href="http://github.com/wzpan/hexo-theme-wixo/">Wixo</a>.    
+</p> </footer>
+  </div> <!-- container-narrow -->
+  
+<a id="gotop" href="#">   
+  <span>▲</span> 
+</a>
+
+<script src="/js/jquery.imagesloaded.min.js"></script>
+<script src="/js/gallery.js"></script>
+<script src="/js/bootstrap.min.js"></script>
+<script src="/js/jquery.tableofcontents.min.js"></script>
+<script src="/js/tocgenerator.min.js"></script>
+<script src="/js/main.js"></script>
+
+
+
+
+<link rel="stylesheet" href="/fancybox/jquery.fancybox.css" media="screen" type="text/css">
+<script src="/fancybox/jquery.fancybox.pack.js"></script>
+<script type="text/javascript">
+(function($){
+  $('.fancybox').fancybox();
+})(jQuery);
+</script>
+
+
+<script>
+var _hmt = _hmt || [];
+(function() {
+  var hm = document.createElement("script");
+  hm.src = "//hm.baidu.com/hm.js?78cd2d23583461b225b36bbf47433d64";
+  var s = document.getElementsByTagName("script")[0]; 
+  s.parentNode.insertBefore(hm, s);
+})();
+</script>
+
+</body>
+</html>

@@ -1,0 +1,555 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+  <meta charset="utf-8">
+  
+  <title>微服务系列2－API网关 | 游骑爬，生命在于折腾</title>
+  <meta name="author" content="niejinping">
+  
+  <meta name="description" content="学习总结，知识管理">
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+  <meta property="og:title" content="微服务系列2－API网关"/>
+  <meta property="og:site_name" content="游骑爬，生命在于折腾"/>
+
+  
+    <meta property="og:image" content="undefined"/>
+  
+
+  
+    <link rel="alternative" href="/atom.xml" title="游骑爬，生命在于折腾" type="application/atom+xml">
+  
+  
+    <link href="/favicon.png" rel="icon">
+  
+  
+  <link rel="stylesheet" href="/css/bootstrap.min.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/css/font-awesome.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/css/style.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/css/highlight.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/css/google-fonts.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/css/responsive.css" media="screen" type="text/css">  
+  <link rel="stylesheet" href="/css/sidenav.css" media="screen" type="text/css">  
+  <!--[if lt IE 9]><script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script><![endif]-->
+
+  <script src="/js/jquery-2.0.3.min.js"></script>
+
+  <!-- analytics -->
+  
+<script type="text/javascript">
+var _gaq = _gaq || [];
+_gaq.push(['_setAccount', 'UA-72124819-1']);
+_gaq.push(['_trackPageview']);
+(function() {
+var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+
+ga.src = ('https:' == document.location.protocol ? 'https://' : 'http://') + 'stats.g.doubleclick.net/dc.js';
+
+var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+})();
+</script>
+
+
+</head>
+
+<body id="body" data-spy="scroll" data-target=".toc">
+  <div class="container" id="container">
+	<div class="content">
+	  <div class="page-header">		
+  <h1><a class="brand" href="/">游骑爬，生命在于折腾</a><span class="split"></span><span class="title">微服务系列2－API网关</span><span class="date" id="title-date"><i class="fa fa-clock-o"></i> 2016-03-11</span></h1>
+</div>		
+
+<div class="row page">
+  <!-- cols -->	
+  
+  
+
+  
+	<div class="col-md-12">
+	  
+
+	  <!-- content -->
+	  <ul>
+<li>微服务简介</li>
+<li>构建微服务：使用API网关</li>
+<li>构造微服务：微服务架构中的进程间通信</li>
+<li>微服务架构的服务发现</li>
+<li>面向微服务的事件驱动数据管理</li>
+<li>微服务部署选型</li>
+<li><h2 id="u5F15_u8A00"><a href="#u5F15_u8A00" class="headerlink" title="引言"></a>引言</h2><p>假设我们正在开发一个原生移动应用购物APP．这可能需要实现产品详情页面，这个用于显示产品信息．</p>
+<p>例如，下面的图示显示了亚马逊的产品详情信息．<br><img src="/" alt="pics"><br>图中包括：</p>
+</li>
+<li>购物车中商品的数量</li>
+<li>订单历史</li>
+<li>用户浏览</li>
+<li>低库存预警</li>
+<li>物流服务</li>
+<li>推荐服务</li>
+<li><p>其它购物选项</p>
+<p>  当你使用一个单体应用架构，移动客户端通过一个简单的REST调用(GET: api.comanpy.com/productdetai/productid)去获取数据．其中，负载均衡设备路请请求，将请求分配到N个后端相同的应用实例．应用将查询数据库并返回响应给客户端．</p>
+<p>  作为对比，娄我们使用微服务架构时，展现的产品详情页数据是由不同的微服务提供的．这里有潜在的微服务提供数据．例如：</p>
+</li>
+<li>购物车服务：　购物车中商品的数量</li>
+<li>订单服务：　订单历史</li>
+<li>类目服务　：　提供基本的产品信息，例如名字，图片和价格</li>
+<li>预览服务：　供用户预览</li>
+<li>库存服务：　提供低库存预警</li>
+<li><p>推荐服务：　提供推荐商品<br>如下图所示：<br><img src="/" alt="pics"></p>
+<p>我们需要确定移动客户端如何访问这些服务．看看下面的方案．</p>
+</li>
+</ul>
+<h2 id="u5BA2_u6237_u7AEF-_u5FAE_u670D_u52A1_u76F4_u63A5_u901A_u4FE1"><a href="#u5BA2_u6237_u7AEF-_u5FAE_u670D_u52A1_u76F4_u63A5_u901A_u4FE1" class="headerlink" title="客户端-微服务直接通信"></a>客户端-微服务直接通信</h2><p>　理论上，客户端可以走向向所有微服务直接提出请求．每个微服务使用一个公共的端点(<a href="https://serviceName,api.company.name).这个URL将映射到微服务的负载均衡设备上．为了得到产品详情页面信息，移动客户端将向每个服务发送请求．" target="_blank" rel="external">https://serviceName,api.company.name).这个URL将映射到微服务的负载均衡设备上．为了得到产品详情页面信息，移动客户端将向每个服务发送请求．</a></p>
+<p>　但是，这种方案存在挑战和约束．一个问题是客户端和良好定义的API之间存在不匹配的问题．在这里，客户端需要向微服务发送７次请求．如果微服务更多，那多，这里会有更多的请求．例如亚马逊有千种服务用于渲染详情页面．如果通过LAN访问在公网上进行访问，可造成效率低下．另外，如果通过移动网络访问，将变得不切实际．<br>　这种方案使得客户端变得很复杂．</p>
+<p>　另外一种方案，就是客户端向微服务发送用户自定义的协议，而不是web友好的方式．例如，使用二进制的Thrift协议．或者使用AMQP消息协议．这些协议对浏览器是不友好的．而且不易绕过防火墙．应用协议应该是类似于HTTP或者WebSocket协议，这种协议可以绕过防火墙的限制．<br>　另外一个缺点是，这种方法不易于微服务的重构．有时，我们需要修改对系统进行服务拆分．例如，我们合并两个服务或者将一个服务划分为两个服务．如果客户端直接连接服务．这种情况将使得重构极其困难．<br>　因为上述的原因，直接连接微服务很少谈论．</p>
+<h2 id="u4F7F_u7528API_u7F51_u5173"><a href="#u4F7F_u7528API_u7F51_u5173" class="headerlink" title="使用API网关"></a>使用API网关</h2><p>　通过一个更好的方法是使用我们所熟知的<strong>API网关</strong>.API网关是整个系统服务器中的单一入口．它类似于面向对象中的＂外观＂模式．API网关封装了内部的微服务，并且提供一个API给外部的客户端．它同时可以提供认证，监控，负载均衡，缓存，请求分发和管理，静态响应处理等功能．<br>下图显示了API网关的典型架构图．<br> <img src="/" alt="pics"></p>
+<p>API网关完成请求路由，组合和协议转换功能．所有来自于客户端的请求首先通过API网关．然后再路由请求到合适的微服务．<br>API网关经常处理调用多次微服务对结果进行聚合．它可以在web协议如HTTP或WebSocket和非web友好的协议（pb,thrift)之间进行转换．</p>
+<p>API网关可以提供一个自定义的API,它暴露给外部移动客户端一个比较粗状的API.例如，想象产品详情页的场景．API网关可以提供一个端口（/productdetail?productid=xxx)给外部移动客户端，向客户端提供关于产品详情的全部数据．在API网关内部，将调用各个微服务，如产品信息，推荐信息，预览信息等，再组全出结果给客户端．</p>
+<h2 id="u4F18_u70B9"><a href="#u4F18_u70B9" class="headerlink" title="优点"></a>优点</h2><h2 id="u7F3A_u70B9"><a href="#u7F3A_u70B9" class="headerlink" title="缺点"></a>缺点</h2><h2 id="u5B9E_u73B0API_u7F51_u5173"><a href="#u5B9E_u73B0API_u7F51_u5173" class="headerlink" title="实现API网关"></a>实现API网关</h2><h3 id="u6027_u80FD_u548C_u4F38_u7F29_u6027"><a href="#u6027_u80FD_u548C_u4F38_u7F29_u6027" class="headerlink" title="性能和伸缩性"></a>性能和伸缩性</h3><h3 id="u4F7F_u7528_u53CD_u5E94_u5F0F_u7F16_u7A0B_u6A21_u578B"><a href="#u4F7F_u7528_u53CD_u5E94_u5F0F_u7F16_u7A0B_u6A21_u578B" class="headerlink" title="使用反应式编程模型"></a>使用反应式编程模型</h3><h3 id="u670D_u52A1_u8C03_u7528"><a href="#u670D_u52A1_u8C03_u7528" class="headerlink" title="服务调用"></a>服务调用</h3><h3 id="u670D_u52A1_u53D1_u73B0"><a href="#u670D_u52A1_u53D1_u73B0" class="headerlink" title="服务发现"></a>服务发现</h3><h3 id="u5904_u7406_u5C40_u90E8_u5931_u6548"><a href="#u5904_u7406_u5C40_u90E8_u5931_u6548" class="headerlink" title="处理局部失效"></a>处理局部失效</h3><p>### </p>
+<p>## </p>
+<h2 id="u603B_u7ED3"><a href="#u603B_u7ED3" class="headerlink" title="总结"></a>总结</h2>	  
+
+	  <div>
+  		<center>
+		  <div class="pagination">
+<ul class="pagination">
+	
+	
+	
+	
+	
+	
+		
+		
+	
+		
+		
+	
+		
+		
+	
+		
+		
+	
+		
+		
+	
+		
+		
+	
+		
+		
+	
+		
+		
+	
+		
+		
+	
+		
+		
+	
+		
+		
+	
+		
+		
+	
+		
+		
+	
+		
+		
+	
+		
+		
+	
+		
+		
+	
+		
+		
+	
+		
+		
+	
+		
+		
+	
+		
+		
+	
+		
+		
+	
+		
+		
+	
+		
+		
+	
+		
+		
+	
+		
+		
+	
+		
+		
+	
+		
+		
+	
+		
+		
+	
+		
+		
+	
+		
+		
+	
+		
+		
+	
+		
+		
+	
+		
+		
+	
+		
+		
+	
+		
+		
+	
+		
+		
+	
+		
+		
+			
+		
+	
+		
+		
+	
+		
+		
+	
+		
+		
+	
+		
+		
+	
+		
+		
+			
+		
+	
+		
+		
+			
+		
+	
+		
+		
+			
+		
+	
+		
+		
+			
+			
+		
+	
+		
+		
+			
+			
+			
+		
+		
+			
+		
+	
+		
+		
+	
+		
+		
+	
+		
+		
+			
+		
+	
+		
+		
+			
+		
+	
+		
+		
+			
+		
+	
+		
+		
+	
+		
+		
+	
+		
+		
+	
+		
+		
+	
+		
+		
+	
+		
+		
+	
+		
+		
+	
+		
+		
+	
+		
+		
+	
+		
+		
+	
+		
+		
+	
+		
+		
+	
+		
+		
+	
+		
+		
+	
+		
+		
+	
+		
+		
+	
+		
+		
+	
+		
+		
+	
+		
+		
+	
+		
+		
+	
+		
+		
+	
+		
+		
+	
+		
+		
+	
+		
+		
+	
+		
+		
+	
+		
+		
+	
+		
+		
+			
+		
+	
+		
+		
+	
+		
+		
+	
+		
+		
+	
+		
+		
+	
+		
+		
+	
+		
+		
+	
+		
+		
+			
+		
+	
+		
+		
+	
+		
+		
+			
+		
+	
+		
+		
+	
+		
+		
+			
+		
+	
+		
+		
+			
+		
+	
+		
+		
+	
+		
+		
+	
+		
+		
+	
+		
+		
+	
+		
+		
+	
+		
+		
+	
+		
+		
+	
+		
+		
+	
+		
+		
+			
+		
+	
+		
+		
+			
+		
+	
+		
+		
+	
+		
+		
+	
+		
+		
+			
+		
+	
+		
+		
+	
+		
+		
+	
+		
+		
+	
+		
+		
+	
+		
+		
+	
+		
+		
+	
+		
+		
+	
+	
+	
+		<li class="prev"><a href="/2016/03/11/how-to-adopt-microservices/" class="alignleft prev"><i class="fa fa-arrow-circle-o-left"></i>prev</a></li>
+	
+	<li><a href="/"><i class="fa fa-archive"></i>Home</a></li>
+	
+		<li class="next"><a href="/2016/03/11/api-gateway/" class="alignright next">next<i class="fa fa-arrow-circle-o-right"></i></a></li>
+	
+</ul>
+</div>
+
+		</center>
+	  </div>
+	  
+	</div> <!-- col-md-9/col-md-12 -->
+	
+  </div><!-- row -->
+
+	</div>
+  </div>
+  <div class="container-narrow">
+	<footer> <p>
+  &copy; 2016 niejinping
+  
+      with help from <a href="http://zespia.tw/hexo/" target="_blank">Hexo</a> and <a href="http://getbootstrap.com/" target="_blank">Twitter Bootstrap</a>. Theme by <a href="http://github.com/wzpan/hexo-theme-wixo/">Wixo</a>.    
+</p> </footer>
+  </div> <!-- container-narrow -->
+  
+<a id="gotop" href="#">   
+  <span>▲</span> 
+</a>
+
+<script src="/js/jquery.imagesloaded.min.js"></script>
+<script src="/js/gallery.js"></script>
+<script src="/js/bootstrap.min.js"></script>
+<script src="/js/jquery.tableofcontents.min.js"></script>
+<script src="/js/tocgenerator.min.js"></script>
+<script src="/js/main.js"></script>
+
+
+
+
+<link rel="stylesheet" href="/fancybox/jquery.fancybox.css" media="screen" type="text/css">
+<script src="/fancybox/jquery.fancybox.pack.js"></script>
+<script type="text/javascript">
+(function($){
+  $('.fancybox').fancybox();
+})(jQuery);
+</script>
+
+
+<script>
+var _hmt = _hmt || [];
+(function() {
+  var hm = document.createElement("script");
+  hm.src = "//hm.baidu.com/hm.js?78cd2d23583461b225b36bbf47433d64";
+  var s = document.getElementsByTagName("script")[0]; 
+  s.parentNode.insertBefore(hm, s);
+})();
+</script>
+
+</body>
+</html>

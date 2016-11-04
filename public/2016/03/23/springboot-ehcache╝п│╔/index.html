@@ -1,0 +1,581 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+  <meta charset="utf-8">
+  
+  <title>springboot mybatis cache集成--完全基于注解 | 游骑爬，生命在于折腾</title>
+  <meta name="author" content="niejinping">
+  
+  <meta name="description" content="学习总结，知识管理">
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+  <meta property="og:title" content="springboot mybatis cache集成--完全基于注解"/>
+  <meta property="og:site_name" content="游骑爬，生命在于折腾"/>
+
+  
+    <meta property="og:image" content="undefined"/>
+  
+
+  
+    <link rel="alternative" href="/atom.xml" title="游骑爬，生命在于折腾" type="application/atom+xml">
+  
+  
+    <link href="/favicon.png" rel="icon">
+  
+  
+  <link rel="stylesheet" href="/css/bootstrap.min.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/css/font-awesome.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/css/style.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/css/highlight.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/css/google-fonts.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/css/responsive.css" media="screen" type="text/css">  
+  <link rel="stylesheet" href="/css/sidenav.css" media="screen" type="text/css">  
+  <!--[if lt IE 9]><script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script><![endif]-->
+
+  <script src="/js/jquery-2.0.3.min.js"></script>
+
+  <!-- analytics -->
+  
+<script type="text/javascript">
+var _gaq = _gaq || [];
+_gaq.push(['_setAccount', 'UA-72124819-1']);
+_gaq.push(['_trackPageview']);
+(function() {
+var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+
+ga.src = ('https:' == document.location.protocol ? 'https://' : 'http://') + 'stats.g.doubleclick.net/dc.js';
+
+var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+})();
+</script>
+
+
+</head>
+
+<body id="body" data-spy="scroll" data-target=".toc">
+  <div class="container" id="container">
+	<div class="content">
+	  <div class="page-header">		
+  <h1><a class="brand" href="/">游骑爬，生命在于折腾</a><span class="split"></span><span class="title">springboot mybatis cache集成--完全基于注解</span><span class="date" id="title-date"><i class="fa fa-clock-o"></i> 2016-03-23</span></h1>
+</div>		
+
+<div class="row page">
+  <!-- cols -->	
+  
+  <div class="col-xs-12 col-sm-3 col-md-3 toc"> 
+	<!-- toc -->
+<script type="text/javascript">
+		jQuery(document).ready(function() {
+ 		   generateWikiTOC('.note', '.toc',  2 , 2 );
+		});
+</script>
+  </div><!-- col-md-3 -->
+  
+  
+
+  
+  <div class="col-xs-12 col-sm-9 col-md-9 note">
+	
+
+	  <!-- content -->
+	  <h1 id="springmybatiscache"><a href="#springmybatiscache" class="headerlink" title="springmybatiscache"></a>springmybatiscache</h1><h2 id="DEMO_u8BF4_u660E"><a href="#DEMO_u8BF4_u660E" class="headerlink" title="DEMO说明"></a>DEMO说明</h2><p>　本示例通过REST控制器接收外界数据请求，rest控制器通过mybatis向数据库请求数据并缓存中cache当中。<br>　通过测试表示，如果没有cache，通过ab请求时，将导致mysql连接不可用。使用缓存后，上游读请求将不会把mysql压跨。<br>　技术要素如下：</p>
+<ul>
+<li>mybatis 　：提供ORM框架</li>
+<li>cache　：缓存查询数据</li>
+<li>restcontroller　：　提供web服务</li>
+<li>springboot : 内嵌tomcat web服务支持<br>本DEMO使用了二级缓存。第一级在REST请求处。<br>第二级在MYBATIS查询处。</li>
+</ul>
+<h2 id="maven_u4F9D_u8D56"><a href="#maven_u4F9D_u8D56" class="headerlink" title="maven依赖"></a>maven依赖</h2><figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">&lt;!-- spring boot --&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="title">dependency</span>&gt;</span></span><br><span class="line">	<span class="tag">&lt;<span class="title">groupId</span>&gt;</span>org.springframework.boot<span class="tag">&lt;/<span class="title">groupId</span>&gt;</span></span><br><span class="line">	<span class="tag">&lt;<span class="title">artifactId</span>&gt;</span>spring-boot-starter-web<span class="tag">&lt;/<span class="title">artifactId</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="title">dependency</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="title">dependency</span>&gt;</span></span><br><span class="line">	<span class="tag">&lt;<span class="title">groupId</span>&gt;</span>org.springframework.boot<span class="tag">&lt;/<span class="title">groupId</span>&gt;</span></span><br><span class="line">	<span class="tag">&lt;<span class="title">artifactId</span>&gt;</span>spring-boot-starter-tomcat<span class="tag">&lt;/<span class="title">artifactId</span>&gt;</span></span><br><span class="line">	<span class="tag">&lt;<span class="title">scope</span>&gt;</span>provided<span class="tag">&lt;/<span class="title">scope</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="title">dependency</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="title">dependency</span>&gt;</span></span><br><span class="line">	<span class="tag">&lt;<span class="title">groupId</span>&gt;</span>org.springframework<span class="tag">&lt;/<span class="title">groupId</span>&gt;</span></span><br><span class="line">	<span class="tag">&lt;<span class="title">artifactId</span>&gt;</span>spring-webmvc<span class="tag">&lt;/<span class="title">artifactId</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="title">dependency</span>&gt;</span></span><br><span class="line"></span><br><span class="line"><span class="tag">&lt;<span class="title">dependency</span>&gt;</span></span><br><span class="line">	<span class="tag">&lt;<span class="title">groupId</span>&gt;</span>org.mybatis<span class="tag">&lt;/<span class="title">groupId</span>&gt;</span></span><br><span class="line">	<span class="tag">&lt;<span class="title">artifactId</span>&gt;</span>mybatis-spring<span class="tag">&lt;/<span class="title">artifactId</span>&gt;</span></span><br><span class="line">	<span class="tag">&lt;<span class="title">version</span>&gt;</span>1.2.3<span class="tag">&lt;/<span class="title">version</span>&gt;</span></span><br><span class="line">	<span class="tag">&lt;<span class="title">type</span>&gt;</span>jar<span class="tag">&lt;/<span class="title">type</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="title">dependency</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="title">dependency</span>&gt;</span></span><br><span class="line">	<span class="tag">&lt;<span class="title">groupId</span>&gt;</span>org.springframework.boot<span class="tag">&lt;/<span class="title">groupId</span>&gt;</span></span><br><span class="line">	<span class="tag">&lt;<span class="title">artifactId</span>&gt;</span>spring-boot-starter-jdbc<span class="tag">&lt;/<span class="title">artifactId</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="title">dependency</span>&gt;</span></span><br><span class="line"></span><br><span class="line"><span class="comment">&lt;!-- mysql驱动 --&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="title">dependency</span>&gt;</span></span><br><span class="line">	<span class="tag">&lt;<span class="title">groupId</span>&gt;</span>mysql<span class="tag">&lt;/<span class="title">groupId</span>&gt;</span></span><br><span class="line">	<span class="tag">&lt;<span class="title">artifactId</span>&gt;</span>mysql-connector-java<span class="tag">&lt;/<span class="title">artifactId</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="title">dependency</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="title">dependency</span>&gt;</span></span><br><span class="line">	<span class="tag">&lt;<span class="title">groupId</span>&gt;</span>org.mybatis<span class="tag">&lt;/<span class="title">groupId</span>&gt;</span></span><br><span class="line">	<span class="tag">&lt;<span class="title">artifactId</span>&gt;</span>mybatis<span class="tag">&lt;/<span class="title">artifactId</span>&gt;</span></span><br><span class="line">	<span class="tag">&lt;<span class="title">version</span>&gt;</span>3.3.0<span class="tag">&lt;/<span class="title">version</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="title">dependency</span>&gt;</span></span><br></pre></td></tr></table></figure>
+<p>##　CACHE配置<br>配置cache,使用spring自带的缓存框架ConcurrentMapCache即可。<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><span class="line"><span class="annotation">@Configuration</span></span><br><span class="line"><span class="annotation">@EnableCaching</span></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">CacheConfig</span> </span><br><span class="line"></span>&#123;</span><br><span class="line">  <span class="annotation">@Bean</span></span><br><span class="line">  <span class="function"><span class="keyword">public</span> SimpleCacheManager <span class="title">cacheManager</span><span class="params">()</span></span>&#123;</span><br><span class="line">	  SimpleCacheManager cacheManager = <span class="keyword">new</span> SimpleCacheManager();</span><br><span class="line">	  cacheManager.setCaches(Arrays.asList(userCache(),defaultCache()));</span><br><span class="line">	  <span class="keyword">return</span> cacheManager;</span><br><span class="line">  &#125;</span><br><span class="line">  </span><br><span class="line">  <span class="annotation">@Bean</span>(name=<span class="string">"userCache"</span>)</span><br><span class="line">  <span class="function"><span class="keyword">public</span> ConcurrentMapCache <span class="title">userCache</span><span class="params">()</span></span>&#123;</span><br><span class="line">	  ConcurrentMapCache userCache = <span class="keyword">new</span> ConcurrentMapCache(<span class="string">"userCache"</span>);</span><br><span class="line">	  <span class="keyword">return</span>  userCache;</span><br><span class="line">  &#125;</span><br><span class="line">  </span><br><span class="line">  <span class="annotation">@Bean</span></span><br><span class="line">  <span class="function"><span class="keyword">public</span> ConcurrentMapCache <span class="title">defaultCache</span><span class="params">()</span></span>&#123;</span><br><span class="line">	  ConcurrentMapCache defaultCache = <span class="keyword">new</span> ConcurrentMapCache(<span class="string">"defaultCache"</span>);</span><br><span class="line">	  <span class="keyword">return</span>  defaultCache;</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<h2 id="REST_u63A7_u5236_u5668_u7F13_u5B58_u914D_u7F6E"><a href="#REST_u63A7_u5236_u5668_u7F13_u5B58_u914D_u7F6E" class="headerlink" title="REST控制器缓存配置"></a>REST控制器缓存配置</h2><h3 id="u52A0_u5165_u4F9D_u8D56"><a href="#u52A0_u5165_u4F9D_u8D56" class="headerlink" title="加入依赖"></a>加入依赖</h3><figure class="highlight less"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="variable">@RestController</span></span><br><span class="line"><span class="variable">@EnableAutoConfiguration</span></span><br><span class="line"><span class="variable">@Cacheable</span> <span class="comment">// 这条注解不能少</span></span><br><span class="line">public class UserController &#123;&#125;</span><br></pre></td></tr></table></figure>
+<h3 id="u7406_u65B0_u4E00_u6B21_u7F13_u5B58@Cacheable"><a href="#u7406_u65B0_u4E00_u6B21_u7F13_u5B58@Cacheable" class="headerlink" title="理新一次缓存@Cacheable"></a>理新一次缓存@Cacheable</h3><p>@Cacheable使用名为”userCache”的缓存，如果缓存中没有数据，则读取数据库后加入缓存。<br><figure class="highlight aspectj"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="annotation">@Cacheable</span>(value = <span class="string">"userCache"</span>) <span class="comment">// 使用了一个缓存名叫 userCache</span></span><br><span class="line"><span class="annotation">@RequestMapping</span>(<span class="string">"/user2/&#123;user_id&#125;"</span>)</span><br><span class="line"><span class="annotation">@ResponseBody</span></span><br><span class="line"><span class="keyword">public</span> <span class="function">User <span class="title">getUser</span><span class="params">(@PathVariable  <span class="keyword">int</span> user_id)</span> </span>&#123;</span><br><span class="line">	<span class="comment">// 方法内部实现不考虑缓存逻辑，直接实现业务</span></span><br><span class="line">	System.out.println(<span class="string">"real query user."</span> + user_id);</span><br><span class="line">	<span class="function"><span class="keyword">return</span> userDAO.<span class="title">getUser</span><span class="params">(user_id)</span></span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<h3 id="u6BCF_u6B21_u66F4_u65B0_u7F13_u5B58@CachePut"><a href="#u6BCF_u6B21_u66F4_u65B0_u7F13_u5B58@CachePut" class="headerlink" title="每次更新缓存@CachePut"></a>每次更新缓存@CachePut</h3><p>@CachePut每次访问时，都会先读数据库，再更新缓存。因此，这条注解适合update的场景。<br>下面的测试代码，实际上相当于缓存失效了。<br><figure class="highlight aspectj"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="annotation">@CachePut</span>(value = <span class="string">"userCache"</span>) <span class="comment">// 使用了一个缓存名叫 userCache</span></span><br><span class="line"><span class="annotation">@RequestMapping</span>(<span class="string">"/user3/&#123;user_id&#125;"</span>)</span><br><span class="line"><span class="annotation">@ResponseBody</span></span><br><span class="line"><span class="keyword">public</span> <span class="function">User <span class="title">getUser3</span><span class="params">(@PathVariable  <span class="keyword">int</span> user_id)</span> </span>&#123;</span><br><span class="line">	<span class="comment">// 方法内部实现不考虑缓存逻辑，直接实现业务</span></span><br><span class="line">	System.out.println(<span class="string">"real query user."</span> + user_id);</span><br><span class="line">	<span class="function"><span class="keyword">return</span> userDAO.<span class="title">getUser</span><span class="params">(user_id)</span></span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<h3 id="u5220_u9664_u5355_u4E2A_u7F13_u5B58@CacheEvict"><a href="#u5220_u9664_u5355_u4E2A_u7F13_u5B58@CacheEvict" class="headerlink" title="删除单个缓存@CacheEvict"></a>删除单个缓存@CacheEvict</h3><p>最好加上key,否则可能没有清除缓存</p>
+<figure class="highlight d"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//　删除部分缓存</span></span><br><span class="line"><span class="keyword">@CacheEvict</span>(value=<span class="string">"userCache"</span>,key=<span class="string">"#user_id"</span>,beforeInvocation=<span class="literal">true</span>)</span><br><span class="line"><span class="keyword">@RequestMapping</span>(<span class="string">"/update/&#123;user_id&#125;/&#123;user_type&#125;"</span>)</span><br><span class="line"><span class="keyword">@ResponseBody</span></span><br><span class="line"><span class="keyword">public</span> User updateUser(<span class="keyword">@PathVariable</span>  <span class="keyword">int</span> user_id,<span class="keyword">@PathVariable</span>  <span class="keyword">int</span> user_type) &#123;</span><br><span class="line">	<span class="comment">// 方法内部实现不考虑缓存逻辑，直接实现业务</span></span><br><span class="line">	System.<span class="keyword">out</span>.println(<span class="string">"UPDATE cache.　user_id : "</span> + user_id);</span><br><span class="line">	userDAO.updateUser(user_id,user_type);</span><br><span class="line">	<span class="keyword">return</span> userDAO.getUser(user_id);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h3 id="u5220_u9664_u6574_u4E2A_u7F13_u5B58"><a href="#u5220_u9664_u6574_u4E2A_u7F13_u5B58" class="headerlink" title="删除整个缓存"></a>删除整个缓存</h3><figure class="highlight aspectj"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 删除全部缓存</span></span><br><span class="line"><span class="annotation">@CacheEvict</span>(value=<span class="string">"userCache"</span>,allEntries=<span class="keyword">true</span>,beforeInvocation=<span class="keyword">true</span>)</span><br><span class="line"><span class="annotation">@RequestMapping</span>(<span class="string">"/clear"</span>)</span><br><span class="line"><span class="keyword">public</span> <span class="function">String <span class="title">clear</span><span class="params">()</span> </span>&#123;</span><br><span class="line">	<span class="comment">// 方法内部实现不考虑缓存逻辑，直接实现业务</span></span><br><span class="line">	System.out.println(<span class="string">"clearn cache."</span>);</span><br><span class="line">	<span class="keyword">return</span> <span class="string">"clear ok"</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h2 id="MYBATIS_u6570_u636E_u5E93_u7F13_u5B58"><a href="#MYBATIS_u6570_u636E_u5E93_u7F13_u5B58" class="headerlink" title="MYBATIS数据库缓存"></a>MYBATIS数据库缓存</h2><p>加上注解<strong>@Options(useCache = true,timeout = 100000,flushCache = false)</strong>即可。</p>
+<figure class="highlight less"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="variable">@Select</span>(<span class="string">"select * from ysyy_user where user_id=#&#123;user_id&#125; "</span>)</span><br><span class="line"><span class="variable">@Options</span>(useCache = true,timeout = <span class="number">100000</span>,flushCache = false)</span><br><span class="line">User <span class="function">getUser</span>(<span class="variable">@Param</span>(<span class="string">"user_id"</span>)int user_id);</span><br></pre></td></tr></table></figure>
+<h2 id="u603B_u7ED3"><a href="#u603B_u7ED3" class="headerlink" title="总结"></a>总结</h2><p>通过性能测试工具ab测试表示，如果不使用缓存，在QPS为40时，MYSQL就扛不住了。<br>加上缓存后，服务运行稳定。</p>
+<p>ab 测试命令行为：<br><figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">ab -c <span class="number">100</span> -n <span class="number">1000000</span> http:<span class="comment">//192.168.1.236:8080/user3/972</span></span><br></pre></td></tr></table></figure></p>
+<p>测试结果为：</p>
+<figure class="highlight stata"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br></pre></td><td class="code"><pre><span class="line">This is ApacheBench, <span class="keyword">Version</span> 2.3 &lt;<span class="label">$Revision</span>: 655654 $&gt;</span><br><span class="line"><span class="keyword">Copyright</span> 1996 Adam Twiss, Zeus Technology Ltd, http:<span class="comment">//www.zeustech.net/</span></span><br><span class="line">Licensed to The Apache Software Foundation, http:<span class="comment">//www.apache.org/</span></span><br><span class="line"></span><br><span class="line">Benchmarking 192.168.1.236 (be patient)</span><br><span class="line">apr_socket_recv: Connection reset <span class="keyword">by</span> peer (104)</span><br><span class="line"><span class="keyword">Total</span> of 17953 requests completed</span><br><span class="line">[niejinping@dev-office-dev-192.168.1.19.centos65.sanhao.com ~]<span class="label">$ab</span> -c 100 -<span class="keyword">n</span> 1000000 http:<span class="comment">//192.168.1.236:8080/user3/972</span></span><br><span class="line">This is ApacheBench, <span class="keyword">Version</span> 2.3 &lt;<span class="label">$Revision</span>: 655654 $&gt;</span><br><span class="line"><span class="keyword">Copyright</span> 1996 Adam Twiss, Zeus Technology Ltd, http:<span class="comment">//www.zeustech.net/</span></span><br><span class="line">Licensed to The Apache Software Foundation, http:<span class="comment">//www.apache.org/</span></span><br><span class="line"></span><br><span class="line">Benchmarking 192.168.1.236 (be patient)</span><br><span class="line">^C</span><br><span class="line"></span><br><span class="line">Server Software:        Apache-Coyote/1.1</span><br><span class="line">Server Hostname:        192.168.1.236</span><br><span class="line">Server Port:            8080</span><br><span class="line"></span><br><span class="line">Document Path:          /user3/972</span><br><span class="line">Document Length:        29 bytes</span><br><span class="line"></span><br><span class="line">Concurrency Level:      100</span><br><span class="line">Time taken <span class="keyword">for</span> tests:   15.923 seconds</span><br><span class="line">Complete requests:      9466</span><br><span class="line">Failed requests:        0</span><br><span class="line">Write errors:           0</span><br><span class="line"><span class="keyword">Total</span> transferred:      1675482 bytes</span><br><span class="line">HTML transferred:       274514 bytes</span><br><span class="line">Requests per second:    594.47 [#/sec] (<span class="keyword">mean</span>)</span><br><span class="line">Time per request:       168.218 [ms] (<span class="keyword">mean</span>)</span><br><span class="line">Time per request:       1.682 [ms] (<span class="keyword">mean</span>, across all concurrent requests)</span><br><span class="line">Transfer rate:          102.75 [Kbytes/sec] received</span><br><span class="line"></span><br><span class="line">Connection Times (ms)</span><br><span class="line">              min  <span class="keyword">mean</span>[+/-sd] <span class="keyword">median</span>   <span class="literal">max</span></span><br><span class="line">Connect:        0    1   0.7      1      16</span><br><span class="line">Processing:     4  162 245.8     30    1825</span><br><span class="line">Waiting:        4  162 245.6     30    1824</span><br><span class="line"><span class="keyword">Total</span>:          5  163 245.9     31    1825</span><br><span class="line"></span><br><span class="line">Percentage of the requests served within a certain time (ms)</span><br><span class="line">  50%     31</span><br><span class="line">  66%    122</span><br><span class="line">  75%    246</span><br><span class="line">  80%    318</span><br><span class="line">  90%    493</span><br><span class="line">  95%    689</span><br><span class="line">  98%    971</span><br><span class="line">  99%   1129</span><br><span class="line"> 100%   1825 (longest request)</span><br></pre></td></tr></table></figure>
+<h2 id="github_u94FE_u63A5"><a href="#github_u94FE_u63A5" class="headerlink" title="github链接"></a>github链接</h2><p> <a href="https://github.com/njkfei/springmybatiscache.git" target="_blank" rel="external">https://github.com/njkfei/springmybatiscache.git</a></p>
+	  
+
+	  <div>
+  		<center>
+		  <div class="pagination">
+<ul class="pagination">
+	
+	
+	
+	
+	
+	
+		
+		
+	
+		
+		
+	
+		
+		
+	
+		
+		
+	
+		
+		
+	
+		
+		
+	
+		
+		
+	
+		
+		
+	
+		
+		
+	
+		
+		
+	
+		
+		
+	
+		
+		
+	
+		
+		
+	
+		
+		
+	
+		
+		
+	
+		
+		
+			
+		
+	
+		
+		
+	
+		
+		
+	
+		
+		
+			
+		
+	
+		
+		
+	
+		
+		
+	
+		
+		
+	
+		
+		
+	
+		
+		
+	
+		
+		
+	
+		
+		
+			
+		
+	
+		
+		
+	
+		
+		
+			
+		
+	
+		
+		
+			
+		
+	
+		
+		
+			
+		
+	
+		
+		
+			
+		
+	
+		
+		
+			
+		
+	
+		
+		
+			
+		
+	
+		
+		
+			
+			
+		
+	
+		
+		
+			
+			
+			
+		
+		
+	
+		
+		
+	
+		
+		
+			
+		
+	
+		
+		
+	
+		
+		
+			
+		
+	
+		
+		
+			
+		
+	
+		
+		
+	
+		
+		
+	
+		
+		
+	
+		
+		
+	
+		
+		
+	
+		
+		
+	
+		
+		
+			
+		
+	
+		
+		
+	
+		
+		
+	
+		
+		
+	
+		
+		
+	
+		
+		
+	
+		
+		
+	
+		
+		
+	
+		
+		
+	
+		
+		
+	
+		
+		
+	
+		
+		
+	
+		
+		
+	
+		
+		
+	
+		
+		
+	
+		
+		
+	
+		
+		
+	
+		
+		
+			
+		
+	
+		
+		
+			
+		
+	
+		
+		
+			
+		
+	
+		
+		
+			
+		
+	
+		
+		
+			
+		
+	
+		
+		
+			
+		
+	
+		
+		
+			
+		
+	
+		
+		
+	
+		
+		
+			
+		
+	
+		
+		
+	
+		
+		
+	
+		
+		
+	
+		
+		
+	
+		
+		
+			
+		
+	
+		
+		
+	
+		
+		
+			
+		
+	
+		
+		
+			
+		
+	
+		
+		
+	
+		
+		
+			
+		
+	
+		
+		
+	
+		
+		
+	
+		
+		
+	
+		
+		
+	
+		
+		
+	
+		
+		
+			
+		
+	
+		
+		
+	
+		
+		
+	
+		
+		
+			
+		
+	
+		
+		
+			
+		
+	
+		
+		
+	
+		
+		
+	
+		
+		
+	
+		
+		
+	
+		
+		
+			
+		
+	
+		
+		
+	
+		
+		
+	
+		
+		
+	
+		
+		
+	
+		
+		
+	
+		
+		
+	
+		
+		
+	
+		
+		
+			
+		
+	
+		
+		
+			
+		
+	
+		
+		
+			
+		
+	
+		
+		
+	
+		
+		
+	
+		
+		
+	
+	
+	
+		<li class="prev"><a href="/2016/03/23/springboot-gradle/" class="alignleft prev"><i class="fa fa-arrow-circle-o-left"></i>prev</a></li>
+	
+	<li><a href="/"><i class="fa fa-archive"></i>Home</a></li>
+	
+		<li class="next"><a href="/2016/03/23/springboot-ehcache-mybatis集成/" class="alignright next">next<i class="fa fa-arrow-circle-o-right"></i></a></li>
+	
+</ul>
+</div>
+
+		</center>
+	  </div>
+	  
+	</div> <!-- col-md-9/col-md-12 -->
+	
+  </div><!-- row -->
+
+	</div>
+  </div>
+  <div class="container-narrow">
+	<footer> <p>
+  &copy; 2016 niejinping
+  
+      with help from <a href="http://zespia.tw/hexo/" target="_blank">Hexo</a> and <a href="http://getbootstrap.com/" target="_blank">Twitter Bootstrap</a>. Theme by <a href="http://github.com/wzpan/hexo-theme-wixo/">Wixo</a>.    
+</p> </footer>
+  </div> <!-- container-narrow -->
+  
+<a id="gotop" href="#">   
+  <span>▲</span> 
+</a>
+
+<script src="/js/jquery.imagesloaded.min.js"></script>
+<script src="/js/gallery.js"></script>
+<script src="/js/bootstrap.min.js"></script>
+<script src="/js/jquery.tableofcontents.min.js"></script>
+<script src="/js/tocgenerator.min.js"></script>
+<script src="/js/main.js"></script>
+
+
+
+
+<link rel="stylesheet" href="/fancybox/jquery.fancybox.css" media="screen" type="text/css">
+<script src="/fancybox/jquery.fancybox.pack.js"></script>
+<script type="text/javascript">
+(function($){
+  $('.fancybox').fancybox();
+})(jQuery);
+</script>
+
+
+<script>
+var _hmt = _hmt || [];
+(function() {
+  var hm = document.createElement("script");
+  hm.src = "//hm.baidu.com/hm.js?78cd2d23583461b225b36bbf47433d64";
+  var s = document.getElementsByTagName("script")[0]; 
+  s.parentNode.insertBefore(hm, s);
+})();
+</script>
+
+</body>
+</html>

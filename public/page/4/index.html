@@ -1,0 +1,954 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  
+  <title>游骑爬，生命在于折腾</title>
+<a class="nav-icon" href="http://weibo.com/1032111474" title="微博" target="_blank">&#61834;</a>
+<a class="nav-icon" href="http://user.qzone.qq.com/297206021" title="QQ空间" target="_blank">&#61910;</a>
+<a class="nav-icon" href="https://twitter.com/HKEY_C17" title="twitter" target="_blank">&#61593;</a>
+<a class="nav-icon" href="https://github.com/njkfei" title="GitHub" target="_blank">&#61595;</a>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <meta name="description" content="学习总结，知识管理">
+<meta property="og:type" content="website">
+<meta property="og:title" content="游骑爬，生命在于折腾">
+<meta property="og:url" content="http://wiki.niejinkun.com/page/4/index.html">
+<meta property="og:site_name" content="游骑爬，生命在于折腾">
+<meta property="og:description" content="学习总结，知识管理">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="游骑爬，生命在于折腾">
+<meta name="twitter:description" content="学习总结，知识管理">
+  
+    <link rel="alternative" href="/atom.xml" title="游骑爬，生命在于折腾" type="application/atom+xml">
+  
+  
+    <link rel="icon" href="/favicon.png">
+  
+  <link href="//fonts.googleapis.com/css?family=Source+Code+Pro" rel="stylesheet" type="text/css">
+  <link rel="stylesheet" href="/css/style.css" type="text/css">
+  
+<!-- Google Analytics -->
+<script type="text/javascript">
+(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+})(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+ga('create', 'UA-72124819-1', 'auto');
+ga('send', 'pageview');
+
+</script>
+<!-- End Google Analytics -->
+
+
+
+</head>
+<body>
+  <div id="container">
+    <div id="wrap">
+      <header id="header">
+  <div id="banner"></div>
+  <div id="header-outer" class="outer">
+    <div id="header-title" class="inner">
+      <h1 id="logo-wrap">
+        <a href="/" id="logo">游骑爬，生命在于折腾</a>
+      </h1>
+      
+        <h2 id="subtitle-wrap">
+          <a href="/" id="subtitle">记录点滴</a>
+        </h2>
+      
+    </div>
+    <div id="header-inner" class="inner">
+      <nav id="main-nav">
+        <a id="main-nav-toggle" class="nav-icon"></a>
+        
+          <a class="main-nav-link" href="/">首页</a>
+        
+          <a class="main-nav-link" href="/archives">归档</a>
+        
+          <a class="main-nav-link" href="/about">关于我</a>
+        
+      </nav>
+       <nav id="sub-nav">
+        <a class="nav-icon-social" href="https://github.com/njkfei" title="GitHub" target="_blank"><img src="/imgs/github-32.png"></a>
+        <a class="nav-icon-social" href="http://weibo.com/1032111474" title="微博" target="_blank"><img src="/imgs/weibo-32.png"></a>
+        <a class="nav-icon-social" title="Search"><img src="/imgs/search-32.png"></a> 
+           
+        <a class="nav-icon-social" href="/atom.xml" title="RSS Feed"></a>
+        
+       </nav>
+      <div id="search-form-wrap">
+        <form action="//google.com/search" method="get" accept-charset="UTF-8" class="search-form"><input type="search" name="q" results="0" class="search-form-input" placeholder="Search"><button type="submit" class="search-form-submit">&#xF002;</button><input type="hidden" name="sitesearch" value="http://wiki.niejinkun.com"></form>
+      </div>
+    </div>
+  </div>
+
+<script>
+    
+    var d = new Date();
+    var m = d.getMinutes();
+    var num = Math.ceil((m + 1) / (60 / 6));
+    document.getElementById("banner").style.backgroundImage = "url(/css/images/banner" + num + ".jpg)";
+    
+</script>
+</header>
+      <div class="outer">
+        <section id="main">
+  
+    <article id="post-springboot-redis-aop集成" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2016/03/23/springboot-redis-aop集成/" class="article-date">
+  <time datetime="2016-03-22T16:00:00.000Z" itemprop="datePublished">2016-03-23</time>
+</a>
+    
+  <div class="article-category">
+    <a class="article-category-link" href="/categories/java/">java</a>
+  </div>
+
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2016/03/23/springboot-redis-aop集成/">spring boot redis aop集成--完全基于注解</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <!-- Table of Contents -->
+        
+        <h2 id="u4E8B_u60C5_u63D0_u51FA"><a href="#u4E8B_u60C5_u63D0_u51FA" class="headerlink" title="事情提出"></a>事情提出</h2><p>项目上线了。后来要加白名单，要加黑名单。要加性能测试。<br>看着那堆业务逻辑。实在不想在里面加东西了。于是，我不得不考虑AOP了。通过AOP，不需要对原有工作良好的业务代码埋点了。<br>因为，埋点就业务着可能会出错误。</p>
+<h1 id="spring-redis-cache-aop-gradle"><a href="#spring-redis-cache-aop-gradle" class="headerlink" title="spring-redis-cache-aop-gradle"></a>spring-redis-cache-aop-gradle</h1><p> spring aop功能储存，全部基于java config。没有难看的XML配置文件。</p>
+<h2 id="AOP_u96C6_u6210_u65B9_u6CD5"><a href="#AOP_u96C6_u6210_u65B9_u6CD5" class="headerlink" title="AOP集成方法"></a>AOP集成方法</h2><h3 id="u5F15_u5165_u4F9D_u8D56"><a href="#u5F15_u5165_u4F9D_u8D56" class="headerlink" title="引入依赖"></a>引入依赖</h3><figure class="highlight css"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"> <span class="tag">compile</span>("<span class="tag">org</span><span class="class">.springframework</span><span class="pseudo">:spring-aop</span><span class="pseudo">:4</span><span class="class">.1</span><span class="class">.5</span><span class="class">.RELEASE</span>")</span><br><span class="line"><span class="tag">compile</span>("<span class="tag">org</span><span class="class">.aspectj</span><span class="pseudo">:aspectjrt</span><span class="pseudo">:1</span><span class="class">.6</span><span class="class">.11</span>")</span><br><span class="line"><span class="tag">compile</span>("<span class="tag">org</span><span class="class">.aspectj</span><span class="pseudo">:aspectjweaver</span><span class="pseudo">:1</span><span class="class">.6</span><span class="class">.11</span>")</span><br><span class="line"><span class="tag">compile</span>("<span class="tag">aopalliance</span><span class="pseudo">:aopalliance</span><span class="pseudo">:1</span><span class="class">.0</span>")</span><br></pre></td></tr></table></figure>
+<h3 id="u52A0_u5165_u914D_u7F6E"><a href="#u52A0_u5165_u914D_u7F6E" class="headerlink" title="加入配置"></a>加入配置</h3><figure class="highlight less"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="variable">@EnableAutoConfiguration</span></span><br><span class="line"><span class="variable">@Configuration</span></span><br><span class="line"><span class="variable">@EnableAspectJAutoProxy</span>(proxyTargetClass = true) <span class="comment">// 这一行必须要有</span></span><br><span class="line">public class AppConfig &#123;</span><br><span class="line"></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>###　注入目标<br><figure class="highlight aspectj"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br></pre></td><td class="code"><pre><span class="line"><span class="annotation">@Aspect</span></span><br><span class="line"><span class="annotation">@Component</span></span><br><span class="line"><span class="annotation">@EnableAutoConfiguration</span></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">LogAop</span> </span><br><span class="line"></span>&#123;</span><br><span class="line">	<span class="annotation">@Before</span>(<span class="string">"execution(* com.niejinkun.spring.springcache.controller.UserController.getUser(..)) &amp;&amp; args(user_id)"</span>)</span><br><span class="line">	<span class="keyword">public</span> <span class="function"><span class="keyword">void</span> <span class="title">logBefore</span><span class="params">(<span class="keyword">int</span> user_id)</span> <span class="keyword">throws</span> Throwable</span>&#123;</span><br><span class="line">		</span><br><span class="line">		System.out.println(<span class="string">"Before log user: "</span> + user_id);</span><br><span class="line">	&#125;</span><br><span class="line">	</span><br><span class="line">	<span class="annotation">@Around</span>(<span class="string">"execution(* com.niejinkun.spring.springcache.controller.UserController.getUser(..)) &amp;&amp; args(user_id)"</span>)</span><br><span class="line">	<span class="keyword">public</span> <span class="function"><span class="keyword">void</span> <span class="title">logStatics</span><span class="params">(ProceedingJoinPoint joinPoint,<span class="keyword">int</span> user_id)</span> <span class="keyword">throws</span> Throwable</span>&#123;</span><br><span class="line">		<span class="keyword">long</span> start = System.currentTimeMillis();</span><br><span class="line">		Object user = joinPoint.<span class="keyword">proceed</span>();</span><br><span class="line">		System.out.println(<span class="string">"log user: "</span> + user.toString());</span><br><span class="line">		<span class="keyword">long</span> end = System.currentTimeMillis();</span><br><span class="line">		System.out.println(<span class="string">"use time : "</span>  + (end - start));</span><br><span class="line">	&#125;</span><br><span class="line">	</span><br><span class="line">	<span class="annotation">@After</span>(<span class="string">"execution(* com.niejinkun.spring.springcache.controller.UserController.getUser(..)) &amp;&amp; args(user_id)"</span>)</span><br><span class="line">	<span class="keyword">public</span> <span class="function"><span class="keyword">void</span> <span class="title">logEnd</span><span class="params">(<span class="keyword">int</span> user_id)</span> <span class="keyword">throws</span> Throwable</span>&#123;</span><br><span class="line">		System.out.println(<span class="string">"After log user: "</span> + user_id);</span><br><span class="line"></span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>说明如下：</p>
+<ul>
+<li>&amp;&amp; args(user_id) 这个是目标函数的参数，只需要参数名，不需要参数类型，参数类型在后面指定</li>
+<li>(ProceedingJoinPoint joinPoint,int user_id)　如果有目标函数的参数，则需要在joinPoint后面加入参数类型和参数</li>
+<li>Object user 使用User user不起作用，不知道为什么。可能是User是特殊的类，和系统类冲突</li>
+<li>@Before </li>
+<li>@Around </li>
+<li>@After</li>
+<li>before after无joinPoint参数</li>
+</ul>
+<h2 id="u6D4B_u8BD5_u8FD0_u884C"><a href="#u6D4B_u8BD5_u8FD0_u884C" class="headerlink" title="测试运行"></a>测试运行</h2><p>由于本demo使用了cache,因此，对于相同的请求，如果目标没有被缓存命中，则AOP只能响应一次。否则，AOP不起作用。</p>
+<h2 id="github"><a href="#github" class="headerlink" title="github"></a>github</h2><p> <a href="https://github.com/njkfei/spring-redis-cache-aop-gradle.git" target="_blank" rel="external">https://github.com/njkfei/spring-redis-cache-aop-gradle.git</a></p>
+
+      
+    </div>
+    <footer class="article-footer">
+      <div class="bshare-custom"><a title="分享到QQ空间" class="bshare-qzone"></a><a title="分享到新浪微博" class="bshare-sinaminiblog"></a><a title="分享到人人网" class="bshare-renren"></a><a title="分享到腾讯微博" class="bshare-qqmb"></a><a title="分享到网易微博" class="bshare-neteasemb"></a><a title="更多平台" class="bshare-more bshare-more-icon more-style-addthis"></a><span class="BSHARE_COUNT bshare-share-count">0</span></div><script type="text/javascript" charset="utf-8" src="http://static.bshare.cn/b/buttonLite.js#style=-1&amp;uuid=&amp;pophcol=2&amp;lang=zh"></script><script type="text/javascript" charset="utf-8" src="http://static.bshare.cn/b/bshareC0.js"></script>
+    <!-- 分享  <a data-url="http://wiki.niejinkun.com/2016/03/23/springboot-redis-aop集成/" data-id="civ3jazdr003vo4uxrn3ry9ln" class="article-share-link">Share</a> -->
+      
+      
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/aop/">aop</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/java/">java</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/redis/">redis</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/springboot/">springboot</a></li></ul>
+
+    </footer>
+  </div>
+  
+</article>
+
+ 
+
+  
+    <article id="post-springboot-memcached集成" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2016/03/23/springboot-memcached集成/" class="article-date">
+  <time datetime="2016-03-22T16:00:00.000Z" itemprop="datePublished">2016-03-23</time>
+</a>
+    
+  <div class="article-category">
+    <a class="article-category-link" href="/categories/java/">java</a>
+  </div>
+
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2016/03/23/springboot-memcached集成/">spring boot memcached集成--完全基于注解</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <!-- Table of Contents -->
+        
+        <p> springboot memcahced集成。<br>memcached使用simple spring memcachedmanager框架。构建工具使用gradle<br>本案例使用的框架有：</p>
+<ul>
+<li>springboot</li>
+<li>memcached : 基于ssm</li>
+<li>mybatis</li>
+<li>springmvc</li>
+</ul>
+<h2 id="gradle_u4F9D_u8D56"><a href="#gradle_u4F9D_u8D56" class="headerlink" title="gradle依赖"></a>gradle依赖</h2><figure class="highlight css"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">   <span class="tag">compile</span>("<span class="tag">com</span><span class="class">.google</span><span class="class">.code</span><span class="class">.simple-spring-memcached</span><span class="pseudo">:xmemcached-provider</span><span class="pseudo">:3</span><span class="class">.5</span><span class="class">.0</span>")</span><br><span class="line">   <span class="tag">compile</span>("<span class="tag">com</span><span class="class">.google</span><span class="class">.code</span><span class="class">.simple-spring-memcached</span><span class="pseudo">:simple-spring-memcached</span><span class="pseudo">:3</span><span class="class">.5</span><span class="class">.0</span>")</span><br><span class="line">   <span class="tag">compile</span>("<span class="tag">com</span><span class="class">.google</span><span class="class">.code</span><span class="class">.simple-spring-memcached</span><span class="pseudo">:spring-cache</span><span class="pseudo">:3</span><span class="class">.5</span><span class="class">.0</span>")</span><br><span class="line">   <span class="tag">compile</span>("<span class="tag">org</span><span class="class">.springframework</span><span class="pseudo">:spring-aop</span><span class="pseudo">:4</span><span class="class">.1</span><span class="class">.5</span><span class="class">.RELEASE</span>")</span><br><span class="line"><span class="tag">compile</span>("<span class="tag">org</span><span class="class">.aspectj</span><span class="pseudo">:aspectjrt</span><span class="pseudo">:1</span><span class="class">.6</span><span class="class">.11</span>")</span><br><span class="line"><span class="tag">compile</span>("<span class="tag">org</span><span class="class">.aspectj</span><span class="pseudo">:aspectjweaver</span><span class="pseudo">:1</span><span class="class">.6</span><span class="class">.11</span>")</span><br><span class="line"><span class="tag">compile</span>("<span class="tag">aopalliance</span><span class="pseudo">:aopalliance</span><span class="pseudo">:1</span><span class="class">.0</span>")</span><br></pre></td></tr></table></figure>
+<h2 id="u6CE8_u89E3_u914D_u7F6E"><a href="#u6CE8_u89E3_u914D_u7F6E" class="headerlink" title="注解配置"></a>注解配置</h2><figure class="highlight scala"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br></pre></td><td class="code"><pre><span class="line"><span class="annotation">@Configuration</span></span><br><span class="line"><span class="annotation">@EnableCaching</span></span><br><span class="line"><span class="annotation">@EnableAspectJAutoProxy</span></span><br><span class="line">public <span class="class"><span class="keyword">class</span> <span class="title">MemCacheConfig</span> <span class="keyword"><span class="keyword">extends</span></span> <span class="title">CachingConfigurerSupport</span> &#123;</span></span><br><span class="line">	<span class="annotation">@Bean</span></span><br><span class="line">	public <span class="type">CacheManager</span> cacheManager()</span><br><span class="line">	&#123;</span><br><span class="line">	    <span class="type">MemcacheClientFactoryImpl</span> cacheClientFactory = <span class="keyword">new</span> <span class="type">MemcacheClientFactoryImpl</span>();</span><br><span class="line">	    <span class="type">AddressProvider</span> addressProvider = <span class="keyword">new</span> <span class="type">DefaultAddressProvider</span>(<span class="string">"www.hollysys.xyz:11211"</span>);</span><br><span class="line">	    com.google.code.ssm.providers.<span class="type">CacheConfiguration</span> cacheConfiguration = <span class="keyword">new</span> com.google.code.ssm.providers.<span class="type">CacheConfiguration</span>();</span><br><span class="line">	    cacheConfiguration.setConsistentHashing(<span class="literal">true</span>); <span class="comment">//TODO check this</span></span><br><span class="line"></span><br><span class="line">	    <span class="type">CacheFactory</span> cacheFactory = <span class="keyword">new</span> <span class="type">CacheFactory</span>();</span><br><span class="line">	    cacheFactory.setCacheName           ( <span class="string">"userCache"</span>        );</span><br><span class="line">	    cacheFactory.setCacheClientFactory  ( cacheClientFactory    );</span><br><span class="line">	    cacheFactory.setAddressProvider     ( addressProvider       );</span><br><span class="line">	    cacheFactory.setConfiguration       ( cacheConfiguration    );</span><br><span class="line"></span><br><span class="line">	    <span class="type">Cache</span> <span class="class"><span class="keyword">object</span> =</span> <span class="literal">null</span>;</span><br><span class="line">	    <span class="keyword">try</span> &#123;</span><br><span class="line">	        <span class="class"><span class="keyword">object</span> =</span> cacheFactory.getObject();</span><br><span class="line">	    &#125; <span class="keyword">catch</span> (<span class="type">Exception</span> e) &#123;</span><br><span class="line">	        e.printStackTrace();</span><br><span class="line">	    &#125;</span><br><span class="line"></span><br><span class="line">	    <span class="type">SSMCache</span> ssmCache = <span class="keyword">new</span> <span class="type">SSMCache</span>(<span class="class"><span class="keyword">object</span>, 10000, <span class="title">true</span>);</span> <span class="comment">//TODO be very carefully here, third param allow remove all entries!!</span></span><br><span class="line"></span><br><span class="line">	    <span class="type">ArrayList</span>&lt;<span class="type">SSMCache</span>&gt; ssmCaches = <span class="keyword">new</span> <span class="type">ArrayList</span>&lt;<span class="type">SSMCache</span>&gt;();</span><br><span class="line">	    ssmCaches.add(<span class="number">0</span>, ssmCache);</span><br><span class="line"></span><br><span class="line">	    <span class="type">SSMCacheManager</span> ssmCacheManager = <span class="keyword">new</span> <span class="type">SSMCacheManager</span>();</span><br><span class="line">	    ssmCacheManager.setCaches(ssmCaches);</span><br><span class="line">	    </span><br><span class="line">	    <span class="keyword">return</span> ssmCacheManager;</span><br><span class="line">	&#125;</span><br><span class="line"></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>注意：</p>
+<ul>
+<li>EnableAspectJAutoProxy　驱动缓存扫描。这句话不能少</li>
+</ul>
+<p>##　冲突的配置<br><figure class="highlight less"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br></pre></td><td class="code"><pre><span class="line"><span class="variable">@Aspect</span></span><br><span class="line"><span class="variable">@Component</span></span><br><span class="line"><span class="variable">@EnableAutoConfiguration</span></span><br><span class="line">public class LogAop </span><br><span class="line">&#123;</span><br><span class="line"><span class="comment">/*	@Around("execution(* com.niejinkun.spring.springcache.controller.UserController.getUser(..)) &amp;&amp; args(user_id)")</span><br><span class="line">	public void logStatics(ProceedingJoinPoint joinPoint,int user_id) throws Throwable&#123;</span><br><span class="line">		</span><br><span class="line">		long start = System.currentTimeMillis();</span><br><span class="line">		</span><br><span class="line">		Object user = joinPoint.proceed();</span><br><span class="line">		</span><br><span class="line">		System.out.println("log user: " + user.toString());</span><br><span class="line">		long end = System.currentTimeMillis();</span><br><span class="line">		</span><br><span class="line">		System.out.println("use time : "  + (end - start));</span><br><span class="line">	&#125;</span><br><span class="line">	</span><br><span class="line">	@Before("execution(* com.niejinkun.spring.springcache.controller.UserController.getUser(..)) &amp;&amp; args(user_id)")</span><br><span class="line">	public void logBefore(int user_id) throws Throwable&#123;</span><br><span class="line">		</span><br><span class="line">		System.out.println("Before log user: " + user_id);</span><br><span class="line">	&#125;</span><br><span class="line">	</span><br><span class="line">	@After("execution(* com.niejinkun.spring.springcache.controller.UserController.getUser(..)) &amp;&amp; args(user_id)")</span><br><span class="line">	public void logEnd(int user_id) throws Throwable&#123;</span><br><span class="line">		System.out.println("After log user: " + user_id);</span><br><span class="line"></span><br><span class="line">	&#125;*/</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>说明：</p>
+<ul>
+<li>这个aop会导致getUser上面的@cacheable失效，因此，这里注释掉了。</li>
+</ul>
+<h2 id="u63A7_u5236_u5668_u914D_u7F6E"><a href="#u63A7_u5236_u5668_u914D_u7F6E" class="headerlink" title="控制器配置"></a>控制器配置</h2><figure class="highlight aspectj"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="annotation">@Cacheable</span>(value = NAMESPACE, key=<span class="string">"#user_id"</span>, unless=<span class="string">"#result == null"</span>)</span><br><span class="line"><span class="annotation">@RequestMapping</span>(<span class="string">"/user2/&#123;user_id&#125;"</span>)</span><br><span class="line"><span class="annotation">@ResponseBody</span></span><br><span class="line"><span class="keyword">public</span>  <span class="function">User <span class="title">getUser</span><span class="params">( @PathVariable  <span class="keyword">int</span> user_id)</span> </span>&#123;</span><br><span class="line">	<span class="comment">// 方法内部实现不考虑缓存逻辑，直接实现业务</span></span><br><span class="line">	System.out.println(<span class="string">"real query user."</span> + user_id);</span><br><span class="line">	<span class="function"><span class="keyword">return</span> userDAO.<span class="title">getUser</span><span class="params">(user_id)</span></span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>　说明：</p>
+<ul>
+<li>unless=”#result == null” 表示如果返回结果为空，则不放入memcached<h2 id="u7F16_u8BD1"><a href="#u7F16_u8BD1" class="headerlink" title="编译"></a>编译</h2><figure class="highlight nginx"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="title">gradle</span> install --<span class="built_in">info</span></span><br></pre></td></tr></table></figure>
+</li>
+</ul>
+<p>##　运行<br><figure class="highlight nginx"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="title">gradle</span> bootrun</span><br></pre></td></tr></table></figure></p>
+<h2 id="u8BF4_u660E"><a href="#u8BF4_u660E" class="headerlink" title="说明"></a>说明</h2><p>如果没有注释掉AOP,则会报下面的错误<br><figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="number">2016</span>-<span class="number">03</span>-<span class="number">23</span> <span class="number">20</span>:<span class="number">51</span>:<span class="number">49.111</span>  INFO <span class="number">9660</span> --- [nio-<span class="number">8080</span>-exec-<span class="number">5</span>] com.google.code.ssm.spring.SSMCache      : Cache miss. Get by key <span class="number">988</span> from cache userCache</span><br></pre></td></tr></table></figure></p>
+<h2 id="github_u94FE_u63A5"><a href="#github_u94FE_u63A5" class="headerlink" title="github链接"></a>github链接</h2><p> <a href="https://github.com/njkfei/spring-mem-cached-gradle" target="_blank" rel="external">https://github.com/njkfei/spring-mem-cached-gradle</a></p>
+
+      
+    </div>
+    <footer class="article-footer">
+      <div class="bshare-custom"><a title="分享到QQ空间" class="bshare-qzone"></a><a title="分享到新浪微博" class="bshare-sinaminiblog"></a><a title="分享到人人网" class="bshare-renren"></a><a title="分享到腾讯微博" class="bshare-qqmb"></a><a title="分享到网易微博" class="bshare-neteasemb"></a><a title="更多平台" class="bshare-more bshare-more-icon more-style-addthis"></a><span class="BSHARE_COUNT bshare-share-count">0</span></div><script type="text/javascript" charset="utf-8" src="http://static.bshare.cn/b/buttonLite.js#style=-1&amp;uuid=&amp;pophcol=2&amp;lang=zh"></script><script type="text/javascript" charset="utf-8" src="http://static.bshare.cn/b/bshareC0.js"></script>
+    <!-- 分享  <a data-url="http://wiki.niejinkun.com/2016/03/23/springboot-memcached集成/" data-id="civ3jazdy0042o4uxob33bzv7" class="article-share-link">Share</a> -->
+      
+      
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/java/">java</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/memcached/">memcached</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/springboot/">springboot</a></li></ul>
+
+    </footer>
+  </div>
+  
+</article>
+
+ 
+
+  
+    <article id="post-springboot-gradle" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2016/03/23/springboot-gradle/" class="article-date">
+  <time datetime="2016-03-22T16:00:00.000Z" itemprop="datePublished">2016-03-23</time>
+</a>
+    
+  <div class="article-category">
+    <a class="article-category-link" href="/categories/java/">java</a>
+  </div>
+
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2016/03/23/springboot-gradle/">spring boot gradle集成--完全基于注解</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <!-- Table of Contents -->
+        
+        <h2 id="springboot-gradle"><a href="#springboot-gradle" class="headerlink" title="springboot-gradle"></a>springboot-gradle</h2><p>本人的第一个gradle工程，抄自springboot官网，从今天开始，将转向基于gradle构建项目。<br>因此，这个项目虽然简单，但确是本人的一个里程碑。</p>
+<h2 id="u5173_u952E_u914D_u7F6E"><a href="#u5173_u952E_u914D_u7F6E" class="headerlink" title="关键配置"></a>关键配置</h2><figure class="highlight xquery"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br></pre></td><td class="code"><pre><span class="line">buildscript &#123;</span><br><span class="line">  repositories &#123;</span><br><span class="line">    maven &#123; url <span class="string">"https://repo.spring.io/libs-release"</span> &#125;</span><br><span class="line">    mavenLocal()</span><br><span class="line">    mavenCentral()</span><br><span class="line">  &#125;</span><br><span class="line">  dependencies &#123;</span><br><span class="line">    classpath(<span class="string">"org.springframework.boot:spring-boot-gradle-plugin:1.1.10.RELEASE"</span>)</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br><span class="line">apply plugin: <span class="string">'java'</span></span><br><span class="line">apply plugin: <span class="string">'eclipse'</span></span><br><span class="line">apply plugin: <span class="string">'idea'</span></span><br><span class="line">apply plugin: <span class="string">'spring-boot'</span></span><br><span class="line">jar &#123;</span><br><span class="line">  baseName = <span class="string">'springbootgradle'</span></span><br><span class="line">  version =  <span class="string">'0.1.0'</span></span><br><span class="line">&#125;</span><br><span class="line">repositories &#123;</span><br><span class="line">  mavenLocal()</span><br><span class="line">  mavenCentral()</span><br><span class="line">  maven &#123; url <span class="string">"https://repo.spring.io/libs-release"</span> &#125;</span><br><span class="line">&#125;</span><br><span class="line">dependencies &#123;</span><br><span class="line">  compile(<span class="string">"org.springframework.boot:spring-boot-starter-web"</span>)</span><br><span class="line">  testCompile(<span class="string">"junit:junit"</span>)</span><br><span class="line">&#125;</span><br><span class="line">task wrapper(type: Wrapper) &#123;</span><br><span class="line">  gradleVersion = <span class="string">'2.2.1'</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h2 id="war_u63D2_u4EF6"><a href="#war_u63D2_u4EF6" class="headerlink" title="war插件"></a>war插件</h2><p>···<br>apply plugin ‘war’<br>···</p>
+<h2 id="u6253_u5305"><a href="#u6253_u5305" class="headerlink" title="打包"></a>打包</h2><p> 期望和maven的assemable插件类似。目前还没有配置过。下次配置成功后再更新本文章。</p>
+<h2 id="u7F16_u8BD1"><a href="#u7F16_u8BD1" class="headerlink" title="编译"></a>编译</h2><figure class="highlight nginx"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="title">gradle</span> build</span><br></pre></td></tr></table></figure>
+<h2 id="u8FD0_u884C"><a href="#u8FD0_u884C" class="headerlink" title="运行"></a>运行</h2><figure class="highlight nginx"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="title">gradle</span> bootrun</span><br></pre></td></tr></table></figure>
+<h2 id="u90E8_u7F72"><a href="#u90E8_u7F72" class="headerlink" title="部署"></a>部署</h2><p> 需要自行配置</p>
+<h2 id="github"><a href="#github" class="headerlink" title="github"></a>github</h2><p> <a href="https://github.com/njkfei/springboot-gradle" target="_blank" rel="external">https://github.com/njkfei/springboot-gradle</a></p>
+
+      
+    </div>
+    <footer class="article-footer">
+      <div class="bshare-custom"><a title="分享到QQ空间" class="bshare-qzone"></a><a title="分享到新浪微博" class="bshare-sinaminiblog"></a><a title="分享到人人网" class="bshare-renren"></a><a title="分享到腾讯微博" class="bshare-qqmb"></a><a title="分享到网易微博" class="bshare-neteasemb"></a><a title="更多平台" class="bshare-more bshare-more-icon more-style-addthis"></a><span class="BSHARE_COUNT bshare-share-count">0</span></div><script type="text/javascript" charset="utf-8" src="http://static.bshare.cn/b/buttonLite.js#style=-1&amp;uuid=&amp;pophcol=2&amp;lang=zh"></script><script type="text/javascript" charset="utf-8" src="http://static.bshare.cn/b/bshareC0.js"></script>
+    <!-- 分享  <a data-url="http://wiki.niejinkun.com/2016/03/23/springboot-gradle/" data-id="civ3jaze80048o4uxwlgzlil5" class="article-share-link">Share</a> -->
+      
+      
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/gradle/">gradle</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/java/">java</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/springboot/">springboot</a></li></ul>
+
+    </footer>
+  </div>
+  
+</article>
+
+ 
+
+  
+    <article id="post-springboot-ehcache集成" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2016/03/23/springboot-ehcache集成/" class="article-date">
+  <time datetime="2016-03-22T16:00:00.000Z" itemprop="datePublished">2016-03-23</time>
+</a>
+    
+  <div class="article-category">
+    <a class="article-category-link" href="/categories/java/">java</a>
+  </div>
+
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2016/03/23/springboot-ehcache集成/">springboot mybatis cache集成--完全基于注解</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <!-- Table of Contents -->
+        
+        <h1 id="springmybatiscache"><a href="#springmybatiscache" class="headerlink" title="springmybatiscache"></a>springmybatiscache</h1><h2 id="DEMO_u8BF4_u660E"><a href="#DEMO_u8BF4_u660E" class="headerlink" title="DEMO说明"></a>DEMO说明</h2><p>　本示例通过REST控制器接收外界数据请求，rest控制器通过mybatis向数据库请求数据并缓存中cache当中。<br>　通过测试表示，如果没有cache，通过ab请求时，将导致mysql连接不可用。使用缓存后，上游读请求将不会把mysql压跨。<br>　技术要素如下：</p>
+<ul>
+<li>mybatis 　：提供ORM框架</li>
+<li>cache　：缓存查询数据</li>
+<li>restcontroller　：　提供web服务</li>
+<li>springboot : 内嵌tomcat web服务支持<br>本DEMO使用了二级缓存。第一级在REST请求处。<br>第二级在MYBATIS查询处。</li>
+</ul>
+<h2 id="maven_u4F9D_u8D56"><a href="#maven_u4F9D_u8D56" class="headerlink" title="maven依赖"></a>maven依赖</h2><figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">&lt;!-- spring boot --&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="title">dependency</span>&gt;</span></span><br><span class="line">	<span class="tag">&lt;<span class="title">groupId</span>&gt;</span>org.springframework.boot<span class="tag">&lt;/<span class="title">groupId</span>&gt;</span></span><br><span class="line">	<span class="tag">&lt;<span class="title">artifactId</span>&gt;</span>spring-boot-starter-web<span class="tag">&lt;/<span class="title">artifactId</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="title">dependency</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="title">dependency</span>&gt;</span></span><br><span class="line">	<span class="tag">&lt;<span class="title">groupId</span>&gt;</span>org.springframework.boot<span class="tag">&lt;/<span class="title">groupId</span>&gt;</span></span><br><span class="line">	<span class="tag">&lt;<span class="title">artifactId</span>&gt;</span>spring-boot-starter-tomcat<span class="tag">&lt;/<span class="title">artifactId</span>&gt;</span></span><br><span class="line">	<span class="tag">&lt;<span class="title">scope</span>&gt;</span>provided<span class="tag">&lt;/<span class="title">scope</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="title">dependency</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="title">dependency</span>&gt;</span></span><br><span class="line">	<span class="tag">&lt;<span class="title">groupId</span>&gt;</span>org.springframework<span class="tag">&lt;/<span class="title">groupId</span>&gt;</span></span><br><span class="line">	<span class="tag">&lt;<span class="title">artifactId</span>&gt;</span>spring-webmvc<span class="tag">&lt;/<span class="title">artifactId</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="title">dependency</span>&gt;</span></span><br><span class="line"></span><br><span class="line"><span class="tag">&lt;<span class="title">dependency</span>&gt;</span></span><br><span class="line">	<span class="tag">&lt;<span class="title">groupId</span>&gt;</span>org.mybatis<span class="tag">&lt;/<span class="title">groupId</span>&gt;</span></span><br><span class="line">	<span class="tag">&lt;<span class="title">artifactId</span>&gt;</span>mybatis-spring<span class="tag">&lt;/<span class="title">artifactId</span>&gt;</span></span><br><span class="line">	<span class="tag">&lt;<span class="title">version</span>&gt;</span>1.2.3<span class="tag">&lt;/<span class="title">version</span>&gt;</span></span><br><span class="line">	<span class="tag">&lt;<span class="title">type</span>&gt;</span>jar<span class="tag">&lt;/<span class="title">type</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="title">dependency</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="title">dependency</span>&gt;</span></span><br><span class="line">	<span class="tag">&lt;<span class="title">groupId</span>&gt;</span>org.springframework.boot<span class="tag">&lt;/<span class="title">groupId</span>&gt;</span></span><br><span class="line">	<span class="tag">&lt;<span class="title">artifactId</span>&gt;</span>spring-boot-starter-jdbc<span class="tag">&lt;/<span class="title">artifactId</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="title">dependency</span>&gt;</span></span><br><span class="line"></span><br><span class="line"><span class="comment">&lt;!-- mysql驱动 --&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="title">dependency</span>&gt;</span></span><br><span class="line">	<span class="tag">&lt;<span class="title">groupId</span>&gt;</span>mysql<span class="tag">&lt;/<span class="title">groupId</span>&gt;</span></span><br><span class="line">	<span class="tag">&lt;<span class="title">artifactId</span>&gt;</span>mysql-connector-java<span class="tag">&lt;/<span class="title">artifactId</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="title">dependency</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="title">dependency</span>&gt;</span></span><br><span class="line">	<span class="tag">&lt;<span class="title">groupId</span>&gt;</span>org.mybatis<span class="tag">&lt;/<span class="title">groupId</span>&gt;</span></span><br><span class="line">	<span class="tag">&lt;<span class="title">artifactId</span>&gt;</span>mybatis<span class="tag">&lt;/<span class="title">artifactId</span>&gt;</span></span><br><span class="line">	<span class="tag">&lt;<span class="title">version</span>&gt;</span>3.3.0<span class="tag">&lt;/<span class="title">version</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="title">dependency</span>&gt;</span></span><br></pre></td></tr></table></figure>
+<p>##　CACHE配置<br>配置cache,使用spring自带的缓存框架ConcurrentMapCache即可。<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><span class="line"><span class="annotation">@Configuration</span></span><br><span class="line"><span class="annotation">@EnableCaching</span></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">CacheConfig</span> </span><br><span class="line"></span>&#123;</span><br><span class="line">  <span class="annotation">@Bean</span></span><br><span class="line">  <span class="function"><span class="keyword">public</span> SimpleCacheManager <span class="title">cacheManager</span><span class="params">()</span></span>&#123;</span><br><span class="line">	  SimpleCacheManager cacheManager = <span class="keyword">new</span> SimpleCacheManager();</span><br><span class="line">	  cacheManager.setCaches(Arrays.asList(userCache(),defaultCache()));</span><br><span class="line">	  <span class="keyword">return</span> cacheManager;</span><br><span class="line">  &#125;</span><br><span class="line">  </span><br><span class="line">  <span class="annotation">@Bean</span>(name=<span class="string">"userCache"</span>)</span><br><span class="line">  <span class="function"><span class="keyword">public</span> ConcurrentMapCache <span class="title">userCache</span><span class="params">()</span></span>&#123;</span><br><span class="line">	  ConcurrentMapCache userCache = <span class="keyword">new</span> ConcurrentMapCache(<span class="string">"userCache"</span>);</span><br><span class="line">	  <span class="keyword">return</span>  userCache;</span><br><span class="line">  &#125;</span><br><span class="line">  </span><br><span class="line">  <span class="annotation">@Bean</span></span><br><span class="line">  <span class="function"><span class="keyword">public</span> ConcurrentMapCache <span class="title">defaultCache</span><span class="params">()</span></span>&#123;</span><br><span class="line">	  ConcurrentMapCache defaultCache = <span class="keyword">new</span> ConcurrentMapCache(<span class="string">"defaultCache"</span>);</span><br><span class="line">	  <span class="keyword">return</span>  defaultCache;</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<h2 id="REST_u63A7_u5236_u5668_u7F13_u5B58_u914D_u7F6E"><a href="#REST_u63A7_u5236_u5668_u7F13_u5B58_u914D_u7F6E" class="headerlink" title="REST控制器缓存配置"></a>REST控制器缓存配置</h2><h3 id="u52A0_u5165_u4F9D_u8D56"><a href="#u52A0_u5165_u4F9D_u8D56" class="headerlink" title="加入依赖"></a>加入依赖</h3><figure class="highlight less"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="variable">@RestController</span></span><br><span class="line"><span class="variable">@EnableAutoConfiguration</span></span><br><span class="line"><span class="variable">@Cacheable</span> <span class="comment">// 这条注解不能少</span></span><br><span class="line">public class UserController &#123;&#125;</span><br></pre></td></tr></table></figure>
+<h3 id="u7406_u65B0_u4E00_u6B21_u7F13_u5B58@Cacheable"><a href="#u7406_u65B0_u4E00_u6B21_u7F13_u5B58@Cacheable" class="headerlink" title="理新一次缓存@Cacheable"></a>理新一次缓存@Cacheable</h3><p>@Cacheable使用名为”userCache”的缓存，如果缓存中没有数据，则读取数据库后加入缓存。<br><figure class="highlight aspectj"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="annotation">@Cacheable</span>(value = <span class="string">"userCache"</span>) <span class="comment">// 使用了一个缓存名叫 userCache</span></span><br><span class="line"><span class="annotation">@RequestMapping</span>(<span class="string">"/user2/&#123;user_id&#125;"</span>)</span><br><span class="line"><span class="annotation">@ResponseBody</span></span><br><span class="line"><span class="keyword">public</span> <span class="function">User <span class="title">getUser</span><span class="params">(@PathVariable  <span class="keyword">int</span> user_id)</span> </span>&#123;</span><br><span class="line">	<span class="comment">// 方法内部实现不考虑缓存逻辑，直接实现业务</span></span><br><span class="line">	System.out.println(<span class="string">"real query user."</span> + user_id);</span><br><span class="line">	<span class="function"><span class="keyword">return</span> userDAO.<span class="title">getUser</span><span class="params">(user_id)</span></span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<h3 id="u6BCF_u6B21_u66F4_u65B0_u7F13_u5B58@CachePut"><a href="#u6BCF_u6B21_u66F4_u65B0_u7F13_u5B58@CachePut" class="headerlink" title="每次更新缓存@CachePut"></a>每次更新缓存@CachePut</h3><p>@CachePut每次访问时，都会先读数据库，再更新缓存。因此，这条注解适合update的场景。<br>下面的测试代码，实际上相当于缓存失效了。<br><figure class="highlight aspectj"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="annotation">@CachePut</span>(value = <span class="string">"userCache"</span>) <span class="comment">// 使用了一个缓存名叫 userCache</span></span><br><span class="line"><span class="annotation">@RequestMapping</span>(<span class="string">"/user3/&#123;user_id&#125;"</span>)</span><br><span class="line"><span class="annotation">@ResponseBody</span></span><br><span class="line"><span class="keyword">public</span> <span class="function">User <span class="title">getUser3</span><span class="params">(@PathVariable  <span class="keyword">int</span> user_id)</span> </span>&#123;</span><br><span class="line">	<span class="comment">// 方法内部实现不考虑缓存逻辑，直接实现业务</span></span><br><span class="line">	System.out.println(<span class="string">"real query user."</span> + user_id);</span><br><span class="line">	<span class="function"><span class="keyword">return</span> userDAO.<span class="title">getUser</span><span class="params">(user_id)</span></span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<h3 id="u5220_u9664_u5355_u4E2A_u7F13_u5B58@CacheEvict"><a href="#u5220_u9664_u5355_u4E2A_u7F13_u5B58@CacheEvict" class="headerlink" title="删除单个缓存@CacheEvict"></a>删除单个缓存@CacheEvict</h3><p>最好加上key,否则可能没有清除缓存</p>
+<figure class="highlight d"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//　删除部分缓存</span></span><br><span class="line"><span class="keyword">@CacheEvict</span>(value=<span class="string">"userCache"</span>,key=<span class="string">"#user_id"</span>,beforeInvocation=<span class="literal">true</span>)</span><br><span class="line"><span class="keyword">@RequestMapping</span>(<span class="string">"/update/&#123;user_id&#125;/&#123;user_type&#125;"</span>)</span><br><span class="line"><span class="keyword">@ResponseBody</span></span><br><span class="line"><span class="keyword">public</span> User updateUser(<span class="keyword">@PathVariable</span>  <span class="keyword">int</span> user_id,<span class="keyword">@PathVariable</span>  <span class="keyword">int</span> user_type) &#123;</span><br><span class="line">	<span class="comment">// 方法内部实现不考虑缓存逻辑，直接实现业务</span></span><br><span class="line">	System.<span class="keyword">out</span>.println(<span class="string">"UPDATE cache.　user_id : "</span> + user_id);</span><br><span class="line">	userDAO.updateUser(user_id,user_type);</span><br><span class="line">	<span class="keyword">return</span> userDAO.getUser(user_id);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h3 id="u5220_u9664_u6574_u4E2A_u7F13_u5B58"><a href="#u5220_u9664_u6574_u4E2A_u7F13_u5B58" class="headerlink" title="删除整个缓存"></a>删除整个缓存</h3><figure class="highlight aspectj"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 删除全部缓存</span></span><br><span class="line"><span class="annotation">@CacheEvict</span>(value=<span class="string">"userCache"</span>,allEntries=<span class="keyword">true</span>,beforeInvocation=<span class="keyword">true</span>)</span><br><span class="line"><span class="annotation">@RequestMapping</span>(<span class="string">"/clear"</span>)</span><br><span class="line"><span class="keyword">public</span> <span class="function">String <span class="title">clear</span><span class="params">()</span> </span>&#123;</span><br><span class="line">	<span class="comment">// 方法内部实现不考虑缓存逻辑，直接实现业务</span></span><br><span class="line">	System.out.println(<span class="string">"clearn cache."</span>);</span><br><span class="line">	<span class="keyword">return</span> <span class="string">"clear ok"</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h2 id="MYBATIS_u6570_u636E_u5E93_u7F13_u5B58"><a href="#MYBATIS_u6570_u636E_u5E93_u7F13_u5B58" class="headerlink" title="MYBATIS数据库缓存"></a>MYBATIS数据库缓存</h2><p>加上注解<strong>@Options(useCache = true,timeout = 100000,flushCache = false)</strong>即可。</p>
+<figure class="highlight less"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="variable">@Select</span>(<span class="string">"select * from ysyy_user where user_id=#&#123;user_id&#125; "</span>)</span><br><span class="line"><span class="variable">@Options</span>(useCache = true,timeout = <span class="number">100000</span>,flushCache = false)</span><br><span class="line">User <span class="function">getUser</span>(<span class="variable">@Param</span>(<span class="string">"user_id"</span>)int user_id);</span><br></pre></td></tr></table></figure>
+<h2 id="u603B_u7ED3"><a href="#u603B_u7ED3" class="headerlink" title="总结"></a>总结</h2><p>通过性能测试工具ab测试表示，如果不使用缓存，在QPS为40时，MYSQL就扛不住了。<br>加上缓存后，服务运行稳定。</p>
+<p>ab 测试命令行为：<br><figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">ab -c <span class="number">100</span> -n <span class="number">1000000</span> http:<span class="comment">//192.168.1.236:8080/user3/972</span></span><br></pre></td></tr></table></figure></p>
+<p>测试结果为：</p>
+<figure class="highlight stata"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br></pre></td><td class="code"><pre><span class="line">This is ApacheBench, <span class="keyword">Version</span> 2.3 &lt;<span class="label">$Revision</span>: 655654 $&gt;</span><br><span class="line"><span class="keyword">Copyright</span> 1996 Adam Twiss, Zeus Technology Ltd, http:<span class="comment">//www.zeustech.net/</span></span><br><span class="line">Licensed to The Apache Software Foundation, http:<span class="comment">//www.apache.org/</span></span><br><span class="line"></span><br><span class="line">Benchmarking 192.168.1.236 (be patient)</span><br><span class="line">apr_socket_recv: Connection reset <span class="keyword">by</span> peer (104)</span><br><span class="line"><span class="keyword">Total</span> of 17953 requests completed</span><br><span class="line">[niejinping@dev-office-dev-192.168.1.19.centos65.sanhao.com ~]<span class="label">$ab</span> -c 100 -<span class="keyword">n</span> 1000000 http:<span class="comment">//192.168.1.236:8080/user3/972</span></span><br><span class="line">This is ApacheBench, <span class="keyword">Version</span> 2.3 &lt;<span class="label">$Revision</span>: 655654 $&gt;</span><br><span class="line"><span class="keyword">Copyright</span> 1996 Adam Twiss, Zeus Technology Ltd, http:<span class="comment">//www.zeustech.net/</span></span><br><span class="line">Licensed to The Apache Software Foundation, http:<span class="comment">//www.apache.org/</span></span><br><span class="line"></span><br><span class="line">Benchmarking 192.168.1.236 (be patient)</span><br><span class="line">^C</span><br><span class="line"></span><br><span class="line">Server Software:        Apache-Coyote/1.1</span><br><span class="line">Server Hostname:        192.168.1.236</span><br><span class="line">Server Port:            8080</span><br><span class="line"></span><br><span class="line">Document Path:          /user3/972</span><br><span class="line">Document Length:        29 bytes</span><br><span class="line"></span><br><span class="line">Concurrency Level:      100</span><br><span class="line">Time taken <span class="keyword">for</span> tests:   15.923 seconds</span><br><span class="line">Complete requests:      9466</span><br><span class="line">Failed requests:        0</span><br><span class="line">Write errors:           0</span><br><span class="line"><span class="keyword">Total</span> transferred:      1675482 bytes</span><br><span class="line">HTML transferred:       274514 bytes</span><br><span class="line">Requests per second:    594.47 [#/sec] (<span class="keyword">mean</span>)</span><br><span class="line">Time per request:       168.218 [ms] (<span class="keyword">mean</span>)</span><br><span class="line">Time per request:       1.682 [ms] (<span class="keyword">mean</span>, across all concurrent requests)</span><br><span class="line">Transfer rate:          102.75 [Kbytes/sec] received</span><br><span class="line"></span><br><span class="line">Connection Times (ms)</span><br><span class="line">              min  <span class="keyword">mean</span>[+/-sd] <span class="keyword">median</span>   <span class="literal">max</span></span><br><span class="line">Connect:        0    1   0.7      1      16</span><br><span class="line">Processing:     4  162 245.8     30    1825</span><br><span class="line">Waiting:        4  162 245.6     30    1824</span><br><span class="line"><span class="keyword">Total</span>:          5  163 245.9     31    1825</span><br><span class="line"></span><br><span class="line">Percentage of the requests served within a certain time (ms)</span><br><span class="line">  50%     31</span><br><span class="line">  66%    122</span><br><span class="line">  75%    246</span><br><span class="line">  80%    318</span><br><span class="line">  90%    493</span><br><span class="line">  95%    689</span><br><span class="line">  98%    971</span><br><span class="line">  99%   1129</span><br><span class="line"> 100%   1825 (longest request)</span><br></pre></td></tr></table></figure>
+<h2 id="github_u94FE_u63A5"><a href="#github_u94FE_u63A5" class="headerlink" title="github链接"></a>github链接</h2><p> <a href="https://github.com/njkfei/springmybatiscache.git" target="_blank" rel="external">https://github.com/njkfei/springmybatiscache.git</a></p>
+
+      
+    </div>
+    <footer class="article-footer">
+      <div class="bshare-custom"><a title="分享到QQ空间" class="bshare-qzone"></a><a title="分享到新浪微博" class="bshare-sinaminiblog"></a><a title="分享到人人网" class="bshare-renren"></a><a title="分享到腾讯微博" class="bshare-qqmb"></a><a title="分享到网易微博" class="bshare-neteasemb"></a><a title="更多平台" class="bshare-more bshare-more-icon more-style-addthis"></a><span class="BSHARE_COUNT bshare-share-count">0</span></div><script type="text/javascript" charset="utf-8" src="http://static.bshare.cn/b/buttonLite.js#style=-1&amp;uuid=&amp;pophcol=2&amp;lang=zh"></script><script type="text/javascript" charset="utf-8" src="http://static.bshare.cn/b/bshareC0.js"></script>
+    <!-- 分享  <a data-url="http://wiki.niejinkun.com/2016/03/23/springboot-ehcache集成/" data-id="civ3jazed004do4uxtc4jwu48" class="article-share-link">Share</a> -->
+      
+      
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/cache/">cache</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/java/">java</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/mytabis/">mytabis</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/springboot/">springboot</a></li></ul>
+
+    </footer>
+  </div>
+  
+</article>
+
+ 
+
+  
+    <article id="post-springboot-ehcache-mybatis集成" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2016/03/23/springboot-ehcache-mybatis集成/" class="article-date">
+  <time datetime="2016-03-22T16:00:00.000Z" itemprop="datePublished">2016-03-23</time>
+</a>
+    
+  <div class="article-category">
+    <a class="article-category-link" href="/categories/java/">java</a>
+  </div>
+
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2016/03/23/springboot-ehcache-mybatis集成/">spring boot ehcache mybatis集成--完全基于注解</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <!-- Table of Contents -->
+        
+        <h1 id="springboot-mybatis-encache"><a href="#springboot-mybatis-encache" class="headerlink" title="springboot-mybatis-encache"></a>springboot-mybatis-encache</h1><p>springboot与mybatis ehcahce集成</p>
+<ul>
+<li>springboot提供统一的框架</li>
+<li>mybatis提供ORM框架</li>
+<li>ehcache提供单机版本缓存</li>
+</ul>
+<h2 id="encache_u914D_u7F6E"><a href="#encache_u914D_u7F6E" class="headerlink" title="encache配置"></a>encache配置</h2><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line"><span class="annotation">@Configuration</span></span><br><span class="line"><span class="annotation">@EnableCaching</span></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">EnCacheConfig</span> </span>&#123;</span><br><span class="line">	<span class="annotation">@Bean</span></span><br><span class="line">	<span class="function"><span class="keyword">public</span> CacheManager <span class="title">cacheManager</span><span class="params">()</span> </span>&#123;</span><br><span class="line">		<span class="keyword">return</span> <span class="keyword">new</span> EhCacheCacheManager(ehCacheCacheManager().getObject());</span><br><span class="line">	&#125;</span><br><span class="line"></span><br><span class="line">	<span class="annotation">@Bean</span></span><br><span class="line">	<span class="function"><span class="keyword">public</span> EhCacheManagerFactoryBean <span class="title">ehCacheCacheManager</span><span class="params">()</span> </span>&#123;</span><br><span class="line">		EhCacheManagerFactoryBean cmfb = <span class="keyword">new</span> EhCacheManagerFactoryBean();</span><br><span class="line">		cmfb.setConfigLocation(<span class="keyword">new</span> ClassPathResource(<span class="string">"conf/ehcache.xml"</span>));</span><br><span class="line">		cmfb.setShared(<span class="keyword">true</span>);</span><br><span class="line">		<span class="keyword">return</span> cmfb;</span><br><span class="line">	&#125;</span><br><span class="line">	</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h2 id="u914D_u7F6E_u6587_u4EF6"><a href="#u914D_u7F6E_u6587_u4EF6" class="headerlink" title="配置文件"></a>配置文件</h2><figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br></pre></td><td class="code"><pre><span class="line"><span class="pi">&lt;?xml version="1.0" encoding="gbk"?&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="title">ehcache</span> <span class="attribute">xmlns:xsi</span>=<span class="value">"http://www.w3.org/2001/XMLSchema-instance"</span> <span class="attribute">xsi:noNamespaceSchemaLocation</span>=<span class="value">"ehcache.xsd"</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="title">diskStore</span> <span class="attribute">path</span>=<span class="value">"java.io.tmpdir"</span>/&gt;</span></span><br><span class="line"> </span><br><span class="line">    <span class="tag">&lt;<span class="title">defaultCache</span> <span class="attribute">maxElementsInMemory</span>=<span class="value">"10000"</span> <span class="attribute">eternal</span>=<span class="value">"false"</span> <span class="attribute">timeToIdleSeconds</span>=<span class="value">"30"</span> <span class="attribute">timeToLiveSeconds</span>=<span class="value">"30"</span> <span class="attribute">overflowToDisk</span>=<span class="value">"false"</span>/&gt;</span></span><br><span class="line">    <span class="comment">&lt;!-- </span><br><span class="line">        配置自定义缓存</span><br><span class="line">        maxElementsInMemory：缓存中允许创建的最大对象数</span><br><span class="line">        eternal：缓存中对象是否为永久的，如果是，超时设置将被忽略，对象从不过期。</span><br><span class="line">        timeToIdleSeconds：缓存数据的钝化时间，也就是在一个元素消亡之前，</span><br><span class="line">                    两次访问时间的最大时间间隔值，这只能在元素不是永久驻留时有效，</span><br><span class="line">                    如果该值是 0 就意味着元素可以停顿无穷长的时间。</span><br><span class="line">        timeToLiveSeconds：缓存数据的生存时间，也就是一个元素从构建到消亡的最大时间间隔值，</span><br><span class="line">                    这只能在元素不是永久驻留时有效，如果该值是0就意味着元素可以停顿无穷长的时间。</span><br><span class="line">        overflowToDisk：内存不足时，是否启用磁盘缓存。</span><br><span class="line">        memoryStoreEvictionPolicy：缓存满了之后的淘汰算法。</span><br><span class="line">    --&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="title">cache</span> <span class="attribute">name</span>=<span class="value">"SimplePageCachingFilter"</span> </span><br><span class="line">        <span class="attribute">maxElementsInMemory</span>=<span class="value">"10000"</span> </span><br><span class="line">        <span class="attribute">eternal</span>=<span class="value">"false"</span></span><br><span class="line">        <span class="attribute">overflowToDisk</span>=<span class="value">"false"</span> </span><br><span class="line">        <span class="attribute">timeToIdleSeconds</span>=<span class="value">"900"</span> </span><br><span class="line">        <span class="attribute">timeToLiveSeconds</span>=<span class="value">"1800"</span></span><br><span class="line">        <span class="attribute">memoryStoreEvictionPolicy</span>=<span class="value">"LFU"</span> /&gt;</span></span><br><span class="line">        </span><br><span class="line">      <span class="tag">&lt;<span class="title">cache</span> <span class="attribute">name</span>=<span class="value">"userEhCache"</span> </span><br><span class="line">        <span class="attribute">maxElementsInMemory</span>=<span class="value">"10000"</span> </span><br><span class="line">        <span class="attribute">eternal</span>=<span class="value">"false"</span></span><br><span class="line">        <span class="attribute">overflowToDisk</span>=<span class="value">"false"</span> </span><br><span class="line">        <span class="attribute">timeToIdleSeconds</span>=<span class="value">"900"</span> </span><br><span class="line">        <span class="attribute">timeToLiveSeconds</span>=<span class="value">"1800"</span></span><br><span class="line">        <span class="attribute">memoryStoreEvictionPolicy</span>=<span class="value">"LFU"</span> /&gt;</span></span><br><span class="line"> </span><br><span class="line"><span class="tag">&lt;/<span class="title">ehcache</span>&gt;</span></span><br></pre></td></tr></table></figure>
+<h2 id="u6D4B_u8BD5"><a href="#u6D4B_u8BD5" class="headerlink" title="测试"></a>测试</h2><figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">ab -c <span class="number">10</span> -n <span class="number">10000</span> <span class="number">192.168</span><span class="number">.1</span><span class="number">.236</span>:<span class="number">8080</span>/user/<span class="number">981</span></span><br></pre></td></tr></table></figure>
+<h2 id="github"><a href="#github" class="headerlink" title="github"></a>github</h2><p>  <a href="https://github.com/njkfei/springboot-mybatis-encache.git" target="_blank" rel="external">https://github.com/njkfei/springboot-mybatis-encache.git</a></p>
+
+      
+    </div>
+    <footer class="article-footer">
+      <div class="bshare-custom"><a title="分享到QQ空间" class="bshare-qzone"></a><a title="分享到新浪微博" class="bshare-sinaminiblog"></a><a title="分享到人人网" class="bshare-renren"></a><a title="分享到腾讯微博" class="bshare-qqmb"></a><a title="分享到网易微博" class="bshare-neteasemb"></a><a title="更多平台" class="bshare-more bshare-more-icon more-style-addthis"></a><span class="BSHARE_COUNT bshare-share-count">0</span></div><script type="text/javascript" charset="utf-8" src="http://static.bshare.cn/b/buttonLite.js#style=-1&amp;uuid=&amp;pophcol=2&amp;lang=zh"></script><script type="text/javascript" charset="utf-8" src="http://static.bshare.cn/b/bshareC0.js"></script>
+    <!-- 分享  <a data-url="http://wiki.niejinkun.com/2016/03/23/springboot-ehcache-mybatis集成/" data-id="civ3jazei004ko4uxjshj32dh" class="article-share-link">Share</a> -->
+      
+      
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/ehcache/">ehcache</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/java/">java</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/mybatis/">mybatis</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/springboot/">springboot</a></li></ul>
+
+    </footer>
+  </div>
+  
+</article>
+
+ 
+
+  
+    <article id="post-encache实战" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2016/03/18/encache实战/" class="article-date">
+  <time datetime="2016-03-17T16:00:00.000Z" itemprop="datePublished">2016-03-18</time>
+</a>
+    
+  <div class="article-category">
+    <a class="article-category-link" href="/categories/linux/">linux</a>
+  </div>
+
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2016/03/18/encache实战/">encache　spring实战</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <!-- Table of Contents -->
+        
+        <h2 id="u7B80_u4ECB"><a href="#u7B80_u4ECB" class="headerlink" title="简介"></a>简介</h2><p>　encache是开源，标准化缓存中间件</p>
+<h3 id="u4F18_u70B9"><a href="#u4F18_u70B9" class="headerlink" title="优点"></a>优点</h3><ul>
+<li>提升性能</li>
+<li>减轻数据库负载</li>
+<li>简单可伸缩</li>
+<li>健状，功能齐全</li>
+<li>本地缓存</li>
+</ul>
+<h2 id="u5B89_u88C5"><a href="#u5B89_u88C5" class="headerlink" title="安装"></a>安装</h2><h3 id="maven_u96C6_u6210"><a href="#maven_u96C6_u6210" class="headerlink" title="maven集成"></a>maven集成　</h3><figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="title">dependency</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="title">groupId</span>&gt;</span>org.ehcache<span class="tag">&lt;/<span class="title">groupId</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="title">artifactId</span>&gt;</span>ehcache<span class="tag">&lt;/<span class="title">artifactId</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="title">version</span>&gt;</span>3.0.0.rc1<span class="tag">&lt;/<span class="title">version</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="title">dependency</span>&gt;</span></span><br></pre></td></tr></table></figure>
+<h3 id="API_u7B80_u4ECB"><a href="#API_u7B80_u4ECB" class="headerlink" title="API简介"></a>API简介</h3><figure class="highlight vbnet"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">CacheManager cacheManager = CacheManagerBuilder.newCacheManagerBuilder()</span><br><span class="line">    .withCache(<span class="string">"preConfigured"</span>,</span><br><span class="line">         CacheConfigurationBuilder.newCacheConfigurationBuilder(<span class="built_in">Long</span>.<span class="keyword">class</span>, <span class="built_in">String</span>.<span class="keyword">class</span>)</span><br><span class="line">         .build())</span><br><span class="line">    .build(<span class="literal">true</span>);</span><br><span class="line"></span><br><span class="line">Cache&lt;<span class="built_in">Long</span>, <span class="built_in">String</span>&gt; preConfigured</span><br><span class="line">    = cacheManager.getCache(<span class="string">"preConfigured"</span>, <span class="built_in">Long</span>.<span class="keyword">class</span>, <span class="built_in">String</span>.<span class="keyword">class</span>);</span><br><span class="line"></span><br><span class="line">Cache&lt;<span class="built_in">Long</span>, <span class="built_in">String</span>&gt; myCache = cacheManager.createCache(<span class="string">"myCache"</span>,</span><br><span class="line">    CacheConfigurationBuilder.newCacheConfigurationBuilder(<span class="built_in">Long</span>.<span class="keyword">class</span>, <span class="built_in">String</span>.<span class="keyword">class</span>).build());</span><br><span class="line"></span><br><span class="line">myCache.put(<span class="number">1</span>L, <span class="string">"da one!"</span>);</span><br><span class="line"><span class="built_in">String</span> value = myCache.<span class="keyword">get</span>(<span class="number">1</span>L);</span><br><span class="line"></span><br><span class="line">cacheManager.close();</span><br></pre></td></tr></table></figure>
+<h2 id="demo"><a href="#demo" class="headerlink" title="demo"></a>demo</h2><p>没搞出来．encache官网比较坑，直接抄源代码编译都过不去，差评．</p>
+<h2 id="u5C0F_u7ED3"><a href="#u5C0F_u7ED3" class="headerlink" title="小结"></a>小结</h2>
+      
+    </div>
+    <footer class="article-footer">
+      <div class="bshare-custom"><a title="分享到QQ空间" class="bshare-qzone"></a><a title="分享到新浪微博" class="bshare-sinaminiblog"></a><a title="分享到人人网" class="bshare-renren"></a><a title="分享到腾讯微博" class="bshare-qqmb"></a><a title="分享到网易微博" class="bshare-neteasemb"></a><a title="更多平台" class="bshare-more bshare-more-icon more-style-addthis"></a><span class="BSHARE_COUNT bshare-share-count">0</span></div><script type="text/javascript" charset="utf-8" src="http://static.bshare.cn/b/buttonLite.js#style=-1&amp;uuid=&amp;pophcol=2&amp;lang=zh"></script><script type="text/javascript" charset="utf-8" src="http://static.bshare.cn/b/bshareC0.js"></script>
+    <!-- 分享  <a data-url="http://wiki.niejinkun.com/2016/03/18/encache实战/" data-id="civ3jazsh00fao4uxc52kd6h6" class="article-share-link">Share</a> -->
+      
+      
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/linux/">linux</a></li></ul>
+
+    </footer>
+  </div>
+  
+</article>
+
+ 
+
+  
+    <article id="post-micro-service-5" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2016/03/17/micro-service-5/" class="article-date">
+  <time datetime="2016-03-16T16:00:00.000Z" itemprop="datePublished">2016-03-17</time>
+</a>
+    
+  <div class="article-category">
+    <a class="article-category-link" href="/categories/服务/">服务</a>
+  </div>
+
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2016/03/17/micro-service-5/">微服务系列5-消息驱动数据管理</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <!-- Table of Contents -->
+        
+        <ul>
+<li>微服务简介</li>
+<li>构建微服务：使用API网关</li>
+<li>构造微服务：微服务架构中的进程间通信</li>
+<li>微服务架构的服务发现</li>
+<li>面向微服务的消息驱动数据管理</li>
+<li>微服务部署选型<br>参考：<a href="https://www.nginx.com/blog/event-driven-data-management-microservices/" target="_blank" rel="external">Microservices and the Problem of Distributed Data Management</a></li>
+</ul>
+<h2 id="u5FAE_u670D_u52A1_u4E0E_u5206_u5E03_u5F0F_u6570_u636E_u7BA1_u7406_u96BE_u9898"><a href="#u5FAE_u670D_u52A1_u4E0E_u5206_u5E03_u5F0F_u6570_u636E_u7BA1_u7406_u96BE_u9898" class="headerlink" title="微服务与分布式数据管理难题"></a>微服务与分布式数据管理难题</h2><p>单体应用通过使用单一的关系型数据库．使用关系型数据这种方式有一个明显的好处就是可以使用关系型数据库的ACID事务功能．ACID功能提供如下保证：</p>
+<ul>
+<li>Atomic : 数据变更是原子性的</li>
+<li>Consistency : 数据库的状态是一致性的<br>*　Isolation: 尽管事务操作可以是并发执行的，但从表现来看，事务操作表现的是顺序性</li>
+<li>Durable : 事务操作不可撤销<br>　这样的就是，你可以放心在一个事务操作中，放心的进行多行的修改操作，然后再提交事务．<br>　关系型数据库的另外一个优点是提供SQL,它：</li>
+<li>功能丰富，声明式且标准化的查询语言．</li>
+<li>用户可以很方便的进行多表联合查询．</li>
+<li>RDBMS系统可以进行性能优化．</li>
+<li>用户不用考虑数据库系统启动是如何工作的．<br>总之，关系型数据库很方便．</li>
+</ul>
+<p>但是，当我们引入了微服务之后，由于数据属于微服务所私有，因此，应用只能通过API进行访问存取．由于微服务与数据之间相互松散藕合且互相独立，如果多个服务访问同一个数据，性能将会明显下降．</p>
+<p>出于多方面的考虑，不同的微服务通过使用不同类型的数据库．现代应用程序存储不同类型的数据到关系型数据库不是最优选择．现在，使用NOSQL数据库已经变得越来越普遍．相对关系型数据库,NOSQL有更好的性能，更好的伸缩性．例如，对于全文检索，你可以通过elasticsearch提供服务．同样的，存储社会图谱数据，Neo4j更适合你．<br>所以，基于微服务的应用，经常混合使用NOSQL和SQL数据库．这叫做<strong>数据持久多样化</strong>方式．</p>
+<p>一分为二地看问题．数据持久多样化还来了很多优势．如解藕，高性能，易伸缩．但是，同样的也引入了分布式数据管理的挑战．</p>
+<p>第一个挑战就是如何实现多个服务之间的事务型业务．以B2B在线商城为例．用户服务维护了关于用户的信息，包括信用卡数据．订单服务用于管理订单，在创建订单之前，订单服务需要判断订单金额没有超过信用卡的额度．这个场景在单体应用中，订单服务可以通过ACID事务操作来判断信用卡额度之后再创建订单．</p>
+<p>但是，在微服务架构中，订单和客户表是由不同的服务所管理的．如下图所示．</p>
+<p><img src="/" alt="pics"></p>
+<p>图中，订单服务不能直接访问客户表．只能通过客户服务的API来访问．订单服务可能使用分布式事务，如二阶段提交(2PC).然而，2PC并不是现代应用的可行选项．为解决分布式场景下的ACID问题，引用了<strong>CAP</strong>理论，CAP理论认为，应在ACID之间做出取舍，通过认为可用性是最优选择．但是，在现代技术中，NOSQL数据库并不支持2PC.而数据的一致性又非常重要．因此，在这种情况下，我们需要另一种解决方案．</p>
+<p>第二个挑战是如何实现从多个服务之中检查数据．例如，你需要显示用户的最近购买记录．如果订单服务提供了检索订单数据．你可以通过服务端的join来实现．通过join程序，分别向订单服务和用户服务请求数据，再进行聚合．数据的请求，一般是通过主健(如支持主键的NOSQL数据库)．</p>
+<h2 id="u6D88_u606F_u9A71_u52A8_u7684_u67B6_u6784"><a href="#u6D88_u606F_u9A71_u52A8_u7684_u67B6_u6784" class="headerlink" title="消息驱动的架构"></a>消息驱动的架构</h2><p>对于大部分应用，<strong>消息驱动的架构</strong>是解决分布式事务的解决方案．在消息驱动的架构中，当有某事件发生时，微服务发布一个事件通知，例如当有更新业务实体数据的情况时．另外一个服务将订阅这些事件．当微服务收到事件哪，它将更新受影响的业务实体数据．这是可能会继续发布更多的事件．</p>
+<p>你可以通过<strong>事件</strong>在多个服务之间实现业务的事务操作．一个事务由一系列步骤组成，每个步骤由一个微服务来更新业务实体数据，然后再发布事件来触发通知后续的微服务操作．<br>下面的序列图展示了如何通过<strong>消息驱动</strong>的方式来检查创建新订单时信用卡和订单之间的联动功能．微服务之间的消息将至通过消息代理中间件来完成．</p>
+<p><img src="/" alt="pics"></p>
+<ul>
+<li><p>订单服务创建一个订单，通过<strong>NEW</strong>标识，然后发布一个创建订单的消息．</p>
+</li>
+<li><p>客户服务消息订单创建事件，然后检查信息卡数据，并将信用卡账户信息发布出去．</p>
+</li>
+<li>订单服务消费信用卡数据事件，然后检查信用卡额度和订单金额，根据它们之间的关系来决定是否开放订单．</li>
+<li>后续有更复杂的场景，如当用户信用卡额度检查通过后，需要扣减商品库存．</li>
+</ul>
+<p>假设每个服务将自动更新数据库然后再发布事件．并且，消息代理中间件会保证事件至少发布一次．你可以轻松实现跨业务的事务性．<br>但是，这些都不是ACID事务．在分布式场景中，一般提供弱保证如”最终一致性”．这种事务模型被称为<strong>BASE模型</strong>．<br>　你可以通过事件来实现视图．将多个微服务的数据进行聚合．这个聚合服务将订阅相关的事件，然后更新视力．如下图所示．<br><img src="/" alt="pics"><br>用户订单视图订阅用户服务和订单服务的事件．．<br>当收到用户服务或订单服务的事件时，用户订单视图服务更新数据库．你可以使用文档型数据库，如mongodb．</p>
+<h2 id="u5B9E_u73B0_u539F_u5B50_u6027"><a href="#u5B9E_u73B0_u539F_u5B50_u6027" class="headerlink" title="实现原子性"></a>实现原子性</h2><p> 在消息驱动架构中．如果保证更新数据库的同时并成功发布消息是一个难题．例如，如订单服务向数据库中插入一条记录时，应同时发布订单创建事件．这应该是同时完成的，但是，如果事件发布失败，那么，数据将变得不一致．标准的解决方法是通过分布式事务来保证数据库和消息中间件这两个操作的原子性．出于CAP原理的约束，这是我们不愿意看到的．<br> 那么，如何实现原子性呢？</p>
+<h3 id="u901A_u8FC7_u672C_u5730_u4E8B_u52A1_u53D1_u5E03_u4E8B_u4EF6"><a href="#u901A_u8FC7_u672C_u5730_u4E8B_u52A1_u53D1_u5E03_u4E8B_u4EF6" class="headerlink" title="通过本地事务发布事件"></a>通过本地事务发布事件</h3><p>　一种方法就是通过事务本地化，即将订单表和流水表放在同一个数据库中．其中，流水表充当消息队列的作用．即实体数据和状态数据在同一个数据库中．另通过进程或线程的方法．来侦听流水表，当有事件未发布时,则将事件发布给消息中间件，当消息被正常消费后,再更新流水表的状态．如下图所示．<br><img src="/" alt="pics"></p>
+<p>图中：</p>
+<ul>
+<li>订单服务插入一条订单记录到订单表,然后再插入一条订单创建消息到消息表.</li>
+<li>另外一个独立的进程或线程(发布线程)查询事件表,获取未发布事件,发送给消息中间件</li>
+<li>当事件被正常消费后,发布线程更新事件表,标志事件已完成发布.</li>
+</ul>
+<h4 id="u4F18_u70B9"><a href="#u4F18_u70B9" class="headerlink" title="优点"></a>优点</h4><ul>
+<li>不依赖于2PC完成事件正确发布</li>
+</ul>
+<h4 id="u7F3A_u70B9"><a href="#u7F3A_u70B9" class="headerlink" title="缺点"></a>缺点</h4><ul>
+<li>易于出错，需要程序员保证发布事件</li>
+<li>当通过NOSQL实现时，会有难度，因为NOSQL不支付事务，或者支持的力度有限．</li>
+</ul>
+<h3 id="u6316_u6398_u6570_u636E_u5E93_u4E8B_u4EF6_u65E5_u5FD7"><a href="#u6316_u6398_u6570_u636E_u5E93_u4E8B_u4EF6_u65E5_u5FD7" class="headerlink" title="挖掘数据库事件日志"></a>挖掘数据库事件日志</h3><p>　另外一个实现2PC的方法是通过挖掘数据库的事务或提交日志．这可以通过一个后台进程或线程来实现消息发布功能．即事务日志挖掘器进程或线程读取事务日志，然后发布消息给消息中间件，如下图所示．<br><img src="/" alt="pics"></p>
+<p>典型用例：</p>
+<ul>
+<li>LinkedIn Databus</li>
+<li>AWS DynamoDB</li>
+</ul>
+<h3 id="u4F7F_u7528_u4E8B_u4EF6_u6E90"><a href="#u4F7F_u7528_u4E8B_u4EF6_u6E90" class="headerlink" title="使用事件源"></a>使用事件源</h3><p> 暂空．</p>
+<h2 id="u603B_u7ED3"><a href="#u603B_u7ED3" class="headerlink" title="总结"></a>总结</h2><h3 id="u4F18_u70B9-1"><a href="#u4F18_u70B9-1" class="headerlink" title="优点"></a>优点</h3><ul>
+<li>解决了跨服务的事件，并提供最终一致性</li>
+<li>提供物化视图的方法，解决数据聚合的问题</li>
+</ul>
+<h3 id="u7F3A_u70B9-1"><a href="#u7F3A_u70B9-1" class="headerlink" title="缺点"></a>缺点</h3><ul>
+<li>相对单数据库的ACID事务，消息驱动的架构太复杂了</li>
+<li>当应用故障是，需要实现事务补偿功能</li>
+<li>需要解决事件丢失和事件重复的CASE</li>
+</ul>
+<p>　在微服务架构中，每个微服务有自己私有的数据库．出于性能等方面的的设计考虑，每个微服务的数据库可能选择SQL或NOSQL．这带来了分布式数据管理的挑战．如</p>
+<ul>
+<li>如何实现跨服务间业务事务的一致性．</li>
+<li>如何从不同服务之间获取数据．</li>
+</ul>
+<p>对于大部分应用而言，解决方案是：使用消息驱动的架构．<br>实现消息驱动架构的难点在于：如何自动更新数据，如何发布消息．<br>这里有多种解决方案,包括：</p>
+<ul>
+<li>使用数据库作为消息队列中间件</li>
+<li>通过挖掘事务日志</li>
+<li>事件源传播</li>
+</ul>
+
+      
+    </div>
+    <footer class="article-footer">
+      <div class="bshare-custom"><a title="分享到QQ空间" class="bshare-qzone"></a><a title="分享到新浪微博" class="bshare-sinaminiblog"></a><a title="分享到人人网" class="bshare-renren"></a><a title="分享到腾讯微博" class="bshare-qqmb"></a><a title="分享到网易微博" class="bshare-neteasemb"></a><a title="更多平台" class="bshare-more bshare-more-icon more-style-addthis"></a><span class="BSHARE_COUNT bshare-share-count">0</span></div><script type="text/javascript" charset="utf-8" src="http://static.bshare.cn/b/buttonLite.js#style=-1&amp;uuid=&amp;pophcol=2&amp;lang=zh"></script><script type="text/javascript" charset="utf-8" src="http://static.bshare.cn/b/bshareC0.js"></script>
+    <!-- 分享  <a data-url="http://wiki.niejinkun.com/2016/03/17/micro-service-5/" data-id="civ3jazmk00bdo4uxbftpafv0" class="article-share-link">Share</a> -->
+      
+      
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/架构/">架构</a></li></ul>
+
+    </footer>
+  </div>
+  
+</article>
+
+ 
+
+  
+    <article id="post-spring-boot-mybatis集成" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2016/03/17/spring-boot-mybatis集成/" class="article-date">
+  <time datetime="2016-03-16T16:00:00.000Z" itemprop="datePublished">2016-03-17</time>
+</a>
+    
+  <div class="article-category">
+    <a class="article-category-link" href="/categories/java/">java</a>
+  </div>
+
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2016/03/17/spring-boot-mybatis集成/">spring boot mybatis restmvc集成--完全基于注解</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <!-- Table of Contents -->
+        
+        <p>  今天在网上找了一下spring boot mybatis集成，发现baidu的链接里面的demo已经过时，比自己目前做的还落后．因此，自己尝试搭一下环境．<br>个人的感受为：</p>
+<ul>
+<li>spring boot确实非常爽，比基于java config还轻松，原来以为基于java config配置已经挺爽了，结果spring boot 更进一步解放和生产力．</li>
+</ul>
+<h3 id="u672C_u793A_u4F8B_u6280_u672F_u8981_u7D20"><a href="#u672C_u793A_u4F8B_u6280_u672F_u8981_u7D20" class="headerlink" title="本示例技术要素"></a>本示例技术要素</h3><ul>
+<li>spring boot</li>
+<li>tomcat 作为web容器，已被spring boot集成</li>
+<li>mybatis 数据库访问框架</li>
+<li>java config进行IOC配置</li>
+</ul>
+<p>特别说明，本demo没有XML配置文件(logback.xml除外)．</p>
+<h3 id="u4F7F_u7528_u6B65_u9AA4"><a href="#u4F7F_u7528_u6B65_u9AA4" class="headerlink" title="使用步骤"></a>使用步骤</h3><ul>
+<li>导入依赖</li>
+<li>创建model</li>
+<li>创建mapper DAO</li>
+<li>创建控制器</li>
+<li>指定入口</li>
+<li>启动运行</li>
+</ul>
+<h3 id="u5BFC_u5165_u4F9D_u8D56"><a href="#u5BFC_u5165_u4F9D_u8D56" class="headerlink" title="导入依赖"></a>导入依赖</h3><figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="title">properties</span>&gt;</span></span><br><span class="line">		<span class="tag">&lt;<span class="title">project.build.sourceEncoding</span>&gt;</span>UTF-8<span class="tag">&lt;/<span class="title">project.build.sourceEncoding</span>&gt;</span></span><br><span class="line">		<span class="tag">&lt;<span class="title">springframework.version</span>&gt;</span>4.2.4.RELEASE<span class="tag">&lt;/<span class="title">springframework.version</span>&gt;</span></span><br><span class="line">	<span class="tag">&lt;/<span class="title">properties</span>&gt;</span></span><br><span class="line">	<span class="tag">&lt;<span class="title">parent</span>&gt;</span></span><br><span class="line">		<span class="tag">&lt;<span class="title">groupId</span>&gt;</span>org.springframework.boot<span class="tag">&lt;/<span class="title">groupId</span>&gt;</span></span><br><span class="line">		<span class="tag">&lt;<span class="title">artifactId</span>&gt;</span>spring-boot-starter-parent<span class="tag">&lt;/<span class="title">artifactId</span>&gt;</span></span><br><span class="line">		<span class="tag">&lt;<span class="title">version</span>&gt;</span>1.3.3.RELEASE<span class="tag">&lt;/<span class="title">version</span>&gt;</span></span><br><span class="line">	<span class="tag">&lt;/<span class="title">parent</span>&gt;</span></span><br><span class="line">	<span class="tag">&lt;<span class="title">dependencies</span>&gt;</span></span><br><span class="line">		<span class="tag">&lt;<span class="title">dependency</span>&gt;</span></span><br><span class="line">			<span class="tag">&lt;<span class="title">groupId</span>&gt;</span>org.springframework.boot<span class="tag">&lt;/<span class="title">groupId</span>&gt;</span></span><br><span class="line">			<span class="tag">&lt;<span class="title">artifactId</span>&gt;</span>spring-boot-starter-web<span class="tag">&lt;/<span class="title">artifactId</span>&gt;</span></span><br><span class="line">		<span class="tag">&lt;/<span class="title">dependency</span>&gt;</span></span><br><span class="line">		<span class="tag">&lt;<span class="title">dependency</span>&gt;</span></span><br><span class="line">			<span class="tag">&lt;<span class="title">groupId</span>&gt;</span>org.springframework.boot<span class="tag">&lt;/<span class="title">groupId</span>&gt;</span></span><br><span class="line">			<span class="tag">&lt;<span class="title">artifactId</span>&gt;</span>spring-boot-starter-tomcat<span class="tag">&lt;/<span class="title">artifactId</span>&gt;</span></span><br><span class="line">			<span class="tag">&lt;<span class="title">scope</span>&gt;</span>provided<span class="tag">&lt;/<span class="title">scope</span>&gt;</span></span><br><span class="line">		<span class="tag">&lt;/<span class="title">dependency</span>&gt;</span></span><br><span class="line">		<span class="comment">&lt;!--支持使用 JDBC 访问数据库 --&gt;</span></span><br><span class="line">		<span class="tag">&lt;<span class="title">dependency</span>&gt;</span></span><br><span class="line">			<span class="tag">&lt;<span class="title">groupId</span>&gt;</span>org.springframework.boot<span class="tag">&lt;/<span class="title">groupId</span>&gt;</span></span><br><span class="line">			<span class="tag">&lt;<span class="title">artifactId</span>&gt;</span>spring-boot-starter-jdbc<span class="tag">&lt;/<span class="title">artifactId</span>&gt;</span></span><br><span class="line">		<span class="tag">&lt;/<span class="title">dependency</span>&gt;</span></span><br><span class="line">		<span class="comment">&lt;!--添加适用于生产环境的功能，如性能指标和监测等功能。 --&gt;</span></span><br><span class="line">		<span class="tag">&lt;<span class="title">dependency</span>&gt;</span></span><br><span class="line">			<span class="tag">&lt;<span class="title">groupId</span>&gt;</span>org.springframework.boot<span class="tag">&lt;/<span class="title">groupId</span>&gt;</span></span><br><span class="line">			<span class="tag">&lt;<span class="title">artifactId</span>&gt;</span>spring-boot-starter-actuator<span class="tag">&lt;/<span class="title">artifactId</span>&gt;</span></span><br><span class="line">		<span class="tag">&lt;/<span class="title">dependency</span>&gt;</span></span><br><span class="line">		<span class="tag">&lt;<span class="title">dependency</span>&gt;</span></span><br><span class="line">			<span class="tag">&lt;<span class="title">groupId</span>&gt;</span>org.springframework<span class="tag">&lt;/<span class="title">groupId</span>&gt;</span></span><br><span class="line">			<span class="tag">&lt;<span class="title">artifactId</span>&gt;</span>spring-jdbc<span class="tag">&lt;/<span class="title">artifactId</span>&gt;</span></span><br><span class="line">			<span class="tag">&lt;<span class="title">version</span>&gt;</span>$&#123;springframework.version&#125;<span class="tag">&lt;/<span class="title">version</span>&gt;</span></span><br><span class="line">		<span class="tag">&lt;/<span class="title">dependency</span>&gt;</span></span><br><span class="line">		<span class="comment">&lt;!-- mysql驱动 --&gt;</span></span><br><span class="line">		<span class="tag">&lt;<span class="title">dependency</span>&gt;</span></span><br><span class="line">			<span class="tag">&lt;<span class="title">groupId</span>&gt;</span>mysql<span class="tag">&lt;/<span class="title">groupId</span>&gt;</span></span><br><span class="line">			<span class="tag">&lt;<span class="title">artifactId</span>&gt;</span>mysql-connector-java<span class="tag">&lt;/<span class="title">artifactId</span>&gt;</span></span><br><span class="line">			<span class="tag">&lt;<span class="title">version</span>&gt;</span>5.1.29<span class="tag">&lt;/<span class="title">version</span>&gt;</span></span><br><span class="line">		<span class="tag">&lt;/<span class="title">dependency</span>&gt;</span></span><br><span class="line">		<span class="tag">&lt;<span class="title">dependency</span>&gt;</span></span><br><span class="line">			<span class="tag">&lt;<span class="title">groupId</span>&gt;</span>com.alibaba<span class="tag">&lt;/<span class="title">groupId</span>&gt;</span></span><br><span class="line">			<span class="tag">&lt;<span class="title">artifactId</span>&gt;</span>druid<span class="tag">&lt;/<span class="title">artifactId</span>&gt;</span></span><br><span class="line">			<span class="tag">&lt;<span class="title">version</span>&gt;</span>1.0.2<span class="tag">&lt;/<span class="title">version</span>&gt;</span></span><br><span class="line">		<span class="tag">&lt;/<span class="title">dependency</span>&gt;</span></span><br><span class="line">		<span class="tag">&lt;<span class="title">dependency</span>&gt;</span></span><br><span class="line">			<span class="tag">&lt;<span class="title">groupId</span>&gt;</span>org.mybatis<span class="tag">&lt;/<span class="title">groupId</span>&gt;</span></span><br><span class="line">			<span class="tag">&lt;<span class="title">artifactId</span>&gt;</span>mybatis<span class="tag">&lt;/<span class="title">artifactId</span>&gt;</span></span><br><span class="line">			<span class="tag">&lt;<span class="title">version</span>&gt;</span>3.3.0<span class="tag">&lt;/<span class="title">version</span>&gt;</span></span><br><span class="line">		<span class="tag">&lt;/<span class="title">dependency</span>&gt;</span></span><br><span class="line">		<span class="tag">&lt;<span class="title">dependency</span>&gt;</span></span><br><span class="line">			<span class="tag">&lt;<span class="title">groupId</span>&gt;</span>commons-dbcp<span class="tag">&lt;/<span class="title">groupId</span>&gt;</span></span><br><span class="line">			<span class="tag">&lt;<span class="title">artifactId</span>&gt;</span>commons-dbcp<span class="tag">&lt;/<span class="title">artifactId</span>&gt;</span></span><br><span class="line">			<span class="tag">&lt;<span class="title">version</span>&gt;</span>1.4<span class="tag">&lt;/<span class="title">version</span>&gt;</span></span><br><span class="line">		<span class="tag">&lt;/<span class="title">dependency</span>&gt;</span></span><br><span class="line">		<span class="tag">&lt;<span class="title">dependency</span>&gt;</span></span><br><span class="line">			<span class="tag">&lt;<span class="title">groupId</span>&gt;</span>org.mybatis<span class="tag">&lt;/<span class="title">groupId</span>&gt;</span></span><br><span class="line">			<span class="tag">&lt;<span class="title">artifactId</span>&gt;</span>mybatis-spring<span class="tag">&lt;/<span class="title">artifactId</span>&gt;</span></span><br><span class="line">			<span class="tag">&lt;<span class="title">version</span>&gt;</span>1.2.3<span class="tag">&lt;/<span class="title">version</span>&gt;</span></span><br><span class="line">			<span class="tag">&lt;<span class="title">type</span>&gt;</span>jar<span class="tag">&lt;/<span class="title">type</span>&gt;</span></span><br><span class="line">		<span class="tag">&lt;/<span class="title">dependency</span>&gt;</span></span><br></pre></td></tr></table></figure>
+<h3 id="u521B_u5EFAmodel"><a href="#u521B_u5EFAmodel" class="headerlink" title="创建model"></a>创建model</h3><pre><code>见model包下面的User.java文件
+</code></pre><figure class="highlight cs"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title">User</span> &#123;</span><br><span class="line">	<span class="keyword">private</span> <span class="keyword">int</span> user_id;</span><br><span class="line">	<span class="keyword">private</span> <span class="keyword">int</span> user_type;</span><br><span class="line">	<span class="function"><span class="keyword">public</span> <span class="keyword">int</span> <span class="title">getUser_id</span>(<span class="params"></span>) </span>&#123;</span><br><span class="line">		<span class="keyword">return</span> user_id;</span><br><span class="line">	&#125;</span><br><span class="line">	<span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">setUser_id</span>(<span class="params"><span class="keyword">int</span> user_id</span>) </span>&#123;</span><br><span class="line">		<span class="keyword">this</span>.user_id = user_id;</span><br><span class="line">	&#125;</span><br><span class="line">	<span class="function"><span class="keyword">public</span> <span class="keyword">int</span> <span class="title">getUser_type</span>(<span class="params"></span>) </span>&#123;</span><br><span class="line">		<span class="keyword">return</span> user_type;</span><br><span class="line">	&#125;</span><br><span class="line">	<span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">setUser_type</span>(<span class="params"><span class="keyword">int</span> user_type</span>) </span>&#123;</span><br><span class="line">		<span class="keyword">this</span>.user_type = user_type;</span><br><span class="line">	&#125;</span><br><span class="line">	</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h3 id="u521B_u5EFAmapper_DAO"><a href="#u521B_u5EFAmapper_DAO" class="headerlink" title="创建mapper DAO"></a>创建mapper DAO</h3><pre><code>见dao包下面的UserDAO.java
+</code></pre><figure class="highlight less"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">public</span> <span class="tag">interface</span> <span class="tag">UserDAO</span> &#123;</span><br><span class="line"></span><br><span class="line">	<span class="variable">@Select</span>(<span class="string">"select * from ysyy_user where user_id=#&#123;user_id&#125; and user_type=#&#123;user_type&#125;"</span>)</span><br><span class="line">	User <span class="function">getUser</span>(<span class="variable">@Param</span>(<span class="string">"user_id"</span>)int user_id,<span class="variable">@Param</span>(<span class="string">"user_type"</span>)int user_type);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h3 id="u521B_u5EFA_u63A7_u5236_u5668"><a href="#u521B_u5EFA_u63A7_u5236_u5668" class="headerlink" title="创建控制器"></a>创建控制器</h3><pre><code>见controller下面的UsrController.java
+</code></pre><figure class="highlight aspectj"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line"><span class="annotation">@RestController</span></span><br><span class="line"><span class="annotation">@EnableAutoConfiguration</span></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">UserController</span> </span>&#123;</span><br><span class="line">	</span><br><span class="line">	<span class="annotation">@Autowired</span></span><br><span class="line">	<span class="keyword">private</span> UserDAO userDAO;</span><br><span class="line">	</span><br><span class="line">	<span class="annotation">@RequestMapping</span>(<span class="string">"/user"</span>)</span><br><span class="line">	<span class="annotation">@ResponseBody</span></span><br><span class="line">	<span class="function">User <span class="title">getUser</span><span class="params">()</span></span>&#123;</span><br><span class="line">		<span class="function"><span class="keyword">return</span> userDAO.<span class="title">getUser</span><span class="params">(<span class="number">971</span>, <span class="number">2</span>)</span></span>;</span><br><span class="line">	&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">/*	public static void main(String[] args)&#123;</span><br><span class="line">		SpringApplication.run(SampleController.class,args);</span><br><span class="line">	&#125;*/</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h3 id="u6307_u5B9A_u5165_u53E3"><a href="#u6307_u5B9A_u5165_u53E3" class="headerlink" title="指定入口"></a>指定入口</h3><pre><code>见App.java
+</code></pre><figure class="highlight groovy"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="annotation">@SpringBootApplication</span></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">App</span> </span><br><span class="line">&#123;</span></span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">static</span> <span class="typename">void</span> main( String[] args )</span><br><span class="line">    &#123;</span><br><span class="line">    	 SpringApplication.run(App.<span class="keyword">class</span>, args);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h3 id="u542F_u52A8_u8FD0_u884C"><a href="#u542F_u52A8_u8FD0_u884C" class="headerlink" title="启动运行"></a>启动运行</h3><figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">mvn clean <span class="operator"><span class="keyword">install</span></span><br><span class="line"><span class="keyword">java</span> -jar spring-boot-mybatis-web</span></span><br></pre></td></tr></table></figure>
+<h3 id="u6D4B_u8BD5"><a href="#u6D4B_u8BD5" class="headerlink" title="测试"></a>测试</h3><p>在浏览器中输入<br><figure class="highlight avrasm"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="label">localhost:</span><span class="number">8080</span>/user</span><br></pre></td></tr></table></figure></p>
+<h3 id="u8FD4_u56DE_u7ED3_u679C"><a href="#u8FD4_u56DE_u7ED3_u679C" class="headerlink" title="返回结果"></a>返回结果</h3><figure class="highlight json"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">&#123;"<span class="attribute">user_id</span>":<span class="value"><span class="number">971</span></span>,"<span class="attribute">user_type</span>":<span class="value"><span class="number">2</span></span>&#125;</span><br></pre></td></tr></table></figure>
+      
+    </div>
+    <footer class="article-footer">
+      <div class="bshare-custom"><a title="分享到QQ空间" class="bshare-qzone"></a><a title="分享到新浪微博" class="bshare-sinaminiblog"></a><a title="分享到人人网" class="bshare-renren"></a><a title="分享到腾讯微博" class="bshare-qqmb"></a><a title="分享到网易微博" class="bshare-neteasemb"></a><a title="更多平台" class="bshare-more bshare-more-icon more-style-addthis"></a><span class="BSHARE_COUNT bshare-share-count">0</span></div><script type="text/javascript" charset="utf-8" src="http://static.bshare.cn/b/buttonLite.js#style=-1&amp;uuid=&amp;pophcol=2&amp;lang=zh"></script><script type="text/javascript" charset="utf-8" src="http://static.bshare.cn/b/bshareC0.js"></script>
+    <!-- 分享  <a data-url="http://wiki.niejinkun.com/2016/03/17/spring-boot-mybatis集成/" data-id="civ3jazgr006fo4uxss91kes6" class="article-share-link">Share</a> -->
+      
+      
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/java/">java</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/mybatis/">mybatis</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/springboot/">springboot</a></li></ul>
+
+    </footer>
+  </div>
+  
+</article>
+
+ 
+
+  
+    <article id="post-abtest" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2016/03/17/abtest/" class="article-date">
+  <time datetime="2016-03-16T16:00:00.000Z" itemprop="datePublished">2016-03-17</time>
+</a>
+    
+  <div class="article-category">
+    <a class="article-category-link" href="/categories/linux/">linux</a>
+  </div>
+
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2016/03/17/abtest/">abtest</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <!-- Table of Contents -->
+        
+        <p>　abtest是重要的性能测试工具．</p>
+<h2 id="u5B89_u88C5"><a href="#u5B89_u88C5" class="headerlink" title="安装"></a>安装</h2><p>centos环境下．安装方法为：<br><figure class="highlight crystal"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">[<span class="variable">@iZ28h3eaiotZ</span> ~]<span class="variable">$ </span>sudo yum install httpd-tools</span><br></pre></td></tr></table></figure></p>
+<p>安装完成后，在命令行下输入ab即可<br><figure class="highlight crystal"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">[<span class="variable">@iZ28h3eaiotZ</span> ~]<span class="variable">$ </span>ab</span><br></pre></td></tr></table></figure></p>
+<h2 id="u4F7F_u7528"><a href="#u4F7F_u7528" class="headerlink" title="使用"></a>使用</h2><p>-c 一次发送的请求数量，即并发量<br>-n 请求次数</p>
+<figure class="highlight scheme"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br></pre></td><td class="code"><pre><span class="line"><span class="list">[<span class="keyword">@iZ28h3eaiotZ</span> ~]$ab -c <span class="number">1</span>  -n <span class="number">100</span> http://localhost:8080/wiki/doku.php</span><br><span class="line">This is ApacheBench, Version <span class="number">2.3</span> &lt;$Revision: <span class="number">655654</span> $&gt;</span><br><span class="line">Copyright <span class="number">1996</span> Adam Twiss, Zeus Technology Ltd, http://www.zeustech.net/</span><br><span class="line">Licensed to The Apache Software Foundation, http://www.apache.org/</span><br><span class="line"></span><br><span class="line">Benchmarking localhost <span class="list">(<span class="keyword">be</span> patient)</span>.....done</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">Server Software:        Apache/2.2.15</span><br><span class="line">Server Hostname:        localhost</span><br><span class="line">Server Port:            <span class="number">8080</span></span><br><span class="line"></span><br><span class="line">Document Path:          /wiki/doku.php</span><br><span class="line">Document Length:        <span class="number">21885</span> bytes</span><br><span class="line"></span><br><span class="line">Concurrency Level:      <span class="number">1</span></span><br><span class="line">Time taken for tests:   <span class="number">5.051</span> seconds</span><br><span class="line">Complete requests:      <span class="number">100</span></span><br><span class="line">Failed requests:        <span class="number">0</span></span><br><span class="line">Write errors:           <span class="number">0</span></span><br><span class="line">Total transferred:      <span class="number">2241900</span> bytes</span><br><span class="line">HTML transferred:       <span class="number">2188500</span> bytes</span><br><span class="line">Requests per second:    <span class="number">19.80</span> <span class="list">[#/sec] <span class="list">(<span class="keyword">mean</span>)</span></span><br><span class="line">Time per request:       <span class="number">50.508</span> <span class="list">[<span class="keyword">ms</span>] <span class="list">(<span class="keyword">mean</span>)</span></span><br><span class="line">Time per request:       <span class="number">50.508</span> <span class="list">[<span class="keyword">ms</span>] <span class="list">(<span class="keyword">mean</span>, across all concurrent requests)</span></span><br><span class="line">Transfer rate:          <span class="number">433.47</span> <span class="list">[<span class="keyword">Kbytes/sec</span>] received</span><br><span class="line"></span><br><span class="line">Connection Times <span class="list">(<span class="keyword">ms</span>)</span></span><br><span class="line">              min  mean<span class="list">[<span class="keyword">+/-sd</span>] median   max</span><br><span class="line">Connect:        <span class="number">0</span>    <span class="number">0</span>   <span class="number">0.0</span>      <span class="number">0</span>       <span class="number">0</span></span><br><span class="line">Processing:    <span class="number">48</span>   <span class="number">50</span>   <span class="number">2.7</span>     <span class="number">50</span>      <span class="number">69</span></span><br><span class="line">Waiting:       <span class="number">44</span>   <span class="number">46</span>   <span class="number">2.5</span>     <span class="number">45</span>      <span class="number">64</span></span><br><span class="line">Total:         <span class="number">48</span>   <span class="number">50</span>   <span class="number">2.7</span>     <span class="number">50</span>      <span class="number">69</span></span><br><span class="line"></span><br><span class="line">Percentage of the requests served within a certain time <span class="list">(<span class="keyword">ms</span>)</span></span><br><span class="line">  <span class="number">50</span>%     <span class="number">50</span></span><br><span class="line">  <span class="number">66</span>%     <span class="number">51</span></span><br><span class="line">  <span class="number">75</span>%     <span class="number">51</span></span><br><span class="line">  <span class="number">80</span>%     <span class="number">51</span></span><br><span class="line">  <span class="number">90</span>%     <span class="number">52</span></span><br><span class="line">  <span class="number">95</span>%     <span class="number">54</span></span><br><span class="line">  <span class="number">98</span>%     <span class="number">60</span></span><br><span class="line">  <span class="number">99</span>%     <span class="number">69</span></span><br><span class="line"> <span class="number">100</span>%     <span class="number">69</span> <span class="list">(<span class="keyword">longest</span> request)</span></span></span></span></span></span></span></span><br></pre></td></tr></table></figure>
+<h2 id="u547D_u4EE4_u884C_u53C2_u6570"><a href="#u547D_u4EE4_u884C_u53C2_u6570" class="headerlink" title="命令行参数"></a>命令行参数</h2><figure class="highlight vhdl"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br></pre></td><td class="code"><pre><span class="line">Usage: ab [options] [http[s]://]hostname[:<span class="keyword">port</span>]/path</span><br><span class="line">Options are:</span><br><span class="line">    -n requests     Number <span class="keyword">of</span> requests <span class="keyword">to</span> perform</span><br><span class="line">    -c concurrency  Number <span class="keyword">of</span> multiple requests <span class="keyword">to</span> make</span><br><span class="line">    -t timelimit    Seconds <span class="keyword">to</span> max. <span class="keyword">wait</span> <span class="keyword">for</span> responses</span><br><span class="line">    -b windowsize   Size <span class="keyword">of</span> TCP send/receive <span class="keyword">buffer</span>, <span class="keyword">in</span> bytes</span><br><span class="line">    -p postfile     <span class="keyword">File</span> containing data <span class="keyword">to</span> POST. Remember also <span class="keyword">to</span> set -T</span><br><span class="line">    -u putfile      <span class="keyword">File</span> containing data <span class="keyword">to</span> PUT. Remember also <span class="keyword">to</span> set -T</span><br><span class="line">    -T content-<span class="keyword">type</span> Content-<span class="keyword">type</span> header <span class="keyword">for</span> POSTing, eg.</span><br><span class="line">                    <span class="attribute">'application</span>/x-www-form-urlencoded'</span><br><span class="line">                    <span class="keyword">Default</span> <span class="keyword">is</span> <span class="attribute">'text</span>/plain'</span><br><span class="line">    -v verbosity    How much troubleshooting info <span class="keyword">to</span> print</span><br><span class="line">    -w              Print <span class="keyword">out</span> results <span class="keyword">in</span> HTML tables</span><br><span class="line">    -i              <span class="keyword">Use</span> HEAD instead <span class="keyword">of</span> GET</span><br><span class="line">    -x attributes   <span class="typename">String</span> <span class="keyword">to</span> insert as table attributes</span><br><span class="line">    -y attributes   <span class="typename">String</span> <span class="keyword">to</span> insert as tr attributes</span><br><span class="line">    -z attributes   <span class="typename">String</span> <span class="keyword">to</span> insert as td <span class="keyword">or</span> th attributes</span><br><span class="line">    -C <span class="keyword">attribute</span>    Add cookie, eg. <span class="attribute">'Apache</span>=<span class="number">1234</span>. (repeatable)</span><br><span class="line">    -H <span class="keyword">attribute</span>    Add Arbitrary header line, eg. <span class="attribute">'Accept</span>-Encoding: gzip'</span><br><span class="line">                    Inserted <span class="keyword">after</span> <span class="keyword">all</span> normal header lines. (repeatable)</span><br><span class="line">    -A <span class="keyword">attribute</span>    Add Basic WWW Authentication, the attributes</span><br><span class="line">                    are a colon separated username <span class="keyword">and</span> password.</span><br><span class="line">    -P <span class="keyword">attribute</span>    Add Basic Proxy Authentication, the attributes</span><br><span class="line">                    are a colon separated username <span class="keyword">and</span> password.</span><br><span class="line">    -X proxy:<span class="keyword">port</span>   Proxyserver <span class="keyword">and</span> <span class="keyword">port</span> number <span class="keyword">to</span> <span class="keyword">use</span></span><br><span class="line">    -V              Print version number <span class="keyword">and</span> <span class="keyword">exit</span></span><br><span class="line">    -k              <span class="keyword">Use</span> HTTP KeepAlive feature</span><br><span class="line">    -d              Do <span class="keyword">not</span> show percentiles served table.</span><br><span class="line">    -S              Do <span class="keyword">not</span> show confidence estimators <span class="keyword">and</span> warnings.</span><br><span class="line">    -g filename     Output collected data <span class="keyword">to</span> gnuplot format <span class="keyword">file</span>.</span><br><span class="line">    -e filename     Output CSV <span class="keyword">file</span> <span class="keyword">with</span> percentages served</span><br><span class="line">    -r              Don<span class="attribute">'t</span> <span class="keyword">exit</span> <span class="keyword">on</span> socket receive errors.</span><br><span class="line">    -h              Display usage information (this message)</span><br><span class="line">    -Z ciphersuite  Specify SSL/TLS cipher suite (See openssl ciphers)</span><br><span class="line">    -f protocol     Specify SSL/TLS protocol (SSL2, SSL3, TLS1, <span class="keyword">or</span> <span class="keyword">ALL</span>)</span><br></pre></td></tr></table></figure>
+
+      
+    </div>
+    <footer class="article-footer">
+      <div class="bshare-custom"><a title="分享到QQ空间" class="bshare-qzone"></a><a title="分享到新浪微博" class="bshare-sinaminiblog"></a><a title="分享到人人网" class="bshare-renren"></a><a title="分享到腾讯微博" class="bshare-qqmb"></a><a title="分享到网易微博" class="bshare-neteasemb"></a><a title="更多平台" class="bshare-more bshare-more-icon more-style-addthis"></a><span class="BSHARE_COUNT bshare-share-count">0</span></div><script type="text/javascript" charset="utf-8" src="http://static.bshare.cn/b/buttonLite.js#style=-1&amp;uuid=&amp;pophcol=2&amp;lang=zh"></script><script type="text/javascript" charset="utf-8" src="http://static.bshare.cn/b/bshareC0.js"></script>
+    <!-- 分享  <a data-url="http://wiki.niejinkun.com/2016/03/17/abtest/" data-id="civ3jazua00gqo4uxxkzxqaoa" class="article-share-link">Share</a> -->
+      
+      
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/linux/">linux</a></li></ul>
+
+    </footer>
+  </div>
+  
+</article>
+
+ 
+
+  
+    <article id="post-dubbo-springboot集成" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2016/03/17/dubbo-springboot集成/" class="article-date">
+  <time datetime="2016-03-16T16:00:00.000Z" itemprop="datePublished">2016-03-17</time>
+</a>
+    
+  <div class="article-category">
+    <a class="article-category-link" href="/categories/java/">java</a>
+  </div>
+
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2016/03/17/dubbo-springboot集成/">dubbo-springboot集成</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <!-- Table of Contents -->
+        
+        <h2 id="u80CC_u666F"><a href="#u80CC_u666F" class="headerlink" title="背景"></a>背景</h2><p>　前面有文章介绍dubbo和spring3 javaconfig集成．这一篇，将介绍dubbo与springboot集成．通过springboot内置的tomcat或<br>jetty容器．可以实现单包部署．相对dubbo和spring3 javaconfig集成，springboot集成更爽．</p>
+<h2 id="u96C6_u6210_u65B9_u6CD5"><a href="#u96C6_u6210_u65B9_u6CD5" class="headerlink" title="集成方法"></a>集成方法</h2><h1 id="springboot-dubbo-provider"><a href="#springboot-dubbo-provider" class="headerlink" title="springboot-dubbo-provider"></a>springboot-dubbo-provider</h1><p>spring boot 与dubbo进行集成．<br>搞通之后，觉得很简单，在搞通之前，有不少坑．主要还是依赖问题和配置问题．</p>
+<h2 id="maven_u914D_u7F6E"><a href="#maven_u914D_u7F6E" class="headerlink" title="maven配置"></a>maven配置</h2><h3 id="u52A0_u5165spring_boot_u4F9D_u8D56"><a href="#u52A0_u5165spring_boot_u4F9D_u8D56" class="headerlink" title="加入spring boot依赖"></a>加入spring boot依赖</h3><p>原来的配置，配置为允许自动配置<br><figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><span class="line">	<span class="tag">&lt;<span class="title">parent</span>&gt;</span></span><br><span class="line">		<span class="tag">&lt;<span class="title">groupId</span>&gt;</span>org.springframework.boot<span class="tag">&lt;/<span class="title">groupId</span>&gt;</span></span><br><span class="line">		<span class="tag">&lt;<span class="title">artifactId</span>&gt;</span>spring-boot-starter-parent<span class="tag">&lt;/<span class="title">artifactId</span>&gt;</span></span><br><span class="line">		<span class="tag">&lt;<span class="title">version</span>&gt;</span>1.3.3.RELEASE<span class="tag">&lt;/<span class="title">version</span>&gt;</span></span><br><span class="line">	<span class="tag">&lt;/<span class="title">parent</span>&gt;</span></span><br><span class="line">		</span><br><span class="line">	<span class="tag">&lt;<span class="title">dependencies</span>&gt;</span></span><br><span class="line">	<span class="comment">&lt;!--  spring boot --&gt;</span></span><br><span class="line">			<span class="tag">&lt;<span class="title">dependency</span>&gt;</span></span><br><span class="line">			<span class="tag">&lt;<span class="title">groupId</span>&gt;</span>org.springframework.boot<span class="tag">&lt;/<span class="title">groupId</span>&gt;</span></span><br><span class="line">			<span class="tag">&lt;<span class="title">artifactId</span>&gt;</span>spring-boot-starter-web<span class="tag">&lt;/<span class="title">artifactId</span>&gt;</span></span><br><span class="line">		<span class="tag">&lt;/<span class="title">dependency</span>&gt;</span></span><br><span class="line">		<span class="tag">&lt;<span class="title">dependency</span>&gt;</span></span><br><span class="line">			<span class="tag">&lt;<span class="title">groupId</span>&gt;</span>org.springframework.boot<span class="tag">&lt;/<span class="title">groupId</span>&gt;</span></span><br><span class="line">			<span class="tag">&lt;<span class="title">artifactId</span>&gt;</span>spring-boot-starter-tomcat<span class="tag">&lt;/<span class="title">artifactId</span>&gt;</span></span><br><span class="line">			<span class="tag">&lt;<span class="title">scope</span>&gt;</span>provided<span class="tag">&lt;/<span class="title">scope</span>&gt;</span></span><br><span class="line">		<span class="tag">&lt;/<span class="title">dependency</span>&gt;</span></span><br><span class="line">				<span class="comment">&lt;!--添加适用于生产环境的功能，如性能指标和监测等功能。 --&gt;</span></span><br><span class="line">		<span class="tag">&lt;<span class="title">dependency</span>&gt;</span></span><br><span class="line">			<span class="tag">&lt;<span class="title">groupId</span>&gt;</span>org.springframework.boot<span class="tag">&lt;/<span class="title">groupId</span>&gt;</span></span><br><span class="line">			<span class="tag">&lt;<span class="title">artifactId</span>&gt;</span>spring-boot-starter-actuator<span class="tag">&lt;/<span class="title">artifactId</span>&gt;</span></span><br><span class="line">		<span class="tag">&lt;/<span class="title">dependency</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="title">dependencies</span>&gt;</span></span><br></pre></td></tr></table></figure></p>
+<h3 id="u52A0_u5165_u6253_u5305_u63D2_u4EF6"><a href="#u52A0_u5165_u6253_u5305_u63D2_u4EF6" class="headerlink" title="加入打包插件"></a>加入打包插件</h3><figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="title">plugin</span>&gt;</span></span><br><span class="line">	<span class="tag">&lt;<span class="title">groupId</span>&gt;</span>org.springframework.boot<span class="tag">&lt;/<span class="title">groupId</span>&gt;</span></span><br><span class="line">	<span class="tag">&lt;<span class="title">artifactId</span>&gt;</span>spring-boot-maven-plugin<span class="tag">&lt;/<span class="title">artifactId</span>&gt;</span></span><br><span class="line">	<span class="tag">&lt;<span class="title">version</span>&gt;</span>1.3.3.RELEASE<span class="tag">&lt;/<span class="title">version</span>&gt;</span></span><br><span class="line">	<span class="tag">&lt;<span class="title">executions</span>&gt;</span></span><br><span class="line">		<span class="tag">&lt;<span class="title">execution</span>&gt;</span></span><br><span class="line">			<span class="tag">&lt;<span class="title">goals</span>&gt;</span></span><br><span class="line">				<span class="tag">&lt;<span class="title">goal</span>&gt;</span>repackage<span class="tag">&lt;/<span class="title">goal</span>&gt;</span></span><br><span class="line">			<span class="tag">&lt;/<span class="title">goals</span>&gt;</span></span><br><span class="line">		<span class="tag">&lt;/<span class="title">execution</span>&gt;</span></span><br><span class="line">	<span class="tag">&lt;/<span class="title">executions</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="title">plugin</span>&gt;</span></span><br></pre></td></tr></table></figure>
+<h2 id="u52A0_u5165_u914D_u7F6E"><a href="#u52A0_u5165_u914D_u7F6E" class="headerlink" title="加入配置"></a>加入配置</h2><p>下面的注解一句都不能少，少了就会报错．<br><figure class="highlight groovy"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="annotation">@SpringBootApplication</span></span><br><span class="line"><span class="annotation">@EnableAutoConfiguration</span>(exclude=&#123;DataSourceAutoConfiguration.<span class="keyword">class</span>&#125;)</span><br><span class="line"><span class="annotation">@Import</span>(&#123;OrderServiceConfig.<span class="keyword">class</span>,MybatisConfiguration.<span class="keyword">class</span>&#125;)</span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">App</span> </span><br><span class="line">&#123;</span></span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">static</span> <span class="typename">void</span> main( String[] args )</span><br><span class="line">    &#123;</span><br><span class="line">    	 SpringApplication.run(App.<span class="keyword">class</span>, args);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>如果少了<br><figure class="highlight crystal"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="variable">@Import</span>(&#123;<span class="constant">OrderServiceConfig</span>.<span class="keyword">class</span>,<span class="constant">MybatisConfiguration</span>.<span class="keyword">class</span>&#125;)</span><br></pre></td></tr></table></figure></p>
+<p>则无法暴露dubbo服务．<br><figure class="highlight stylus"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">Caused by: org<span class="class">.springframework</span><span class="class">.boot</span><span class="class">.autoconfigure</span><span class="class">.jdbc</span><span class="class">.DataSourceProperties</span><span class="variable">$DataSourceBeanCreationException</span>: Cannot determine embedded database driver class <span class="keyword">for</span> database type NONE. If you want an <span class="tag">em</span></span><br><span class="line">bedded database please put <span class="tag">a</span> supported one on the classpath. If you have database settings to be loaded from <span class="tag">a</span> particular profile you may need to active it (no profiles are currently active).</span><br><span class="line">        at org<span class="class">.springframework</span><span class="class">.boot</span><span class="class">.autoconfigure</span><span class="class">.jdbc</span><span class="class">.DataSourceProperties</span><span class="class">.getDriverClassName</span>(DataSourceProperties<span class="class">.java</span>:<span class="number">180</span>)</span><br><span class="line">        at org<span class="class">.springframework</span><span class="class">.boot</span><span class="class">.autoconfigure</span><span class="class">.jdbc</span><span class="class">.DataSourceAutoConfiguration</span><span class="variable">$NonEmbeddedConfiguration</span>.<span class="function"><span class="title">dataSource</span><span class="params">(DataSourceAutoConfiguration.java:<span class="number">121</span>)</span></span></span><br><span class="line">        at sun<span class="class">.reflect</span><span class="class">.NativeMethodAccessorImpl</span><span class="class">.invoke0</span>(Native Method)</span><br><span class="line">        at sun<span class="class">.reflect</span><span class="class">.NativeMethodAccessorImpl</span><span class="class">.invoke</span>(Unknown Source)</span><br><span class="line">        at sun<span class="class">.reflect</span><span class="class">.DelegatingMethodAccessorImpl</span><span class="class">.invoke</span>(Unknown Source)</span><br><span class="line">        at java<span class="class">.lang</span><span class="class">.reflect</span><span class="class">.Method</span><span class="class">.invoke</span>(Unknown Source)</span><br><span class="line">        at org<span class="class">.springframework</span><span class="class">.beans</span><span class="class">.factory</span><span class="class">.support</span><span class="class">.SimpleInstantiationStrategy</span><span class="class">.instantiate</span>(SimpleInstantiationStrategy<span class="class">.java</span>:<span class="number">162</span>)</span><br><span class="line">        ... <span class="number">38</span> more</span><br></pre></td></tr></table></figure></p>
+<figure class="highlight stylus"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 后面经实测，这句可以去掉</span></span><br><span class="line">@<span class="function"><span class="title">EnableAutoConfiguration</span><span class="params">(exclude=&#123;DataSourceAutoConfiguration.class&#125;)</span></span></span><br></pre></td></tr></table></figure>
+<h2 id="u7F16_u8BD1"><a href="#u7F16_u8BD1" class="headerlink" title="编译"></a>编译</h2><figure class="highlight armasm"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">mvn </span>clean install</span><br></pre></td></tr></table></figure>
+<h2 id="u8FD0_u884C"><a href="#u8FD0_u884C" class="headerlink" title="运行"></a>运行</h2><figure class="highlight css"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">java</span> <span class="tag">-jar</span> <span class="tag">target</span>\<span class="tag">dataservice-provider-0</span><span class="class">.0</span><span class="class">.1-SNAPSHOT</span><span class="class">.jar</span></span><br></pre></td></tr></table></figure>
+<h2 id="u6CE8_u610F_u4E8B_u9879"><a href="#u6CE8_u610F_u4E8B_u9879" class="headerlink" title="注意事项"></a>注意事项</h2><h3 id="u52A0_u5165_u76D1_u63A7_u4E2D_u5FC3_u540E_uFF0C_u65E0_u6CD5_u663E_u793A_u7EDF_u8BA1_u6570_u636E"><a href="#u52A0_u5165_u76D1_u63A7_u4E2D_u5FC3_u540E_uFF0C_u65E0_u6CD5_u663E_u793A_u7EDF_u8BA1_u6570_u636E" class="headerlink" title="加入监控中心后，无法显示统计数据"></a>加入监控中心后，无法显示统计数据</h3><p>解雇方案：<br>需要在服务端开启监控配置。<br>修改两个地方：<br>配置监控信息<br><figure class="highlight smali"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">@Bean(name=<span class="string">"registry"</span><span class="function">)</span><span class="keyword"></span><br><span class="line">public</span> RegistryConfig<span class="function"> registry(</span><span class="function">)</span>&#123;&#125;</span><br><span class="line"></span><br><span class="line">@Bean<span class="keyword"></span><br><span class="line">public</span> MonitorConfig<span class="function"> monitor(</span><span class="function">)</span>&#123;</span><br><span class="line">    MonitorConfig<span class="instruction"> monitor </span>=<span class="instruction"> new </span>MonitorConfig(<span class="function">)</span>;</span><br><span class="line">   <span class="function"> monitor.setProtocol(</span><span class="string">"registry"</span><span class="function">)</span>;</span><br><span class="line">   <span class="instruction"> return </span>monitor;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>将服务加入监控<br><figure class="highlight css"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="at_rule">@<span class="keyword">Bean</span></span><br><span class="line">public ServiceConfg <span class="function">serviceConfg</span>()</span>&#123;</span><br><span class="line">    ....</span><br><span class="line">    <span class="tag">service</span><span class="class">.setMonitor</span>(<span class="tag">dubboConfig</span><span class="class">.monitor</span>());)</span><br><span class="line">    ....</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<h2 id="u7ED3_u8BBA"><a href="#u7ED3_u8BBA" class="headerlink" title="结论"></a>结论</h2><h3 id="u4F18_u70B9"><a href="#u4F18_u70B9" class="headerlink" title="优点"></a>优点</h3><ul>
+<li>部署简单</li>
+</ul>
+<h2 id="github"><a href="#github" class="headerlink" title="github"></a>github</h2><p>示例已上传至github.<br>路径为：</p>
+<ul>
+<li><a href="https://github.com/njkfei/springboot-dubbo-provider.git" target="_blank" rel="external">dubbo服务提供者</a></li>
+<li><a href="https://github.com/njkfei/dubbo-consumer.git" target="_blank" rel="external">dubbo服务消费者</a></li>
+</ul>
+
+      
+    </div>
+    <footer class="article-footer">
+      <div class="bshare-custom"><a title="分享到QQ空间" class="bshare-qzone"></a><a title="分享到新浪微博" class="bshare-sinaminiblog"></a><a title="分享到人人网" class="bshare-renren"></a><a title="分享到腾讯微博" class="bshare-qqmb"></a><a title="分享到网易微博" class="bshare-neteasemb"></a><a title="更多平台" class="bshare-more bshare-more-icon more-style-addthis"></a><span class="BSHARE_COUNT bshare-share-count">0</span></div><script type="text/javascript" charset="utf-8" src="http://static.bshare.cn/b/buttonLite.js#style=-1&amp;uuid=&amp;pophcol=2&amp;lang=zh"></script><script type="text/javascript" charset="utf-8" src="http://static.bshare.cn/b/bshareC0.js"></script>
+    <!-- 分享  <a data-url="http://wiki.niejinkun.com/2016/03/17/dubbo-springboot集成/" data-id="civ3jazt000foo4uxe5debhh7" class="article-share-link">Share</a> -->
+      
+      
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/dubbo/">dubbo</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/spirng/">spirng</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/服务化/">服务化</a></li></ul>
+
+    </footer>
+  </div>
+  
+</article>
+
+ 
+
+  
+  
+    <nav id="page-nav">
+      <a class="extend prev" rel="prev" href="/page/3/">&laquo; Prev</a><a class="page-number" href="/">1</a><a class="page-number" href="/page/2/">2</a><a class="page-number" href="/page/3/">3</a><span class="page-number current">4</span><a class="page-number" href="/page/5/">5</a><a class="page-number" href="/page/6/">6</a><span class="space">&hellip;</span><a class="page-number" href="/page/12/">12</a><a class="extend next" rel="next" href="/page/5/">Next &raquo;</a>
+    </nav>
+  
+
+</section>
+        
+          <aside id="sidebar">
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Categories</h3>
+    <div class="widget">
+      <ul class="category-list"><li class="category-list-item"><a class="category-list-link" href="/categories/api/">api</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/java/">java</a><span class="category-list-count">34</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/linux/">linux</a><span class="category-list-count">12</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/mysql/">mysql</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/nginx/">nginx</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/opencv/">opencv</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/php/">php</a><span class="category-list-count">3</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/protocal/">protocal</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/web前端/">web前端</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/前端/">前端</a><span class="category-list-count">3</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/大数据/">大数据</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/存储系统/">存储系统</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/安全/">安全</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/工具/">工具</a><span class="category-list-count">3</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/性能优化/">性能优化</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/搜索/">搜索</a><span class="category-list-count">5</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/数据库/">数据库</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/有用的资源/">有用的资源</a><span class="category-list-count">2</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/服务/">服务</a><span class="category-list-count">18</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/架构/">架构</a><span class="category-list-count">5</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/沟通协作/">沟通协作</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/生活/">生活</a><span class="category-list-count">7</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/编程开发/">编程开发</a><span class="category-list-count">2</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/设计/">设计</a><span class="category-list-count">4</span></li></ul>
+    </div>
+  </div>
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Tags</h3>
+    <div class="widget">
+      <ul class="tag-list"><li class="tag-list-item"><a class="tag-list-link" href="/tags/AngularJS/">AngularJS</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/ImageMagick/">ImageMagick</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/android/">android</a><span class="tag-list-count">3</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/aop/">aop</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/api/">api</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/async/">async</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/audio/">audio</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/cache/">cache</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/commons-fileupload/">commons-fileupload</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/concunrrent/">concunrrent</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/crontab/">crontab</a><span class="tag-list-count">6</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/download/">download</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/dubbo/">dubbo</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/ehcache/">ehcache</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/elasticsearch/">elasticsearch</a><span class="tag-list-count">4</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/es/">es</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/fileuploads/">fileuploads</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/git/">git</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/github/">github</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/go/">go</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/gradle/">gradle</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/grep/">grep</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/https/">https</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/im/">im</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/image/">image</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/indexer/">indexer</a><span class="tag-list-count">4</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/ionic/">ionic</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/italy/">italy</a><span class="tag-list-count">3</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/java/">java</a><span class="tag-list-count">49</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/javav/">javav</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/jdbctemplate/">jdbctemplate</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/jetty/">jetty</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/job/">job</a><span class="tag-list-count">7</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/jquery/">jquery</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/json/">json</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/jta/">jta</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/jvm/">jvm</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/life/">life</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/linux/">linux</a><span class="tag-list-count">13</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/liux/">liux</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/mail/">mail</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/map/">map</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/maven/">maven</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/memcached/">memcached</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/mq/">mq</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/mqtt/">mqtt</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/mvc/">mvc</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/mybatis/">mybatis</a><span class="tag-list-count">9</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/mysal/">mysal</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/mysql/">mysql</a><span class="tag-list-count">4</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/mytabis/">mytabis</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/netty/">netty</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/nginx/">nginx</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/opencv/">opencv</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/pb/">pb</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/php/">php</a><span class="tag-list-count">3</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/protolbuf/">protolbuf</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/push/">push</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/quartz/">quartz</a><span class="tag-list-count">3</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/redis/">redis</a><span class="tag-list-count">4</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/rome/">rome</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/schedule/">schedule</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/search/">search</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/security/">security</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/servlet/">servlet</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/session/">session</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/shell/">shell</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/sms/">sms</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/solr/">solr</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/spirng/">spirng</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/spring/">spring</a><span class="tag-list-count">8</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/spring-security/">spring security</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/springboot/">springboot</a><span class="tag-list-count">10</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/springcache/">springcache</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/springmvc/">springmvc</a><span class="tag-list-count">6</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/ssl/">ssl</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/threads/">threads</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/tomcat/">tomcat</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/travel/">travel</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/video/">video</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/web/">web</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/yii2/">yii2</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/zookeeper/">zookeeper</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/事务/">事务</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/分布式/">分布式</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/分布式事务/">分布式事务</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/前端/">前端</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/协调/">协调</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/大数据/">大数据</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/安全/">安全</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/定时任务/">定时任务</a><span class="tag-list-count">6</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/工具/">工具</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/性能/">性能</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/性能优化，O2O/">性能优化，O2O</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/性能，架构/">性能，架构</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/推荐/">推荐</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/推送/">推送</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/搜索/">搜索</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/支付/">支付</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/支付宝/">支付宝</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/数据库/">数据库</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/服务化/">服务化</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/架构/">架构</a><span class="tag-list-count">14</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/消息/">消息</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/短信/">短信</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/队列/">队列</a><span class="tag-list-count">2</span></li></ul>
+    </div>
+  </div>
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Tag Cloud</h3>
+    <div class="widget tagcloud">
+      <a href="/tags/AngularJS/" style="font-size: 10px;">AngularJS</a> <a href="/tags/ImageMagick/" style="font-size: 10px;">ImageMagick</a> <a href="/tags/android/" style="font-size: 11.82px;">android</a> <a href="/tags/aop/" style="font-size: 10px;">aop</a> <a href="/tags/api/" style="font-size: 10px;">api</a> <a href="/tags/async/" style="font-size: 10px;">async</a> <a href="/tags/audio/" style="font-size: 10px;">audio</a> <a href="/tags/cache/" style="font-size: 10.91px;">cache</a> <a href="/tags/commons-fileupload/" style="font-size: 10px;">commons-fileupload</a> <a href="/tags/concunrrent/" style="font-size: 10px;">concunrrent</a> <a href="/tags/crontab/" style="font-size: 13.64px;">crontab</a> <a href="/tags/download/" style="font-size: 10px;">download</a> <a href="/tags/dubbo/" style="font-size: 10.91px;">dubbo</a> <a href="/tags/ehcache/" style="font-size: 10px;">ehcache</a> <a href="/tags/elasticsearch/" style="font-size: 12.73px;">elasticsearch</a> <a href="/tags/es/" style="font-size: 10px;">es</a> <a href="/tags/fileuploads/" style="font-size: 10.91px;">fileuploads</a> <a href="/tags/git/" style="font-size: 10.91px;">git</a> <a href="/tags/github/" style="font-size: 10px;">github</a> <a href="/tags/go/" style="font-size: 10px;">go</a> <a href="/tags/gradle/" style="font-size: 10.91px;">gradle</a> <a href="/tags/grep/" style="font-size: 10px;">grep</a> <a href="/tags/https/" style="font-size: 10px;">https</a> <a href="/tags/im/" style="font-size: 10px;">im</a> <a href="/tags/image/" style="font-size: 10px;">image</a> <a href="/tags/indexer/" style="font-size: 12.73px;">indexer</a> <a href="/tags/ionic/" style="font-size: 10px;">ionic</a> <a href="/tags/italy/" style="font-size: 11.82px;">italy</a> <a href="/tags/java/" style="font-size: 20px;">java</a> <a href="/tags/javav/" style="font-size: 10px;">javav</a> <a href="/tags/jdbctemplate/" style="font-size: 10px;">jdbctemplate</a> <a href="/tags/jetty/" style="font-size: 10px;">jetty</a> <a href="/tags/job/" style="font-size: 14.55px;">job</a> <a href="/tags/jquery/" style="font-size: 10px;">jquery</a> <a href="/tags/json/" style="font-size: 10px;">json</a> <a href="/tags/jta/" style="font-size: 10px;">jta</a> <a href="/tags/jvm/" style="font-size: 10px;">jvm</a> <a href="/tags/life/" style="font-size: 10px;">life</a> <a href="/tags/linux/" style="font-size: 18.18px;">linux</a> <a href="/tags/liux/" style="font-size: 10px;">liux</a> <a href="/tags/mail/" style="font-size: 10px;">mail</a> <a href="/tags/map/" style="font-size: 10px;">map</a> <a href="/tags/maven/" style="font-size: 10px;">maven</a> <a href="/tags/memcached/" style="font-size: 10px;">memcached</a> <a href="/tags/mq/" style="font-size: 10.91px;">mq</a> <a href="/tags/mqtt/" style="font-size: 10px;">mqtt</a> <a href="/tags/mvc/" style="font-size: 10.91px;">mvc</a> <a href="/tags/mybatis/" style="font-size: 16.36px;">mybatis</a> <a href="/tags/mysal/" style="font-size: 10px;">mysal</a> <a href="/tags/mysql/" style="font-size: 12.73px;">mysql</a> <a href="/tags/mytabis/" style="font-size: 10px;">mytabis</a> <a href="/tags/netty/" style="font-size: 10.91px;">netty</a> <a href="/tags/nginx/" style="font-size: 10px;">nginx</a> <a href="/tags/opencv/" style="font-size: 10px;">opencv</a> <a href="/tags/pb/" style="font-size: 10px;">pb</a> <a href="/tags/php/" style="font-size: 11.82px;">php</a> <a href="/tags/protolbuf/" style="font-size: 10px;">protolbuf</a> <a href="/tags/push/" style="font-size: 10.91px;">push</a> <a href="/tags/quartz/" style="font-size: 11.82px;">quartz</a> <a href="/tags/redis/" style="font-size: 12.73px;">redis</a> <a href="/tags/rome/" style="font-size: 10.91px;">rome</a> <a href="/tags/schedule/" style="font-size: 10px;">schedule</a> <a href="/tags/search/" style="font-size: 10px;">search</a> <a href="/tags/security/" style="font-size: 10px;">security</a> <a href="/tags/servlet/" style="font-size: 10.91px;">servlet</a> <a href="/tags/session/" style="font-size: 10px;">session</a> <a href="/tags/shell/" style="font-size: 10px;">shell</a> <a href="/tags/sms/" style="font-size: 10px;">sms</a> <a href="/tags/solr/" style="font-size: 10px;">solr</a> <a href="/tags/spirng/" style="font-size: 10px;">spirng</a> <a href="/tags/spring/" style="font-size: 15.45px;">spring</a> <a href="/tags/spring-security/" style="font-size: 10px;">spring security</a> <a href="/tags/springboot/" style="font-size: 17.27px;">springboot</a> <a href="/tags/springcache/" style="font-size: 10px;">springcache</a> <a href="/tags/springmvc/" style="font-size: 13.64px;">springmvc</a> <a href="/tags/ssl/" style="font-size: 10px;">ssl</a> <a href="/tags/threads/" style="font-size: 10px;">threads</a> <a href="/tags/tomcat/" style="font-size: 10px;">tomcat</a> <a href="/tags/travel/" style="font-size: 10px;">travel</a> <a href="/tags/video/" style="font-size: 10px;">video</a> <a href="/tags/web/" style="font-size: 10.91px;">web</a> <a href="/tags/yii2/" style="font-size: 10.91px;">yii2</a> <a href="/tags/zookeeper/" style="font-size: 10px;">zookeeper</a> <a href="/tags/事务/" style="font-size: 10px;">事务</a> <a href="/tags/分布式/" style="font-size: 10.91px;">分布式</a> <a href="/tags/分布式事务/" style="font-size: 10px;">分布式事务</a> <a href="/tags/前端/" style="font-size: 10px;">前端</a> <a href="/tags/协调/" style="font-size: 10px;">协调</a> <a href="/tags/大数据/" style="font-size: 10px;">大数据</a> <a href="/tags/安全/" style="font-size: 10px;">安全</a> <a href="/tags/定时任务/" style="font-size: 13.64px;">定时任务</a> <a href="/tags/工具/" style="font-size: 10px;">工具</a> <a href="/tags/性能/" style="font-size: 10px;">性能</a> <a href="/tags/性能优化，O2O/" style="font-size: 10px;">性能优化，O2O</a> <a href="/tags/性能，架构/" style="font-size: 10px;">性能，架构</a> <a href="/tags/推荐/" style="font-size: 10px;">推荐</a> <a href="/tags/推送/" style="font-size: 10px;">推送</a> <a href="/tags/搜索/" style="font-size: 10px;">搜索</a> <a href="/tags/支付/" style="font-size: 10px;">支付</a> <a href="/tags/支付宝/" style="font-size: 10px;">支付宝</a> <a href="/tags/数据库/" style="font-size: 10px;">数据库</a> <a href="/tags/服务化/" style="font-size: 10.91px;">服务化</a> <a href="/tags/架构/" style="font-size: 19.09px;">架构</a> <a href="/tags/消息/" style="font-size: 10.91px;">消息</a> <a href="/tags/短信/" style="font-size: 10px;">短信</a> <a href="/tags/队列/" style="font-size: 10.91px;">队列</a>
+    </div>
+  </div>
+
+  
+    <iframe width="100%" height="550" class="share_self"  frameborder="0" scrolling="no" src="http://widget.weibo.com/weiboshow/index.php?language=&width=0&height=550&fansRow=2&ptype=1&speed=0&skin=1&isTitle=1&noborder=1&isWeibo=1&isFans=1&uid=1032111474&verifier=90bc37f2&dpc=1"></iframe>
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Recents</h3>
+    <div class="widget">
+      <ul>
+        
+          <li>
+            <a href="/2016/11/04/nginx日志分析/">线上ngnix日志分析</a>
+          </li>
+        
+          <li>
+            <a href="/2016/10/28/性能优化之O2O/">性能优化之O2O大法</a>
+          </li>
+        
+          <li>
+            <a href="/2016/10/24/git最佳实践/">git最佳实践</a>
+          </li>
+        
+          <li>
+            <a href="/2016/10/24/文件安全/">web文件安全</a>
+          </li>
+        
+          <li>
+            <a href="/2016/10/20/mysql编码规范/">MySql编码规范</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">关于我</h3>
+    <div class="widget">
+      	<ul class="entry">
+		<li><a href="mailto:niejinping2014@gmail.com" title="email">邮箱:niejinping2014@gmail.com</a></li>
+		<li><a href="https://github.com/njkfei" title="github">github:https://github.com/njkfei</a></li>
+	</ul>
+    </div>
+  </div>
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Archives</h3>
+    <div class="widget">
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/11/">十一月 2016</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/10/">十月 2016</a><span class="archive-list-count">6</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/08/">八月 2016</a><span class="archive-list-count">4</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/06/">六月 2016</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/05/">五月 2016</a><span class="archive-list-count">8</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/04/">四月 2016</a><span class="archive-list-count">3</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/03/">三月 2016</a><span class="archive-list-count">26</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/02/">二月 2016</a><span class="archive-list-count">4</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/01/">一月 2016</a><span class="archive-list-count">57</span></li></ul>
+    </div>
+  </div>
+
+  
+    <div class="widget-wrap">
+<h3 class="widget-title">友情链接</h3>
+<div class="widget">
+	<ul class="entry">
+		<li><a href="http://www.58.com/" title="神奇的网站">神奇的网站:58同城</a></li>
+		<li><a href="http://www.sanhao.com/" title="让教育回归家庭">让教育回归家庭:三好网</a></li>
+	</ul>
+</div>
+</div>
+
+  
+</aside>
+        
+      </div>
+      <footer id="footer">
+  
+<div class="outer">
+    <div id="footer-info" class="inner" style="text-align:center;">
+	  <table width="100%" border="0">
+        <tr>
+          <td style="text-align:left">
+            Copyright &copy; 2014-2016 niejinping &nbsp; &nbsp;
+            Powered by <a href="http://hexo.io/" target="_blank">Hexo</a><br>
+	        Theme <a href="https://github.com/njk/landscape-njk" target="_blank">爱折腾</a> by 游骑爬 &nbsp; &nbsp;
+	        Hosted on <a href="https://github.com/" target="_blank">GitHub</a>
+		  </td>
+		  <td style="text-align:right">
+		    <div style="font-family: FontAwesome;font-size: 20px;">
+		    <a href="http://weibo.com/1032111474" title="微博" target="_blank">&#61834;</a>&nbsp;
+			<a href="http://user.qzone.qq.com/297206021" title="QQ空间" target="_blank">&#61910;</a>&nbsp;
+			<a href="https://github.com/njkfei" title="GitHub" target="_blank">&#61595;</a>&nbsp;
+			</div><br>
+		    <a href="/sitemap.xml">网站地图</a>&nbsp; &nbsp;
+			<a href="/atom.xml">订阅本站</a>&nbsp; &nbsp;
+			<a href="mailto:297206021@qq.com" target="_blank">联系作者</a>&nbsp; &nbsp;
+			ICP 备案中
+		  </td>
+        </tr>
+      </table>
+    </div>
+</div>
+</footer>
+
+    </div>
+    <nav id="mobile-nav">
+  
+    <a href="/" class="mobile-nav-link">首页</a>
+  
+    <a href="/archives" class="mobile-nav-link">归档</a>
+  
+    <a href="/about" class="mobile-nav-link">关于我</a>
+  
+</nav>
+    
+
+<script type="text/javascript">(function(){document.write(unescape('%3Cdiv id="bdcs"%3E%3C/div%3E'));var bdcs = document.createElement('script');bdcs.type = 'text/javascript';bdcs.async = true;bdcs.src = 'http://znsv.baidu.com/customer_search/api/js?sid=4804069604996030452' + '&plate_url=' + encodeURIComponent(window.location.href) + '&t=' + Math.ceil(new Date()/3600000);var s = document.getElementsByTagName('script')[0];s.parentNode.insertBefore(bdcs, s);})();</script>
+
+<script src="//ajax.googleapis.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script>
+
+
+  <link rel="stylesheet" href="/fancybox/jquery.fancybox.css" type="text/css">
+  <script src="/fancybox/jquery.fancybox.pack.js" type="text/javascript"></script>
+
+
+<div id="totop" style="position:fixed;bottom:150px;right:50px;cursor: pointer;">
+<a title="返回顶部"><img src="/imgs/scrollup.png"/></a>
+</div>
+<script src="/js/totop.js"></script>
+
+<script src="/js/script.js" type="text/javascript"></script>
+
+  </div>
+</body>
+</html>

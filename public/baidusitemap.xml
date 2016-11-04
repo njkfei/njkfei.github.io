@@ -1,0 +1,2523 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+
+
+    
+  <url>
+    <loc>http://wiki.niejinkun.com/2016/11/04/nginx%E6%97%A5%E5%BF%97%E5%88%86%E6%9E%90/</loc>
+    <lastmod>2016-11-04T08:43:14.135Z</lastmod>
+    <data>
+        <display>
+        <title>线上ngnix日志分析</title>
+        <pubTime>2016-11-03T16:00:00.000Z</pubTime>
+        
+        <tag>nginx</tag>
+         
+         
+           
+             
+              <breadCrumb title="nginx" url="http://wiki.niejinkun.com/categories/nginx/"/>
+          
+        </display>
+    </data>
+    </url>
+
+    
+  <url>
+    <loc>http://wiki.niejinkun.com/2016/10/28/%E6%80%A7%E8%83%BD%E4%BC%98%E5%8C%96%E4%B9%8BO2O/</loc>
+    <lastmod>2016-10-28T06:56:24.025Z</lastmod>
+    <data>
+        <display>
+        <title>性能优化之O2O大法</title>
+        <pubTime>2016-10-27T16:00:00.000Z</pubTime>
+        
+        <tag>性能优化，O2O</tag>
+         
+         
+           
+             
+              <breadCrumb title="性能优化" url="http://wiki.niejinkun.com/categories/%E6%80%A7%E8%83%BD%E4%BC%98%E5%8C%96/"/>
+          
+        </display>
+    </data>
+    </url>
+
+    
+  <url>
+    <loc>http://wiki.niejinkun.com/2016/10/24/%E6%96%87%E4%BB%B6%E5%AE%89%E5%85%A8/</loc>
+    <lastmod>2016-10-24T09:25:48.573Z</lastmod>
+    <data>
+        <display>
+        <title>web文件安全</title>
+        <pubTime>2016-10-23T16:00:00.000Z</pubTime>
+        
+        <tag>安全</tag>
+         
+         
+           
+             
+              <breadCrumb title="安全" url="http://wiki.niejinkun.com/categories/%E5%AE%89%E5%85%A8/"/>
+          
+        </display>
+    </data>
+    </url>
+
+    
+  <url>
+    <loc>http://wiki.niejinkun.com/2016/10/24/git%E6%9C%80%E4%BD%B3%E5%AE%9E%E8%B7%B5/</loc>
+    <lastmod>2016-10-24T07:05:31.633Z</lastmod>
+    <data>
+        <display>
+        <title>git最佳实践</title>
+        <pubTime>2016-10-23T16:00:00.000Z</pubTime>
+        
+        <tag>git</tag>
+         
+         
+           
+             
+              <breadCrumb title="沟通协作" url="http://wiki.niejinkun.com/categories/%E6%B2%9F%E9%80%9A%E5%8D%8F%E4%BD%9C/"/>
+          
+        </display>
+    </data>
+    </url>
+
+    
+  <url>
+    <loc>http://wiki.niejinkun.com/2016/10/20/mysql%E7%BC%96%E7%A0%81%E8%A7%84%E8%8C%83/</loc>
+    <lastmod>2016-10-21T09:16:37.189Z</lastmod>
+    <data>
+        <display>
+        <title>MySql编码规范</title>
+        <pubTime>2016-10-19T16:00:00.000Z</pubTime>
+        
+        <tag>mysql</tag>
+         
+        <tag>性能</tag>
+         
+         
+           
+             
+              <breadCrumb title="mysql" url="http://wiki.niejinkun.com/categories/mysql/"/>
+          
+        </display>
+    </data>
+    </url>
+
+    
+  <url>
+    <loc>http://wiki.niejinkun.com/2016/10/18/%E6%80%A7%E8%83%BD%E4%BC%98%E5%8C%96%E6%80%BB%E7%BB%93/</loc>
+    <lastmod>2016-10-18T03:14:56.000Z</lastmod>
+    <data>
+        <display>
+        <title>性能优化总结</title>
+        <pubTime>2016-10-17T16:00:00.000Z</pubTime>
+        
+        <tag>java</tag>
+         
+        <tag>jvm</tag>
+         
+        <tag>性能，架构</tag>
+         
+         
+           
+             
+              <breadCrumb title="架构" url="http://wiki.niejinkun.com/categories/%E6%9E%B6%E6%9E%84/"/>
+          
+        </display>
+    </data>
+    </url>
+
+    
+  <url>
+    <loc>http://wiki.niejinkun.com/2016/08/26/Java%20API%E6%96%87%E6%A1%A3%E4%B8%80%E4%BD%93%E5%8C%96%E5%AE%9E%E8%B7%B5/</loc>
+    <lastmod>2016-08-26T09:03:03.874Z</lastmod>
+    <data>
+        <display>
+        <title>java API文档一体化集成实践</title>
+        <pubTime>2016-08-25T16:00:00.000Z</pubTime>
+        
+        <tag>java</tag>
+         
+        <tag>架构</tag>
+         
+         
+           
+             
+              <breadCrumb title="设计" url="http://wiki.niejinkun.com/categories/%E8%AE%BE%E8%AE%A1/"/>
+          
+        </display>
+    </data>
+    </url>
+
+    
+  <url>
+    <loc>http://wiki.niejinkun.com/2016/08/24/java%E5%BC%80%E5%90%AF%E8%BF%9C%E7%A8%8B%E7%9B%91%E6%8E%A7/</loc>
+    <lastmod>2016-08-24T03:48:00.601Z</lastmod>
+    <data>
+        <display>
+        <title>java开启远程监控</title>
+        <pubTime>2016-08-23T16:00:00.000Z</pubTime>
+        
+        <tag>架构</tag>
+         
+         
+           
+             
+              <breadCrumb title="设计" url="http://wiki.niejinkun.com/categories/%E8%AE%BE%E8%AE%A1/"/>
+          
+        </display>
+    </data>
+    </url>
+
+    
+  <url>
+    <loc>http://wiki.niejinkun.com/2016/08/24/java%E6%9E%B6%E6%9E%84%E6%9C%80%E4%BD%B3%E5%AE%9E%E8%B7%B5/</loc>
+    <lastmod>2016-08-24T03:34:48.524Z</lastmod>
+    <data>
+        <display>
+        <title>JAVA架构最佳实践</title>
+        <pubTime>2016-08-23T16:00:00.000Z</pubTime>
+        
+        <tag>架构</tag>
+         
+         
+           
+             
+              <breadCrumb title="设计" url="http://wiki.niejinkun.com/categories/%E8%AE%BE%E8%AE%A1/"/>
+          
+        </display>
+    </data>
+    </url>
+
+    
+  <url>
+    <loc>http://wiki.niejinkun.com/2016/08/24/rmi_vs_restfulapi/</loc>
+    <lastmod>2016-08-24T02:36:57.289Z</lastmod>
+    <data>
+        <display>
+        <title>RMI VS Restful API</title>
+        <pubTime>2016-08-23T16:00:00.000Z</pubTime>
+        
+        <tag>架构</tag>
+         
+         
+           
+             
+              <breadCrumb title="设计" url="http://wiki.niejinkun.com/categories/%E8%AE%BE%E8%AE%A1/"/>
+          
+        </display>
+    </data>
+    </url>
+
+    
+  <url>
+    <loc>http://wiki.niejinkun.com/2016/04/30/%E4%B8%89%E5%A5%BD%E7%BD%91java%E5%AE%9E%E8%B7%B5%E4%B9%8B%E8%B7%AF/</loc>
+    <lastmod>2016-06-27T07:31:49.903Z</lastmod>
+    <data>
+        <display>
+        <title>三好网java实践之路</title>
+        <pubTime>2016-04-29T16:00:00.000Z</pubTime>
+        
+        <tag>gradle</tag>
+         
+        <tag>java</tag>
+         
+        <tag>maven</tag>
+         
+         
+           
+             
+              <breadCrumb title="php" url="http://wiki.niejinkun.com/categories/php/"/>
+          
+        </display>
+    </data>
+    </url>
+
+    
+  <url>
+    <loc>http://wiki.niejinkun.com/2016/06/12/solr%20vs%20es/</loc>
+    <lastmod>2016-06-12T03:33:35.334Z</lastmod>
+    <data>
+        <display>
+        <title>solr vs es 性能比较</title>
+        <pubTime>2016-06-11T16:00:00.000Z</pubTime>
+        
+        <tag>es</tag>
+         
+        <tag>solr</tag>
+         
+         
+           
+             
+              <breadCrumb title="搜索" url="http://wiki.niejinkun.com/categories/%E6%90%9C%E7%B4%A2/"/>
+          
+        </display>
+    </data>
+    </url>
+
+    
+  <url>
+    <loc>http://wiki.niejinkun.com/2016/06/07/zuul%E7%AE%80%E4%BB%8B/</loc>
+    <lastmod>2016-06-07T03:23:12.558Z</lastmod>
+    <data>
+        <display>
+        <title>zuul</title>
+        <pubTime>2016-06-06T16:00:00.000Z</pubTime>
+        
+        <tag>api</tag>
+         
+         
+           
+             
+              <breadCrumb title="api" url="http://wiki.niejinkun.com/categories/api/"/>
+          
+        </display>
+    </data>
+    </url>
+
+    
+  <url>
+    <loc>http://wiki.niejinkun.com/2016/05/31/my-tools/</loc>
+    <lastmod>2016-05-31T09:46:14.000Z</lastmod>
+    <data>
+        <display>
+        <title>我的工具经验(不定期更新)</title>
+        <pubTime>2016-05-30T16:00:00.000Z</pubTime>
+        
+        <tag>架构</tag>
+         
+         
+           
+             
+              <breadCrumb title="架构" url="http://wiki.niejinkun.com/categories/%E6%9E%B6%E6%9E%84/"/>
+          
+        </display>
+    </data>
+    </url>
+
+    
+  <url>
+    <loc>http://wiki.niejinkun.com/2016/05/31/protobuf-hello/</loc>
+    <lastmod>2016-05-31T09:39:33.000Z</lastmod>
+    <data>
+        <display>
+        <title>protocol buf netty 集成</title>
+        <pubTime>2016-05-30T16:00:00.000Z</pubTime>
+        
+        <tag>java</tag>
+         
+        <tag>netty</tag>
+         
+        <tag>pb</tag>
+         
+         
+           
+             
+              <breadCrumb title="protocal" url="http://wiki.niejinkun.com/categories/protocal/"/>
+          
+        </display>
+    </data>
+    </url>
+
+    
+  <url>
+    <loc>http://wiki.niejinkun.com/2016/05/12/opencv/</loc>
+    <lastmod>2016-05-31T09:03:23.134Z</lastmod>
+    <data>
+        <display>
+        <title>opencv java����ʹ�ü���</title>
+        <pubTime>2016-05-11T16:00:00.000Z</pubTime>
+        
+        <tag>java</tag>
+         
+        <tag>opencv</tag>
+         
+         
+           
+             
+              <breadCrumb title="opencv" url="http://wiki.niejinkun.com/categories/opencv/"/>
+          
+        </display>
+    </data>
+    </url>
+
+    
+  <url>
+    <loc>http://wiki.niejinkun.com/2016/05/19/springboot%E9%9B%86%E6%88%90tomcat%20ssl/</loc>
+    <lastmod>2016-05-19T04:45:14.451Z</lastmod>
+    <data>
+        <display>
+        <title>springboot集成ssl tomcat</title>
+        <pubTime>2016-05-18T16:00:00.000Z</pubTime>
+        
+        <tag>https</tag>
+         
+        <tag>java</tag>
+         
+        <tag>springboot</tag>
+         
+        <tag>ssl</tag>
+         
+        <tag>tomcat</tag>
+         
+         
+           
+             
+              <breadCrumb title="java" url="http://wiki.niejinkun.com/categories/java/"/>
+          
+        </display>
+    </data>
+    </url>
+
+    
+  <url>
+    <loc>http://wiki.niejinkun.com/2016/05/05/%E5%9B%BE%E7%89%87%E6%9C%8D%E5%8A%A1%E5%BC%80%E5%8F%91/</loc>
+    <lastmod>2016-05-09T09:45:49.015Z</lastmod>
+    <data>
+        <display>
+        <title>图片服务</title>
+        <pubTime>2016-05-04T16:00:00.000Z</pubTime>
+        
+        <tag>ImageMagick</tag>
+         
+        <tag>image</tag>
+         
+        <tag>java</tag>
+         
+        <tag>liux</tag>
+         
+         
+           
+        </display>
+    </data>
+    </url>
+
+    
+  <url>
+    <loc>http://wiki.niejinkun.com/2016/05/06/spring-netty-protobuffer%E9%9B%86%E6%88%90/</loc>
+    <lastmod>2016-05-06T03:25:38.559Z</lastmod>
+    <data>
+        <display>
+        <title>spring netty protolbuf集成</title>
+        <pubTime>2016-05-05T16:00:00.000Z</pubTime>
+        
+        <tag>netty</tag>
+         
+        <tag>protolbuf</tag>
+         
+        <tag>spring</tag>
+         
+         
+           
+             
+              <breadCrumb title="java" url="http://wiki.niejinkun.com/categories/java/"/>
+          
+        </display>
+    </data>
+    </url>
+
+    
+  <url>
+    <loc>http://wiki.niejinkun.com/2016/05/06/mqtt%E6%90%AD%E5%BB%BAIm%E5%92%8C%E6%8E%A8%E9%80%81%E7%B3%BB%E7%BB%9F/</loc>
+    <lastmod>2016-05-06T03:17:35.131Z</lastmod>
+    <data>
+        <display>
+        <title>基于mqtt搭建im和推送系统</title>
+        <pubTime>2016-05-05T16:00:00.000Z</pubTime>
+        
+        <tag>im</tag>
+         
+        <tag>mqtt</tag>
+         
+        <tag>push</tag>
+         
+         
+           
+             
+              <breadCrumb title="linux" url="http://wiki.niejinkun.com/categories/linux/"/>
+          
+        </display>
+    </data>
+    </url>
+
+    
+    
+  <url>
+    <loc>http://wiki.niejinkun.com/2016/03/17/dubbo-springboot%E9%9B%86%E6%88%90/</loc>
+    <lastmod>2016-05-05T02:21:57.000Z</lastmod>
+    <data>
+        <display>
+        <title>dubbo-springboot集成</title>
+        <pubTime>2016-03-16T16:00:00.000Z</pubTime>
+        
+        <tag>dubbo</tag>
+         
+        <tag>spirng</tag>
+         
+        <tag>服务化</tag>
+         
+         
+           
+             
+              <breadCrumb title="java" url="http://wiki.niejinkun.com/categories/java/"/>
+          
+        </display>
+    </data>
+    </url>
+
+    
+  <url>
+    <loc>http://wiki.niejinkun.com/2016/03/14/dubbo_spring3%E5%AE%9E%E6%88%98/</loc>
+    <lastmod>2016-05-05T02:21:39.000Z</lastmod>
+    <data>
+        <display>
+        <title>dubbo-spring3实践</title>
+        <pubTime>2016-03-13T16:00:00.000Z</pubTime>
+        
+        <tag>dubbo</tag>
+         
+        <tag>java</tag>
+         
+        <tag>服务化</tag>
+         
+         
+           
+             
+              <breadCrumb title="java" url="http://wiki.niejinkun.com/categories/java/"/>
+          
+        </display>
+    </data>
+    </url>
+
+    
+  <url>
+    <loc>http://wiki.niejinkun.com/2016/05/03/yii2%20ubuntu%E9%83%A8%E7%BD%B2%E6%8C%87%E5%8D%97/</loc>
+    <lastmod>2016-05-03T07:21:51.838Z</lastmod>
+    <data>
+        <display>
+        <title>yii2 ubuntu部署指南</title>
+        <pubTime>2016-05-02T16:00:00.000Z</pubTime>
+        
+        <tag>php</tag>
+         
+        <tag>yii2</tag>
+         
+         
+           
+             
+              <breadCrumb title="php" url="http://wiki.niejinkun.com/categories/php/"/>
+          
+        </display>
+    </data>
+    </url>
+
+    
+  <url>
+    <loc>http://wiki.niejinkun.com/2016/04/30/yii2-redis-mysql%E9%9B%86%E6%88%90%E6%8C%87%E5%8D%97/</loc>
+    <lastmod>2016-04-30T02:31:30.660Z</lastmod>
+    <data>
+        <display>
+        <title>yii2 redis mysql集成指南</title>
+        <pubTime>2016-04-29T16:00:00.000Z</pubTime>
+        
+        <tag>mysql</tag>
+         
+        <tag>php</tag>
+         
+        <tag>redis</tag>
+         
+        <tag>yii2</tag>
+         
+         
+           
+             
+              <breadCrumb title="php" url="http://wiki.niejinkun.com/categories/php/"/>
+          
+        </display>
+    </data>
+    </url>
+
+    
+  <url>
+    <loc>http://wiki.niejinkun.com/2016/04/30/go_java_yii%E6%80%A7%E8%83%BD%E6%AF%94%E8%BE%83/</loc>
+    <lastmod>2016-04-30T01:26:56.307Z</lastmod>
+    <data>
+        <display>
+        <title>go java php性能比较</title>
+        <pubTime>2016-04-29T16:00:00.000Z</pubTime>
+        
+        <tag>go</tag>
+         
+        <tag>java</tag>
+         
+        <tag>php</tag>
+         
+         
+           
+             
+              <breadCrumb title="架构" url="http://wiki.niejinkun.com/categories/%E6%9E%B6%E6%9E%84/"/>
+          
+        </display>
+    </data>
+    </url>
+
+    
+  <url>
+    <loc>http://wiki.niejinkun.com/2016/01/11/java-utils/</loc>
+    <lastmod>2016-04-29T12:09:06.606Z</lastmod>
+    <data>
+        <display>
+        <title>java常用资源</title>
+        <pubTime>2016-01-10T16:00:00.000Z</pubTime>
+        
+        <tag>java</tag>
+         
+         
+           
+             
+              <breadCrumb title="java" url="http://wiki.niejinkun.com/categories/java/"/>
+          
+        </display>
+    </data>
+    </url>
+
+    
+  <url>
+    <loc>http://wiki.niejinkun.com/2016/01/07/linux-utils/</loc>
+    <lastmod>2016-04-01T06:10:46.000Z</lastmod>
+    <data>
+        <display>
+        <title>linux常用命令</title>
+        <pubTime>2016-01-06T16:00:00.000Z</pubTime>
+        
+        <tag>linux</tag>
+         
+        <tag>shell</tag>
+         
+         
+           
+             
+              <breadCrumb title="linux" url="http://wiki.niejinkun.com/categories/linux/"/>
+          
+        </display>
+    </data>
+    </url>
+
+    
+  <url>
+    <loc>http://wiki.niejinkun.com/2016/03/31/restful-api%E6%9C%80%E4%BD%B3%E5%AE%9E%E8%B7%B5/</loc>
+    <lastmod>2016-03-31T04:35:22.000Z</lastmod>
+    <data>
+        <display>
+        <title>restful api 最佳实践</title>
+        <pubTime>2016-03-30T16:00:00.000Z</pubTime>
+        
+        <tag>架构</tag>
+         
+         
+           
+             
+              <breadCrumb title="架构" url="http://wiki.niejinkun.com/categories/%E6%9E%B6%E6%9E%84/"/>
+          
+        </display>
+    </data>
+    </url>
+
+    
+  <url>
+    <loc>http://wiki.niejinkun.com/2016/03/30/spring-order%E6%B3%A8%E8%A7%A3/</loc>
+    <lastmod>2016-03-30T03:59:35.000Z</lastmod>
+    <data>
+        <display>
+        <title>spring @order注解的作用</title>
+        <pubTime>2016-03-29T16:00:00.000Z</pubTime>
+        
+        <tag>java</tag>
+         
+        <tag>spring</tag>
+         
+         
+           
+             
+              <breadCrumb title="java" url="http://wiki.niejinkun.com/categories/java/"/>
+          
+        </display>
+    </data>
+    </url>
+
+    
+  <url>
+    <loc>http://wiki.niejinkun.com/2016/03/27/openapi/</loc>
+    <lastmod>2016-03-27T14:53:55.000Z</lastmod>
+    <data>
+        <display>
+        <title>open api设计最佳实践</title>
+        <pubTime>2016-03-26T16:00:00.000Z</pubTime>
+        
+        <tag>架构</tag>
+         
+         
+           
+             
+              <breadCrumb title="架构" url="http://wiki.niejinkun.com/categories/%E6%9E%B6%E6%9E%84/"/>
+          
+        </display>
+    </data>
+    </url>
+
+    
+  <url>
+    <loc>http://wiki.niejinkun.com/2016/03/25/mysql%E5%BC%80%E5%90%AFbinlog/</loc>
+    <lastmod>2016-03-25T08:38:01.000Z</lastmod>
+    <data>
+        <display>
+        <title>mysql开启binlog服务</title>
+        <pubTime>2016-03-24T16:00:00.000Z</pubTime>
+        
+        <tag>java</tag>
+         
+        <tag>mysal</tag>
+         
+         
+           
+             
+              <breadCrumb title="java" url="http://wiki.niejinkun.com/categories/java/"/>
+          
+        </display>
+    </data>
+    </url>
+
+    
+  <url>
+    <loc>http://wiki.niejinkun.com/2016/03/23/springboot-ehcache%E9%9B%86%E6%88%90/</loc>
+    <lastmod>2016-03-23T15:00:38.000Z</lastmod>
+    <data>
+        <display>
+        <title>springboot mybatis cache集成--完全基于注解</title>
+        <pubTime>2016-03-22T16:00:00.000Z</pubTime>
+        
+        <tag>cache</tag>
+         
+        <tag>java</tag>
+         
+        <tag>mytabis</tag>
+         
+        <tag>springboot</tag>
+         
+         
+           
+             
+              <breadCrumb title="java" url="http://wiki.niejinkun.com/categories/java/"/>
+          
+        </display>
+    </data>
+    </url>
+
+    
+  <url>
+    <loc>http://wiki.niejinkun.com/2016/03/23/springboot-ehcache-mybatis%E9%9B%86%E6%88%90/</loc>
+    <lastmod>2016-03-23T14:56:21.000Z</lastmod>
+    <data>
+        <display>
+        <title>spring boot ehcache mybatis集成--完全基于注解</title>
+        <pubTime>2016-03-22T16:00:00.000Z</pubTime>
+        
+        <tag>ehcache</tag>
+         
+        <tag>java</tag>
+         
+        <tag>mybatis</tag>
+         
+        <tag>springboot</tag>
+         
+         
+           
+             
+              <breadCrumb title="java" url="http://wiki.niejinkun.com/categories/java/"/>
+          
+        </display>
+    </data>
+    </url>
+
+    
+  <url>
+    <loc>http://wiki.niejinkun.com/2016/03/23/springboot-cache%E9%9B%86%E6%88%90/</loc>
+    <lastmod>2016-03-23T14:55:38.000Z</lastmod>
+    <data>
+        <display>
+        <title>spring boot springcache集成--完全基于注解</title>
+        <pubTime>2016-03-22T16:00:00.000Z</pubTime>
+        
+        <tag>java</tag>
+         
+        <tag>springboot</tag>
+         
+        <tag>springcache</tag>
+         
+         
+           
+             
+              <breadCrumb title="java" url="http://wiki.niejinkun.com/categories/java/"/>
+          
+        </display>
+    </data>
+    </url>
+
+    
+  <url>
+    <loc>http://wiki.niejinkun.com/2016/03/23/springboot-gradle/</loc>
+    <lastmod>2016-03-23T14:44:14.000Z</lastmod>
+    <data>
+        <display>
+        <title>spring boot gradle集成--完全基于注解</title>
+        <pubTime>2016-03-22T16:00:00.000Z</pubTime>
+        
+        <tag>gradle</tag>
+         
+        <tag>java</tag>
+         
+        <tag>springboot</tag>
+         
+         
+           
+             
+              <breadCrumb title="java" url="http://wiki.niejinkun.com/categories/java/"/>
+          
+        </display>
+    </data>
+    </url>
+
+    
+  <url>
+    <loc>http://wiki.niejinkun.com/2016/03/23/springboot-redis-aop%E9%9B%86%E6%88%90/</loc>
+    <lastmod>2016-03-23T14:36:16.000Z</lastmod>
+    <data>
+        <display>
+        <title>spring boot redis aop集成--完全基于注解</title>
+        <pubTime>2016-03-22T16:00:00.000Z</pubTime>
+        
+        <tag>aop</tag>
+         
+        <tag>java</tag>
+         
+        <tag>redis</tag>
+         
+        <tag>springboot</tag>
+         
+         
+           
+             
+              <breadCrumb title="java" url="http://wiki.niejinkun.com/categories/java/"/>
+          
+        </display>
+    </data>
+    </url>
+
+    
+  <url>
+    <loc>http://wiki.niejinkun.com/2016/03/23/springboot-redis-cache%E9%9B%86%E6%88%90/</loc>
+    <lastmod>2016-03-23T14:29:12.000Z</lastmod>
+    <data>
+        <display>
+        <title>spring boot redis cache集成--完全基于注解</title>
+        <pubTime>2016-03-22T16:00:00.000Z</pubTime>
+        
+        <tag>cache</tag>
+         
+        <tag>java</tag>
+         
+        <tag>redis</tag>
+         
+        <tag>springboot</tag>
+         
+         
+           
+             
+              <breadCrumb title="java" url="http://wiki.niejinkun.com/categories/java/"/>
+          
+        </display>
+    </data>
+    </url>
+
+    
+  <url>
+    <loc>http://wiki.niejinkun.com/2016/03/23/springboot-memcached%E9%9B%86%E6%88%90/</loc>
+    <lastmod>2016-03-23T14:25:45.000Z</lastmod>
+    <data>
+        <display>
+        <title>spring boot memcached集成--完全基于注解</title>
+        <pubTime>2016-03-22T16:00:00.000Z</pubTime>
+        
+        <tag>java</tag>
+         
+        <tag>memcached</tag>
+         
+        <tag>springboot</tag>
+         
+         
+           
+             
+              <breadCrumb title="java" url="http://wiki.niejinkun.com/categories/java/"/>
+          
+        </display>
+    </data>
+    </url>
+
+    
+  <url>
+    <loc>http://wiki.niejinkun.com/2016/03/18/encache%E5%AE%9E%E6%88%98/</loc>
+    <lastmod>2016-03-18T07:06:30.000Z</lastmod>
+    <data>
+        <display>
+        <title>encache　spring实战</title>
+        <pubTime>2016-03-17T16:00:00.000Z</pubTime>
+        
+        <tag>linux</tag>
+         
+         
+           
+             
+              <breadCrumb title="linux" url="http://wiki.niejinkun.com/categories/linux/"/>
+          
+        </display>
+    </data>
+    </url>
+
+    
+  <url>
+    <loc>http://wiki.niejinkun.com/2016/03/17/abtest/</loc>
+    <lastmod>2016-03-17T10:55:48.000Z</lastmod>
+    <data>
+        <display>
+        <title>abtest</title>
+        <pubTime>2016-03-16T16:00:00.000Z</pubTime>
+        
+        <tag>linux</tag>
+         
+         
+           
+             
+              <breadCrumb title="linux" url="http://wiki.niejinkun.com/categories/linux/"/>
+          
+        </display>
+    </data>
+    </url>
+
+    
+  <url>
+    <loc>http://wiki.niejinkun.com/2016/03/17/micro-service-5/</loc>
+    <lastmod>2016-03-17T10:15:42.000Z</lastmod>
+    <data>
+        <display>
+        <title>微服务系列5-消息驱动数据管理</title>
+        <pubTime>2016-03-16T16:00:00.000Z</pubTime>
+        
+        <tag>架构</tag>
+         
+         
+           
+             
+              <breadCrumb title="服务" url="http://wiki.niejinkun.com/categories/%E6%9C%8D%E5%8A%A1/"/>
+          
+        </display>
+    </data>
+    </url>
+
+    
+  <url>
+    <loc>http://wiki.niejinkun.com/2016/03/17/spring-boot-mybatis%E9%9B%86%E6%88%90/</loc>
+    <lastmod>2016-03-17T03:17:52.000Z</lastmod>
+    <data>
+        <display>
+        <title>spring boot mybatis restmvc集成--完全基于注解</title>
+        <pubTime>2016-03-16T16:00:00.000Z</pubTime>
+        
+        <tag>java</tag>
+         
+        <tag>mybatis</tag>
+         
+        <tag>springboot</tag>
+         
+         
+           
+             
+              <breadCrumb title="java" url="http://wiki.niejinkun.com/categories/java/"/>
+          
+        </display>
+    </data>
+    </url>
+
+    
+  <url>
+    <loc>http://wiki.niejinkun.com/2016/03/12/micro-service-4/</loc>
+    <lastmod>2016-03-12T11:28:26.000Z</lastmod>
+    <data>
+        <display>
+        <title>微服务系列4-服务发现</title>
+        <pubTime>2016-03-11T16:00:00.000Z</pubTime>
+        
+        <tag>架构</tag>
+         
+         
+           
+             
+              <breadCrumb title="服务" url="http://wiki.niejinkun.com/categories/%E6%9C%8D%E5%8A%A1/"/>
+          
+        </display>
+    </data>
+    </url>
+
+    
+  <url>
+    <loc>http://wiki.niejinkun.com/2016/03/12/micro-service-3/</loc>
+    <lastmod>2016-03-12T10:11:06.000Z</lastmod>
+    <data>
+        <display>
+        <title>微服务系列3-进程间通信</title>
+        <pubTime>2016-03-11T16:00:00.000Z</pubTime>
+        
+        <tag>架构</tag>
+         
+         
+           
+             
+              <breadCrumb title="服务" url="http://wiki.niejinkun.com/categories/%E6%9C%8D%E5%8A%A1/"/>
+          
+        </display>
+    </data>
+    </url>
+
+    
+  <url>
+    <loc>http://wiki.niejinkun.com/2016/03/11/micro-service-2/</loc>
+    <lastmod>2016-03-11T12:03:37.000Z</lastmod>
+    <data>
+        <display>
+        <title>微服务系列2－API网关</title>
+        <pubTime>2016-03-10T16:00:00.000Z</pubTime>
+        
+        <tag>架构</tag>
+         
+         
+           
+             
+              <breadCrumb title="服务" url="http://wiki.niejinkun.com/categories/%E6%9C%8D%E5%8A%A1/"/>
+          
+        </display>
+    </data>
+    </url>
+
+    
+  <url>
+    <loc>http://wiki.niejinkun.com/2016/03/10/micro-service-1/</loc>
+    <lastmod>2016-03-11T10:49:08.000Z</lastmod>
+    <data>
+        <display>
+        <title>微服务系列1－微服务简介</title>
+        <pubTime>2016-03-09T16:00:00.000Z</pubTime>
+        
+        <tag>架构</tag>
+         
+         
+           
+             
+              <breadCrumb title="服务" url="http://wiki.niejinkun.com/categories/%E6%9C%8D%E5%8A%A1/"/>
+          
+        </display>
+    </data>
+    </url>
+
+    
+  <url>
+    <loc>http://wiki.niejinkun.com/2016/03/11/api-gateway/</loc>
+    <lastmod>2016-03-11T06:16:08.000Z</lastmod>
+    <data>
+        <display>
+        <title>服务化－API网关</title>
+        <pubTime>2016-03-10T16:00:00.000Z</pubTime>
+        
+        <tag>架构</tag>
+         
+         
+           
+             
+              <breadCrumb title="服务" url="http://wiki.niejinkun.com/categories/%E6%9C%8D%E5%8A%A1/"/>
+          
+        </display>
+    </data>
+    </url>
+
+    
+  <url>
+    <loc>http://wiki.niejinkun.com/2016/03/11/how-to-adopt-microservices/</loc>
+    <lastmod>2016-03-11T02:57:11.000Z</lastmod>
+    <data>
+        <display>
+        <title>如何采用微服务</title>
+        <pubTime>2016-03-10T16:00:00.000Z</pubTime>
+        
+        <tag>架构</tag>
+         
+         
+           
+             
+              <breadCrumb title="服务" url="http://wiki.niejinkun.com/categories/%E6%9C%8D%E5%8A%A1/"/>
+          
+        </display>
+    </data>
+    </url>
+
+    
+  <url>
+    <loc>http://wiki.niejinkun.com/2016/03/10/spring-boot-mybatis-restmvc/</loc>
+    <lastmod>2016-03-10T07:47:15.000Z</lastmod>
+    <data>
+        <display>
+        <title>spring boot mybatis restmvc集成--完全基于注解</title>
+        <pubTime>2016-03-09T16:00:00.000Z</pubTime>
+        
+        <tag>java</tag>
+         
+        <tag>mybatis</tag>
+         
+        <tag>springboot</tag>
+         
+         
+           
+             
+              <breadCrumb title="java" url="http://wiki.niejinkun.com/categories/java/"/>
+          
+        </display>
+    </data>
+    </url>
+
+    
+  <url>
+    <loc>http://wiki.niejinkun.com/2016/03/04/%E6%B0%B4%E6%9E%9C%E4%B8%8A%E5%B8%82%E6%97%B6%E9%97%B4/</loc>
+    <lastmod>2016-03-04T08:43:18.000Z</lastmod>
+    <data>
+        <display>
+        <title>各种水果上市时间</title>
+        <pubTime>2016-03-03T16:00:00.000Z</pubTime>
+        
+         
+           
+             
+              <breadCrumb title="生活" url="http://wiki.niejinkun.com/categories/%E7%94%9F%E6%B4%BB/"/>
+          
+        </display>
+    </data>
+    </url>
+
+    
+  <url>
+    <loc>http://wiki.niejinkun.com/2016/03/03/android-gradle/</loc>
+    <lastmod>2016-03-03T07:52:35.000Z</lastmod>
+    <data>
+        <display>
+        <title>android常用依赖项目</title>
+        <pubTime>2016-03-02T16:00:00.000Z</pubTime>
+        
+        <tag>android</tag>
+         
+         
+           
+             
+              <breadCrumb title="服务" url="http://wiki.niejinkun.com/categories/%E6%9C%8D%E5%8A%A1/"/>
+          
+        </display>
+    </data>
+    </url>
+
+    
+  <url>
+    <loc>http://wiki.niejinkun.com/2016/02/27/android-util/</loc>
+    <lastmod>2016-02-27T07:46:32.000Z</lastmod>
+    <data>
+        <display>
+        <title>android常用链接</title>
+        <pubTime>2016-02-26T16:00:00.000Z</pubTime>
+        
+        <tag>android</tag>
+         
+         
+           
+             
+              <breadCrumb title="服务" url="http://wiki.niejinkun.com/categories/%E6%9C%8D%E5%8A%A1/"/>
+          
+        </display>
+    </data>
+    </url>
+
+    
+  <url>
+    <loc>http://wiki.niejinkun.com/2016/01/26/italy-links/</loc>
+    <lastmod>2016-02-23T04:49:25.000Z</lastmod>
+    <data>
+        <display>
+        <title>意大利常用链接</title>
+        <pubTime>2016-01-25T16:00:00.000Z</pubTime>
+        
+        <tag>life</tag>
+         
+         
+           
+             
+              <breadCrumb title="生活" url="http://wiki.niejinkun.com/categories/%E7%94%9F%E6%B4%BB/"/>
+          
+        </display>
+    </data>
+    </url>
+
+    
+  <url>
+    <loc>http://wiki.niejinkun.com/2016/02/17/android-mist/</loc>
+    <lastmod>2016-02-19T08:31:00.000Z</lastmod>
+    <data>
+        <display>
+        <title>android杂项</title>
+        <pubTime>2016-02-16T16:00:00.000Z</pubTime>
+        
+        <tag>android</tag>
+         
+         
+           
+             
+              <breadCrumb title="服务" url="http://wiki.niejinkun.com/categories/%E6%9C%8D%E5%8A%A1/"/>
+          
+        </display>
+    </data>
+    </url>
+
+    
+  <url>
+    <loc>http://wiki.niejinkun.com/2016/02/16/hfs/</loc>
+    <lastmod>2016-02-16T02:14:48.000Z</lastmod>
+    <data>
+        <display>
+        <title>利用hfs共享文件</title>
+        <pubTime>2016-02-15T16:00:00.000Z</pubTime>
+        
+        <tag>工具</tag>
+         
+         
+           
+             
+              <breadCrumb title="工具" url="http://wiki.niejinkun.com/categories/%E5%B7%A5%E5%85%B7/"/>
+          
+        </display>
+    </data>
+    </url>
+
+    
+  <url>
+    <loc>http://wiki.niejinkun.com/2016/02/01/gitlab-install/</loc>
+    <lastmod>2016-02-01T07:32:52.000Z</lastmod>
+    <data>
+        <display>
+        <title>gitlab安装</title>
+        <pubTime>2016-01-31T16:00:00.000Z</pubTime>
+        
+        <tag>linux</tag>
+         
+         
+           
+             
+              <breadCrumb title="工具" url="http://wiki.niejinkun.com/categories/%E5%B7%A5%E5%85%B7/"/>
+          
+        </display>
+    </data>
+    </url>
+
+    
+  <url>
+    <loc>http://wiki.niejinkun.com/2016/01/31/img2015/</loc>
+    <lastmod>2016-02-01T02:31:58.000Z</lastmod>
+    <data>
+        <display>
+        <title>2015年照片精选</title>
+        <pubTime>2016-01-30T16:00:00.000Z</pubTime>
+        
+         
+           
+             
+              <breadCrumb title="生活" url="http://wiki.niejinkun.com/categories/%E7%94%9F%E6%B4%BB/"/>
+          
+        </display>
+    </data>
+    </url>
+
+    
+  <url>
+    <loc>http://wiki.niejinkun.com/2016/01/23/italy-travel-train/</loc>
+    <lastmod>2016-01-31T09:23:24.000Z</lastmod>
+    <data>
+        <display>
+        <title>意大利旅行计划－列车篇</title>
+        <pubTime>2016-01-22T16:00:00.000Z</pubTime>
+        
+        <tag>italy</tag>
+         
+        <tag>travel</tag>
+         
+         
+           
+             
+              <breadCrumb title="生活" url="http://wiki.niejinkun.com/categories/%E7%94%9F%E6%B4%BB/"/>
+          
+        </display>
+    </data>
+    </url>
+
+    
+  <url>
+    <loc>http://wiki.niejinkun.com/2016/01/17/%E5%B8%B8%E7%94%A8%E6%AD%A3%E5%88%99%E8%A1%A8%E8%BE%BE%E5%BC%8F/</loc>
+    <lastmod>2016-01-27T07:19:36.000Z</lastmod>
+    <data>
+        <display>
+        <title>elasticsearch创建索引</title>
+        <pubTime>2016-01-16T16:00:00.000Z</pubTime>
+        
+        <tag>elasticsearch</tag>
+         
+        <tag>indexer</tag>
+         
+         
+           
+             
+              <breadCrumb title="搜索" url="http://wiki.niejinkun.com/categories/%E6%90%9C%E7%B4%A2/"/>
+          
+        </display>
+    </data>
+    </url>
+
+    
+  <url>
+    <loc>http://wiki.niejinkun.com/2016/01/26/linux-split/</loc>
+    <lastmod>2016-01-26T08:27:01.000Z</lastmod>
+    <data>
+        <display>
+        <title>切分日志文件</title>
+        <pubTime>2016-01-25T16:00:00.000Z</pubTime>
+        
+        <tag>linux</tag>
+         
+         
+           
+             
+              <breadCrumb title="linux" url="http://wiki.niejinkun.com/categories/linux/"/>
+          
+        </display>
+    </data>
+    </url>
+
+    
+  <url>
+    <loc>http://wiki.niejinkun.com/2016/01/22/italy-travel-hotels/</loc>
+    <lastmod>2016-01-23T05:31:03.000Z</lastmod>
+    <data>
+        <display>
+        <title>意大利旅行计划－住宿篇</title>
+        <pubTime>2016-01-21T16:00:00.000Z</pubTime>
+        
+        <tag>italy</tag>
+         
+        <tag>rome</tag>
+         
+         
+           
+             
+              <breadCrumb title="生活" url="http://wiki.niejinkun.com/categories/%E7%94%9F%E6%B4%BB/"/>
+          
+        </display>
+    </data>
+    </url>
+
+    
+  <url>
+    <loc>http://wiki.niejinkun.com/2016/01/22/italy-travel-schedule/</loc>
+    <lastmod>2016-01-23T05:02:57.000Z</lastmod>
+    <data>
+        <display>
+        <title>意大利旅行计划－行程篇</title>
+        <pubTime>2016-01-21T16:00:00.000Z</pubTime>
+        
+        <tag>italy</tag>
+         
+        <tag>rome</tag>
+         
+         
+           
+             
+              <breadCrumb title="生活" url="http://wiki.niejinkun.com/categories/%E7%94%9F%E6%B4%BB/"/>
+          
+        </display>
+    </data>
+    </url>
+
+    
+  <url>
+    <loc>http://wiki.niejinkun.com/2016/01/08/links/</loc>
+    <lastmod>2016-01-23T04:48:11.000Z</lastmod>
+    <data>
+        <display>
+        <title>常用链接</title>
+        <pubTime>2016-01-07T16:00:00.000Z</pubTime>
+        
+         
+           
+             
+              <breadCrumb title="有用的资源" url="http://wiki.niejinkun.com/categories/%E6%9C%89%E7%94%A8%E7%9A%84%E8%B5%84%E6%BA%90/"/>
+          
+        </display>
+    </data>
+    </url>
+
+    
+  <url>
+    <loc>http://wiki.niejinkun.com/2016/01/08/mysql/</loc>
+    <lastmod>2016-01-23T03:57:32.000Z</lastmod>
+    <data>
+        <display>
+        <title>mysql常用命令</title>
+        <pubTime>2016-01-07T16:00:00.000Z</pubTime>
+        
+        <tag>mysql</tag>
+         
+        <tag>数据库</tag>
+         
+         
+           
+             
+              <breadCrumb title="数据库" url="http://wiki.niejinkun.com/categories/%E6%95%B0%E6%8D%AE%E5%BA%93/"/>
+          
+        </display>
+    </data>
+    </url>
+
+    
+  <url>
+    <loc>http://wiki.niejinkun.com/2016/01/22/%E5%BE%AE%E8%BD%AF%E7%89%9B%E6%B4%A5%E8%AE%A1%E5%88%92/</loc>
+    <lastmod>2016-01-22T07:59:00.000Z</lastmod>
+    <data>
+        <display>
+        <title>微软牛津计划简单</title>
+        <pubTime>2016-01-21T16:00:00.000Z</pubTime>
+        
+         
+           
+             
+              <breadCrumb title="有用的资源" url="http://wiki.niejinkun.com/categories/%E6%9C%89%E7%94%A8%E7%9A%84%E8%B5%84%E6%BA%90/"/>
+          
+        </display>
+    </data>
+    </url>
+
+    
+  <url>
+    <loc>http://wiki.niejinkun.com/2016/10/18/ffmpeg/</loc>
+    <lastmod>2016-01-21T09:59:19.000Z</lastmod>
+    <data>
+        <display>
+        <title>ffmpeg媒体编解码使用方法</title>
+        <pubTime>2016-10-18T13:31:29.435Z</pubTime>
+        
+        <tag>audio</tag>
+         
+        <tag>video</tag>
+         
+         
+           
+             
+              <breadCrumb title="编程开发" url="http://wiki.niejinkun.com/categories/%E7%BC%96%E7%A8%8B%E5%BC%80%E5%8F%91/"/>
+          
+        </display>
+    </data>
+    </url>
+
+    
+  <url>
+    <loc>http://wiki.niejinkun.com/2016/01/21/grep/</loc>
+    <lastmod>2016-01-21T09:46:07.000Z</lastmod>
+    <data>
+        <display>
+        <title>grep使用</title>
+        <pubTime>2016-01-20T16:00:00.000Z</pubTime>
+        
+        <tag>grep</tag>
+         
+        <tag>linux</tag>
+         
+         
+           
+             
+              <breadCrumb title="linux" url="http://wiki.niejinkun.com/categories/linux/"/>
+          
+        </display>
+    </data>
+    </url>
+
+    
+  <url>
+    <loc>http://wiki.niejinkun.com/2016/01/21/ionic-start/</loc>
+    <lastmod>2016-01-21T02:34:37.000Z</lastmod>
+    <data>
+        <display>
+        <title>ionic helloworld</title>
+        <pubTime>2016-01-20T16:00:00.000Z</pubTime>
+        
+        <tag>ionic</tag>
+         
+         
+           
+             
+              <breadCrumb title="前端" url="http://wiki.niejinkun.com/categories/%E5%89%8D%E7%AB%AF/"/>
+          
+        </display>
+    </data>
+    </url>
+
+    
+  <url>
+    <loc>http://wiki.niejinkun.com/2016/01/20/AngularJs/</loc>
+    <lastmod>2016-01-20T03:27:40.000Z</lastmod>
+    <data>
+        <display>
+        <title>AngularJS简介</title>
+        <pubTime>2016-01-19T16:00:00.000Z</pubTime>
+        
+        <tag>AngularJS</tag>
+         
+         
+           
+             
+              <breadCrumb title="前端" url="http://wiki.niejinkun.com/categories/%E5%89%8D%E7%AB%AF/"/>
+          
+        </display>
+    </data>
+    </url>
+
+    
+  <url>
+    <loc>http://wiki.niejinkun.com/2016/01/08/crontab/</loc>
+    <lastmod>2016-01-19T03:25:10.000Z</lastmod>
+    <data>
+        <display>
+        <title>crontab使用方法</title>
+        <pubTime>2016-01-07T16:00:00.000Z</pubTime>
+        
+        <tag>crontab</tag>
+         
+        <tag>job</tag>
+         
+        <tag>linux</tag>
+         
+        <tag>定时任务</tag>
+         
+         
+           
+             
+              <breadCrumb title="linux" url="http://wiki.niejinkun.com/categories/linux/"/>
+          
+        </display>
+    </data>
+    </url>
+
+    
+  <url>
+    <loc>http://wiki.niejinkun.com/2016/01/15/github/</loc>
+    <lastmod>2016-01-19T03:25:05.000Z</lastmod>
+    <data>
+        <display>
+        <title>github 使用入门</title>
+        <pubTime>2016-01-14T16:00:00.000Z</pubTime>
+        
+        <tag>git</tag>
+         
+        <tag>github</tag>
+         
+         
+           
+             
+              <breadCrumb title="工具" url="http://wiki.niejinkun.com/categories/%E5%B7%A5%E5%85%B7/"/>
+          
+        </display>
+    </data>
+    </url>
+
+    
+  <url>
+    <loc>http://wiki.niejinkun.com/2016/01/13/java-json-map/</loc>
+    <lastmod>2016-01-19T03:24:25.000Z</lastmod>
+    <data>
+        <display>
+        <title>json与map互转demo</title>
+        <pubTime>2016-01-12T16:00:00.000Z</pubTime>
+        
+        <tag>java</tag>
+         
+        <tag>json</tag>
+         
+        <tag>map</tag>
+         
+         
+           
+             
+              <breadCrumb title="java" url="http://wiki.niejinkun.com/categories/java/"/>
+          
+        </display>
+    </data>
+    </url>
+
+    
+  <url>
+    <loc>http://wiki.niejinkun.com/2016/01/17/jdbctemplate%E5%88%86%E5%B8%83%E5%BC%8F%E4%BA%8B%E5%8A%A1/</loc>
+    <lastmod>2016-01-19T03:24:03.000Z</lastmod>
+    <data>
+        <display>
+        <title>jdbctemplate分布式事务</title>
+        <pubTime>2016-01-16T16:00:00.000Z</pubTime>
+        
+        <tag>java</tag>
+         
+        <tag>jdbctemplate</tag>
+         
+        <tag>spring</tag>
+         
+        <tag>分布式事务</tag>
+         
+         
+           
+             
+              <breadCrumb title="java" url="http://wiki.niejinkun.com/categories/java/"/>
+          
+        </display>
+    </data>
+    </url>
+
+    
+  <url>
+    <loc>http://wiki.niejinkun.com/2016/01/08/mq/</loc>
+    <lastmod>2016-01-19T03:23:57.000Z</lastmod>
+    <data>
+        <display>
+        <title>message queue消息队列服务</title>
+        <pubTime>2016-01-07T16:00:00.000Z</pubTime>
+        
+        <tag>java</tag>
+         
+        <tag>mq</tag>
+         
+        <tag>消息</tag>
+         
+        <tag>队列</tag>
+         
+         
+           
+             
+              <breadCrumb title="服务" url="http://wiki.niejinkun.com/categories/%E6%9C%8D%E5%8A%A1/"/>
+          
+        </display>
+    </data>
+    </url>
+
+    
+  <url>
+    <loc>http://wiki.niejinkun.com/2016/01/17/mybatis/</loc>
+    <lastmod>2016-01-19T03:23:40.000Z</lastmod>
+    <data>
+        <display>
+        <title>mybatis分布式事务</title>
+        <pubTime>2016-01-16T16:00:00.000Z</pubTime>
+        
+        <tag>java</tag>
+         
+        <tag>jta</tag>
+         
+        <tag>mybatis</tag>
+         
+         
+           
+             
+              <breadCrumb title="java" url="http://wiki.niejinkun.com/categories/java/"/>
+          
+        </display>
+    </data>
+    </url>
+
+    
+  <url>
+    <loc>http://wiki.niejinkun.com/2016/01/08/mybatis%E5%85%B3%E7%B3%BB%E6%98%A0%E5%B0%84/</loc>
+    <lastmod>2016-01-19T03:23:36.000Z</lastmod>
+    <data>
+        <display>
+        <title>mybatis入门指南</title>
+        <pubTime>2016-01-07T16:00:00.000Z</pubTime>
+        
+        <tag>java</tag>
+         
+        <tag>mybatis</tag>
+         
+         
+           
+             
+              <breadCrumb title="java" url="http://wiki.niejinkun.com/categories/java/"/>
+          
+        </display>
+    </data>
+    </url>
+
+    
+  <url>
+    <loc>http://wiki.niejinkun.com/2016/01/17/mybatis%E5%88%86%E5%B8%83%E5%BC%8F%E4%BA%8B%E5%8A%A1/</loc>
+    <lastmod>2016-01-19T03:23:32.000Z</lastmod>
+    <data>
+        <display>
+        <title>mybatis分布式事务管理</title>
+        <pubTime>2016-01-16T16:00:00.000Z</pubTime>
+        
+        <tag>java</tag>
+         
+        <tag>mybatis</tag>
+         
+        <tag>事务</tag>
+         
+        <tag>分布式</tag>
+         
+         
+           
+             
+              <breadCrumb title="java" url="http://wiki.niejinkun.com/categories/java/"/>
+          
+        </display>
+    </data>
+    </url>
+
+    
+  <url>
+    <loc>http://wiki.niejinkun.com/2016/01/08/servlet/</loc>
+    <lastmod>2016-01-19T03:23:27.000Z</lastmod>
+    <data>
+        <display>
+        <title>servlet实践</title>
+        <pubTime>2016-01-07T16:00:00.000Z</pubTime>
+        
+        <tag>java</tag>
+         
+        <tag>mvc</tag>
+         
+        <tag>servlet</tag>
+         
+         
+           
+             
+              <breadCrumb title="java" url="http://wiki.niejinkun.com/categories/java/"/>
+          
+        </display>
+    </data>
+    </url>
+
+    
+  <url>
+    <loc>http://wiki.niejinkun.com/2016/01/07/spring/</loc>
+    <lastmod>2016-01-19T03:23:17.000Z</lastmod>
+    <data>
+        <display>
+        <title>spring入门指南</title>
+        <pubTime>2016-01-06T16:00:00.000Z</pubTime>
+        
+        <tag>java</tag>
+         
+        <tag>spring</tag>
+         
+         
+           
+             
+              <breadCrumb title="java" url="http://wiki.niejinkun.com/categories/java/"/>
+          
+        </display>
+    </data>
+    </url>
+
+    
+  <url>
+    <loc>http://wiki.niejinkun.com/2016/01/07/spring-session/</loc>
+    <lastmod>2016-01-19T03:23:00.000Z</lastmod>
+    <data>
+        <display>
+        <title>springsession</title>
+        <pubTime>2016-01-06T16:00:00.000Z</pubTime>
+        
+        <tag>java</tag>
+         
+        <tag>session</tag>
+         
+        <tag>spring</tag>
+         
+         
+           
+             
+              <breadCrumb title="java" url="http://wiki.niejinkun.com/categories/java/"/>
+          
+        </display>
+    </data>
+    </url>
+
+    
+  <url>
+    <loc>http://wiki.niejinkun.com/2016/01/18/springmvc-fileupload-servlet/</loc>
+    <lastmod>2016-01-19T03:22:56.000Z</lastmod>
+    <data>
+        <display>
+        <title>springmvc file upload 基于servlet文件上传</title>
+        <pubTime>2016-01-17T16:00:00.000Z</pubTime>
+        
+        <tag>fileuploads</tag>
+         
+        <tag>java</tag>
+         
+        <tag>servlet</tag>
+         
+        <tag>springmvc</tag>
+         
+         
+           
+             
+              <breadCrumb title="java" url="http://wiki.niejinkun.com/categories/java/"/>
+          
+        </display>
+    </data>
+    </url>
+
+    
+  <url>
+    <loc>http://wiki.niejinkun.com/2016/01/07/spring-security/</loc>
+    <lastmod>2016-01-19T03:22:49.000Z</lastmod>
+    <data>
+        <display>
+        <title>springsecurity学习</title>
+        <pubTime>2016-01-06T16:00:00.000Z</pubTime>
+        
+        <tag>java</tag>
+         
+        <tag>spring security</tag>
+         
+         
+           
+             
+              <breadCrumb title="java" url="http://wiki.niejinkun.com/categories/java/"/>
+          
+        </display>
+    </data>
+    </url>
+
+    
+  <url>
+    <loc>http://wiki.niejinkun.com/2016/01/18/spring-schedule/</loc>
+    <lastmod>2016-01-19T03:22:19.000Z</lastmod>
+    <data>
+        <display>
+        <title>spring schedule 任务调度框架</title>
+        <pubTime>2016-01-17T16:00:00.000Z</pubTime>
+        
+        <tag>java</tag>
+         
+        <tag>quartz</tag>
+         
+        <tag>schedule</tag>
+         
+        <tag>springmvc</tag>
+         
+         
+           
+             
+              <breadCrumb title="java" url="http://wiki.niejinkun.com/categories/java/"/>
+          
+        </display>
+    </data>
+    </url>
+
+    
+  <url>
+    <loc>http://wiki.niejinkun.com/2016/01/13/spring-mytabis-security/</loc>
+    <lastmod>2016-01-19T03:22:15.000Z</lastmod>
+    <data>
+        <display>
+        <title>spring4 mybatis mvc security集成</title>
+        <pubTime>2016-01-12T16:00:00.000Z</pubTime>
+        
+        <tag>java</tag>
+         
+        <tag>mvc</tag>
+         
+        <tag>mybatis</tag>
+         
+        <tag>security</tag>
+         
+        <tag>spring</tag>
+         
+        <tag>web</tag>
+         
+         
+           
+             
+              <breadCrumb title="java" url="http://wiki.niejinkun.com/categories/java/"/>
+          
+        </display>
+    </data>
+    </url>
+
+    
+  <url>
+    <loc>http://wiki.niejinkun.com/2016/01/19/springmvc-filedownload/</loc>
+    <lastmod>2016-01-19T03:22:07.000Z</lastmod>
+    <data>
+        <display>
+        <title>springmvc 文件下载</title>
+        <pubTime>2016-01-18T16:00:00.000Z</pubTime>
+        
+        <tag>download</tag>
+         
+        <tag>java</tag>
+         
+        <tag>springmvc</tag>
+         
+         
+           
+             
+              <breadCrumb title="java" url="http://wiki.niejinkun.com/categories/java/"/>
+          
+        </display>
+    </data>
+    </url>
+
+    
+  <url>
+    <loc>http://wiki.niejinkun.com/2016/01/08/springmvc/</loc>
+    <lastmod>2016-01-19T03:22:02.000Z</lastmod>
+    <data>
+        <display>
+        <title>springmvc入门指南</title>
+        <pubTime>2016-01-07T16:00:00.000Z</pubTime>
+        
+        <tag>java</tag>
+         
+        <tag>springmvc</tag>
+         
+         
+           
+             
+              <breadCrumb title="java" url="http://wiki.niejinkun.com/categories/java/"/>
+          
+        </display>
+    </data>
+    </url>
+
+    
+  <url>
+    <loc>http://wiki.niejinkun.com/2016/01/08/spring-jetty/</loc>
+    <lastmod>2016-01-19T03:21:37.000Z</lastmod>
+    <data>
+        <display>
+        <title>spring jetty集成</title>
+        <pubTime>2016-01-07T16:00:00.000Z</pubTime>
+        
+        <tag>java</tag>
+         
+        <tag>jetty</tag>
+         
+        <tag>spring</tag>
+         
+        <tag>web</tag>
+         
+         
+           
+             
+              <breadCrumb title="java" url="http://wiki.niejinkun.com/categories/java/"/>
+          
+        </display>
+    </data>
+    </url>
+
+    
+  <url>
+    <loc>http://wiki.niejinkun.com/2016/01/18/spring-async/</loc>
+    <lastmod>2016-01-19T03:15:58.000Z</lastmod>
+    <data>
+        <display>
+        <title>spring async异步框架</title>
+        <pubTime>2016-01-17T16:00:00.000Z</pubTime>
+        
+        <tag>async</tag>
+         
+        <tag>java</tag>
+         
+        <tag>springmvc</tag>
+         
+         
+           
+             
+              <breadCrumb title="java" url="http://wiki.niejinkun.com/categories/java/"/>
+          
+        </display>
+    </data>
+    </url>
+
+    
+  <url>
+    <loc>http://wiki.niejinkun.com/2016/01/18/springmvc-fileupload/</loc>
+    <lastmod>2016-01-18T10:50:40.000Z</lastmod>
+    <data>
+        <display>
+        <title>springmvc file upload 文件上传</title>
+        <pubTime>2016-01-17T16:00:00.000Z</pubTime>
+        
+        <tag>commons-fileupload</tag>
+         
+        <tag>fileuploads</tag>
+         
+        <tag>java</tag>
+         
+        <tag>springmvc</tag>
+         
+         
+           
+             
+              <breadCrumb title="java" url="http://wiki.niejinkun.com/categories/java/"/>
+          
+        </display>
+    </data>
+    </url>
+
+    
+  <url>
+    <loc>http://wiki.niejinkun.com/2016/01/17/elasticsearch-demo/</loc>
+    <lastmod>2016-01-17T02:44:07.000Z</lastmod>
+    <data>
+        <display>
+        <title>elasticsearch创建索引</title>
+        <pubTime>2016-01-16T16:00:00.000Z</pubTime>
+        
+        <tag>elasticsearch</tag>
+         
+        <tag>indexer</tag>
+         
+         
+           
+             
+              <breadCrumb title="搜索" url="http://wiki.niejinkun.com/categories/%E6%90%9C%E7%B4%A2/"/>
+          
+        </display>
+    </data>
+    </url>
+
+    
+  <url>
+    <loc>http://wiki.niejinkun.com/2016/01/17/websocket/</loc>
+    <lastmod>2016-01-17T02:44:07.000Z</lastmod>
+    <data>
+        <display>
+        <title>elasticsearch创建索引</title>
+        <pubTime>2016-01-16T16:00:00.000Z</pubTime>
+        
+        <tag>elasticsearch</tag>
+         
+        <tag>indexer</tag>
+         
+         
+           
+             
+              <breadCrumb title="搜索" url="http://wiki.niejinkun.com/categories/%E6%90%9C%E7%B4%A2/"/>
+          
+        </display>
+    </data>
+    </url>
+
+    
+  <url>
+    <loc>http://wiki.niejinkun.com/2016/01/17/netty/</loc>
+    <lastmod>2016-01-17T02:44:07.000Z</lastmod>
+    <data>
+        <display>
+        <title>elasticsearch创建索引</title>
+        <pubTime>2016-01-16T16:00:00.000Z</pubTime>
+        
+        <tag>elasticsearch</tag>
+         
+        <tag>indexer</tag>
+         
+         
+           
+             
+              <breadCrumb title="搜索" url="http://wiki.niejinkun.com/categories/%E6%90%9C%E7%B4%A2/"/>
+          
+        </display>
+    </data>
+    </url>
+
+    
+  <url>
+    <loc>http://wiki.niejinkun.com/2016/01/07/highcharts/</loc>
+    <lastmod>2016-01-17T02:37:42.000Z</lastmod>
+    <data>
+        <display>
+        <title>highcharts</title>
+        <pubTime>2016-01-06T16:00:00.000Z</pubTime>
+        
+        <tag>java</tag>
+         
+        <tag>mybatis</tag>
+         
+         
+           
+             
+              <breadCrumb title="web前端" url="http://wiki.niejinkun.com/categories/web%E5%89%8D%E7%AB%AF/"/>
+          
+        </display>
+    </data>
+    </url>
+
+    
+  <url>
+    <loc>http://wiki.niejinkun.com/2016/01/08/sed/</loc>
+    <lastmod>2016-01-17T02:34:44.000Z</lastmod>
+    <data>
+        <display>
+        <title>crontab使用方法</title>
+        <pubTime>2016-01-07T16:00:00.000Z</pubTime>
+        
+        <tag>crontab</tag>
+         
+        <tag>job</tag>
+         
+        <tag>linux</tag>
+         
+        <tag>定时任务</tag>
+         
+         
+           
+             
+              <breadCrumb title="linux" url="http://wiki.niejinkun.com/categories/linux/"/>
+          
+        </display>
+    </data>
+    </url>
+
+    
+  <url>
+    <loc>http://wiki.niejinkun.com/2016/01/08/mina/</loc>
+    <lastmod>2016-01-17T02:34:44.000Z</lastmod>
+    <data>
+        <display>
+        <title>crontab使用方法</title>
+        <pubTime>2016-01-07T16:00:00.000Z</pubTime>
+        
+        <tag>crontab</tag>
+         
+        <tag>job</tag>
+         
+        <tag>linux</tag>
+         
+        <tag>定时任务</tag>
+         
+         
+           
+             
+              <breadCrumb title="linux" url="http://wiki.niejinkun.com/categories/linux/"/>
+          
+        </display>
+    </data>
+    </url>
+
+    
+  <url>
+    <loc>http://wiki.niejinkun.com/2016/01/08/im/</loc>
+    <lastmod>2016-01-17T02:34:44.000Z</lastmod>
+    <data>
+        <display>
+        <title>crontab使用方法</title>
+        <pubTime>2016-01-07T16:00:00.000Z</pubTime>
+        
+        <tag>crontab</tag>
+         
+        <tag>job</tag>
+         
+        <tag>linux</tag>
+         
+        <tag>定时任务</tag>
+         
+         
+           
+             
+              <breadCrumb title="linux" url="http://wiki.niejinkun.com/categories/linux/"/>
+          
+        </display>
+    </data>
+    </url>
+
+    
+  <url>
+    <loc>http://wiki.niejinkun.com/2016/01/08/awk/</loc>
+    <lastmod>2016-01-17T02:34:44.000Z</lastmod>
+    <data>
+        <display>
+        <title>crontab使用方法</title>
+        <pubTime>2016-01-07T16:00:00.000Z</pubTime>
+        
+        <tag>crontab</tag>
+         
+        <tag>job</tag>
+         
+        <tag>linux</tag>
+         
+        <tag>定时任务</tag>
+         
+         
+           
+             
+              <breadCrumb title="linux" url="http://wiki.niejinkun.com/categories/linux/"/>
+          
+        </display>
+    </data>
+    </url>
+
+    
+  <url>
+    <loc>http://wiki.niejinkun.com/2016/01/08/%E7%83%AD%E8%AF%8D%E6%90%9C%E7%B4%A2%E6%9C%8D%E5%8A%A1/</loc>
+    <lastmod>2016-01-17T02:34:44.000Z</lastmod>
+    <data>
+        <display>
+        <title>crontab使用方法</title>
+        <pubTime>2016-01-07T16:00:00.000Z</pubTime>
+        
+        <tag>crontab</tag>
+         
+        <tag>job</tag>
+         
+        <tag>linux</tag>
+         
+        <tag>定时任务</tag>
+         
+         
+           
+             
+              <breadCrumb title="linux" url="http://wiki.niejinkun.com/categories/linux/"/>
+          
+        </display>
+    </data>
+    </url>
+
+    
+  <url>
+    <loc>http://wiki.niejinkun.com/2016/01/13/pay/</loc>
+    <lastmod>2016-01-13T15:42:06.000Z</lastmod>
+    <data>
+        <display>
+        <title>支付系统服务</title>
+        <pubTime>2016-01-12T16:00:00.000Z</pubTime>
+        
+        <tag>java</tag>
+         
+        <tag>mq</tag>
+         
+        <tag>消息</tag>
+         
+        <tag>队列</tag>
+         
+         
+           
+             
+              <breadCrumb title="服务" url="http://wiki.niejinkun.com/categories/%E6%9C%8D%E5%8A%A1/"/>
+          
+        </display>
+    </data>
+    </url>
+
+    
+  <url>
+    <loc>http://wiki.niejinkun.com/2016/01/12/jquery/</loc>
+    <lastmod>2016-01-12T15:27:47.000Z</lastmod>
+    <data>
+        <display>
+        <title>jquery</title>
+        <pubTime>2016-01-11T16:00:00.000Z</pubTime>
+        
+        <tag>jquery</tag>
+         
+        <tag>前端</tag>
+         
+         
+           
+             
+              <breadCrumb title="前端" url="http://wiki.niejinkun.com/categories/%E5%89%8D%E7%AB%AF/"/>
+          
+        </display>
+    </data>
+    </url>
+
+    
+  <url>
+    <loc>http://wiki.niejinkun.com/2016/01/12/java-threads/</loc>
+    <lastmod>2016-01-12T15:07:44.000Z</lastmod>
+    <data>
+        <display>
+        <title>java并发编程</title>
+        <pubTime>2016-01-11T16:00:00.000Z</pubTime>
+        
+        <tag>concunrrent</tag>
+         
+        <tag>java</tag>
+         
+        <tag>threads</tag>
+         
+         
+           
+             
+              <breadCrumb title="java" url="http://wiki.niejinkun.com/categories/java/"/>
+          
+        </display>
+    </data>
+    </url>
+
+    
+  <url>
+    <loc>http://wiki.niejinkun.com/2016/01/08/search/</loc>
+    <lastmod>2016-01-12T06:40:09.000Z</lastmod>
+    <data>
+        <display>
+        <title>搜索服务</title>
+        <pubTime>2016-01-07T16:00:00.000Z</pubTime>
+        
+        <tag>java</tag>
+         
+        <tag>search</tag>
+         
+        <tag>搜索</tag>
+         
+         
+           
+             
+              <breadCrumb title="服务" url="http://wiki.niejinkun.com/categories/%E6%9C%8D%E5%8A%A1/"/>
+          
+        </display>
+    </data>
+    </url>
+
+    
+  <url>
+    <loc>http://wiki.niejinkun.com/2016/01/08/alipay/</loc>
+    <lastmod>2016-01-09T09:18:30.000Z</lastmod>
+    <data>
+        <display>
+        <title>支付宝开发入门</title>
+        <pubTime>2016-01-07T16:00:00.000Z</pubTime>
+        
+        <tag>java</tag>
+         
+        <tag>支付</tag>
+         
+        <tag>支付宝</tag>
+         
+         
+           
+             
+              <breadCrumb title="服务" url="http://wiki.niejinkun.com/categories/%E6%9C%8D%E5%8A%A1/"/>
+          
+        </display>
+    </data>
+    </url>
+
+    
+  <url>
+    <loc>http://wiki.niejinkun.com/2016/01/08/zookeeper/</loc>
+    <lastmod>2016-01-08T09:59:48.000Z</lastmod>
+    <data>
+        <display>
+        <title>zookeeper入门实践</title>
+        <pubTime>2016-01-07T16:00:00.000Z</pubTime>
+        
+        <tag>zookeeper</tag>
+         
+        <tag>分布式</tag>
+         
+        <tag>协调</tag>
+         
+        <tag>大数据</tag>
+         
+         
+           
+             
+              <breadCrumb title="大数据" url="http://wiki.niejinkun.com/categories/%E5%A4%A7%E6%95%B0%E6%8D%AE/"/>
+          
+        </display>
+    </data>
+    </url>
+
+    
+  <url>
+    <loc>http://wiki.niejinkun.com/2016/01/08/quartz/</loc>
+    <lastmod>2016-01-08T09:52:34.000Z</lastmod>
+    <data>
+        <display>
+        <title>QUARTZ定时任务</title>
+        <pubTime>2016-01-07T16:00:00.000Z</pubTime>
+        
+        <tag>java</tag>
+         
+        <tag>job</tag>
+         
+        <tag>quartz</tag>
+         
+         
+           
+             
+              <breadCrumb title="服务" url="http://wiki.niejinkun.com/categories/%E6%9C%8D%E5%8A%A1/"/>
+          
+        </display>
+    </data>
+    </url>
+
+    
+  <url>
+    <loc>http://wiki.niejinkun.com/2016/01/08/recommend/</loc>
+    <lastmod>2016-01-08T09:40:08.000Z</lastmod>
+    <data>
+        <display>
+        <title>推荐服务</title>
+        <pubTime>2016-01-07T16:00:00.000Z</pubTime>
+        
+        <tag>java</tag>
+         
+        <tag>推荐</tag>
+         
+         
+           
+             
+              <breadCrumb title="服务" url="http://wiki.niejinkun.com/categories/%E6%9C%8D%E5%8A%A1/"/>
+          
+        </display>
+    </data>
+    </url>
+
+    
+  <url>
+    <loc>http://wiki.niejinkun.com/2016/01/08/push/</loc>
+    <lastmod>2016-01-08T09:29:43.000Z</lastmod>
+    <data>
+        <display>
+        <title>push推送服务</title>
+        <pubTime>2016-01-07T16:00:00.000Z</pubTime>
+        
+        <tag>java</tag>
+         
+        <tag>push</tag>
+         
+        <tag>推送</tag>
+         
+         
+           
+             
+              <breadCrumb title="服务" url="http://wiki.niejinkun.com/categories/%E6%9C%8D%E5%8A%A1/"/>
+          
+        </display>
+    </data>
+    </url>
+
+    
+  <url>
+    <loc>http://wiki.niejinkun.com/2016/01/08/sms/</loc>
+    <lastmod>2016-01-08T06:35:13.000Z</lastmod>
+    <data>
+        <display>
+        <title>sms短信服务</title>
+        <pubTime>2016-01-07T16:00:00.000Z</pubTime>
+        
+        <tag>java</tag>
+         
+        <tag>sms</tag>
+         
+        <tag>短信</tag>
+         
+         
+           
+             
+              <breadCrumb title="服务" url="http://wiki.niejinkun.com/categories/%E6%9C%8D%E5%8A%A1/"/>
+          
+        </display>
+    </data>
+    </url>
+
+    
+  <url>
+    <loc>http://wiki.niejinkun.com/2016/01/08/redis/</loc>
+    <lastmod>2016-01-08T03:57:52.000Z</lastmod>
+    <data>
+        <display>
+        <title>redis入门指南</title>
+        <pubTime>2016-01-07T16:00:00.000Z</pubTime>
+        
+         
+           
+             
+              <breadCrumb title="存储系统" url="http://wiki.niejinkun.com/categories/%E5%AD%98%E5%82%A8%E7%B3%BB%E7%BB%9F/"/>
+          
+        </display>
+    </data>
+    </url>
+
+    
+  <url>
+    <loc>http://wiki.niejinkun.com/2016/01/08/life/</loc>
+    <lastmod>2016-01-08T02:49:49.000Z</lastmod>
+    <data>
+        <display>
+        <title>2016贺词</title>
+        <pubTime>2016-01-07T16:00:00.000Z</pubTime>
+        
+        <tag>java</tag>
+         
+        <tag>mybatis</tag>
+         
+         
+           
+             
+              <breadCrumb title="生活" url="http://wiki.niejinkun.com/categories/%E7%94%9F%E6%B4%BB/"/>
+          
+        </display>
+    </data>
+    </url>
+
+    
+  <url>
+    <loc>http://wiki.niejinkun.com/2016/01/07/program/</loc>
+    <lastmod>2016-01-07T07:30:17.000Z</lastmod>
+    <data>
+        <display>
+        <title>工作点滴</title>
+        <pubTime>2016-01-06T16:00:00.000Z</pubTime>
+        
+        <tag>javav</tag>
+         
+        <tag>linux</tag>
+         
+        <tag>mail</tag>
+         
+        <tag>mysql</tag>
+         
+        <tag>quartz</tag>
+         
+        <tag>redis</tag>
+         
+        <tag>spring</tag>
+         
+         
+           
+             
+              <breadCrumb title="编程开发" url="http://wiki.niejinkun.com/categories/%E7%BC%96%E7%A8%8B%E5%BC%80%E5%8F%91/"/>
+          
+        </display>
+    </data>
+    </url>
+
+</urlset>

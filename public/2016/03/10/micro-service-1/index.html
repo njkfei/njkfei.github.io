@@ -1,0 +1,591 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+  <meta charset="utf-8">
+  
+  <title>微服务系列1－微服务简介 | 游骑爬，生命在于折腾</title>
+  <meta name="author" content="niejinping">
+  
+  <meta name="description" content="学习总结，知识管理">
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+  <meta property="og:title" content="微服务系列1－微服务简介"/>
+  <meta property="og:site_name" content="游骑爬，生命在于折腾"/>
+
+  
+    <meta property="og:image" content="undefined"/>
+  
+
+  
+    <link rel="alternative" href="/atom.xml" title="游骑爬，生命在于折腾" type="application/atom+xml">
+  
+  
+    <link href="/favicon.png" rel="icon">
+  
+  
+  <link rel="stylesheet" href="/css/bootstrap.min.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/css/font-awesome.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/css/style.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/css/highlight.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/css/google-fonts.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/css/responsive.css" media="screen" type="text/css">  
+  <link rel="stylesheet" href="/css/sidenav.css" media="screen" type="text/css">  
+  <!--[if lt IE 9]><script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script><![endif]-->
+
+  <script src="/js/jquery-2.0.3.min.js"></script>
+
+  <!-- analytics -->
+  
+<script type="text/javascript">
+var _gaq = _gaq || [];
+_gaq.push(['_setAccount', 'UA-72124819-1']);
+_gaq.push(['_trackPageview']);
+(function() {
+var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+
+ga.src = ('https:' == document.location.protocol ? 'https://' : 'http://') + 'stats.g.doubleclick.net/dc.js';
+
+var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+})();
+</script>
+
+
+</head>
+
+<body id="body" data-spy="scroll" data-target=".toc">
+  <div class="container" id="container">
+	<div class="content">
+	  <div class="page-header">		
+  <h1><a class="brand" href="/">游骑爬，生命在于折腾</a><span class="split"></span><span class="title">微服务系列1－微服务简介</span><span class="date" id="title-date"><i class="fa fa-clock-o"></i> 2016-03-10</span></h1>
+</div>		
+
+<div class="row page">
+  <!-- cols -->	
+  
+  
+
+  
+	<div class="col-md-12">
+	  
+
+	  <!-- content -->
+	  <ul>
+<li>构建微服务：使用API网关</li>
+<li>构造微服务：微服务架构中的进程间通信</li>
+<li>微服务架构的服务发现</li>
+<li>面向微服务的事件驱动数据管理</li>
+<li>微服务部署选型</li>
+<li><h2 id="u5F15_u8A00"><a href="#u5F15_u8A00" class="headerlink" title="引言"></a>引言</h2>　当前，微服务吸引了越来越多的目光,无论是文章，博客，社交媒体，还是学术会议.在各种热词排行榜中，都能看到微服务．</li>
+</ul>
+<h2 id="u6784_u5EFA_u5355_u4E00_u6574_u4F53_u5E94_u7528"><a href="#u6784_u5EFA_u5355_u4E00_u6574_u4F53_u5E94_u7528" class="headerlink" title="构建单一整体应用"></a>构建单一整体应用</h2><pre><code>假设我们正在开始构建一个类似于UBER的全新的打车应用．在经过前期的预备会议和需求收集后，我们构建好了一个全新的应用．这种应用可以通过spring boot 或者　rails 或者play框架．这个应用的架构如下所示的六方法所示．
+
+![pics](imgs/arch/service/mircroservice/pic1.jpg)
+</code></pre><p>图中，在应用的核心位置是业务逻辑．业务逻辑是通过一系列模块组成．这些模块定义了服务，领域对象和事件．围绕着核心功能，是与外部世界的适配器和接口．例如数据库访问组件适配器，用于生产和消费消息的组件．以及暴露API的web组件或UI组件．</p>
+<pre><code>除了拥有一个模块架构外，整个应用是做为一个单体应用进行打包和部署的．实际情况依赖于应用所采用的语言和框架．例如：
+</code></pre><ul>
+<li>JAVA应用将打成一个WAR包．这些WAR包将部署在Tomcat或Jetty等WEB容器上．</li>
+<li>内置WEB容器的java包</li>
+<li><p>独立目录部署的应用．例如Rails或Node.js应用</p>
+<p>  这种设计方式的单体应用非常普遍，它们非常容易开发，因为我们的IDE或者其它工作都聚焦于构建这种单体应用．这些应用同时也很容易测试和．你可以通过<em>Selenium</em>对UI进行端到端的测试．单体应用同时也晚易于部署．你可以复制部署包到其它服务器．你同样可以通过多份复制的方式，通过负载均衡器，进行水平伸缩．<br>  在早期阶段，单体应用运行还是非常好的．</p>
+</li>
+</ul>
+<p>##　走向单体应用恶梦<br>　不幸的是．简单的方法有一个巨大的限制，随着时间的推移，成功的应用一般增长迅速，并且变得越来越大．通过每次前进，你的开发团队实现了越来越多的功能，当然，这也意味着增加了越来越多的代码．<br>    几年之后，你的细小，简单的应用变成了巨大的单体怪物．举个极端的例子，我最近遇到了一个工程师，他写了一个工具，用于分析几千个JAR包．这些jar包由数百万行代码组成．我确定他这些年作出了巨大的努力．</p>
+<pre><code>一旦你的应用变大，变得复杂．你的开发团队将陷入痛苦的境地．任何尝试敏捷开发将会是一场无用的折腾．问题主要原因是单体应用变得难以逾越的复杂．对于任何开发人员而言，单体应用因为巨大的复杂性，而无法完全理解．这样的结果是，定位BUG或者正确实现新的功能将变得困难而费时．更严重的是，这将进入一个死循环，如果代码变得难于理解，后续的任何变更将无法保持正确．你将面对一个无法理解的大怪物．
+
+大型单体应用将减慢开发速度，单体应用越大，启动时间越长，例如，最近调查显示一些开发者报告这个应用的启动时间达到了12分钟，我曾经听说启动时间花了40分钟．如果工程师不得不重启应用服务器，那么一天的大部分时间是等等产品启动．
+
+另外一个大问题是，复杂的单体应用，将阻碍持续开发．今天，SAAS应用推动了生产方式的变化．对于复杂的单体应用，修改其中的一部分，然后对其进行重新部署将变得极其困难．而不仅仅是前面提到的启动时间过长．此外，因为变更的影响通常无法易于理解，因此，你需要进行大量的人工测试，来确认变更的正确性．最后的结果是，持续开发将变得几乎不可能．
+
+单体应用还难以协调不同模块之间的资源冲突问题．例如，一个模块是CPU密集的图像处理逻辑，它最理想的部署是EC2优化计算实例．另外一个模块是一个内存数据库，它最适合部署在EC2内存优化实例上．然后，由于这些模块部署在一起，你不得不综合权衡硬件选型．
+
+还没有完，另外一个单体应用的问题是可靠性．由于所以模块运行在同样的处理器上，如果任何一个模块有BUG,例如内存泄漏，可能影响整个处理器的性能．进一步地，因为所有实例是相同的，因此，这个BUG将影响所有的机器．
+
+还有，单体应用使得采用新的框架或新的语言变得困难．例如，让我们想象一下，你有一个2百万行代码它们使用XYZ框架编写．如果你想改用最新的ABC框架重写，这种代价极其昂贵，即使新的框架是被认为是更优的．结果就是，采用新技术将遇到巨大的阻力，你将被采用任何新技术选择所卡住．
+
+总结来看：你将拥有一个成功的关键业务的应用，它会变成巨大的怪物．开发者们知道，它将继续使用落后，淘汰的技术．这使得招聘优秀的工程师变得困难．这种应用将变得难于伸缩又不可靠．最后就是，敏捷开发和发布将变得不可能．
+
+那么，你将怎么办呢？
+</code></pre><h2 id="u5FAE_u670D_u52A1_uFF1A_u641E_u5B9A_u590D_u6742_u6027_u95EE_u9898"><a href="#u5FAE_u670D_u52A1_uFF1A_u641E_u5B9A_u590D_u6742_u6027_u95EE_u9898" class="headerlink" title="微服务：搞定复杂性问题"></a>微服务：搞定复杂性问题</h2><p>　很多组织，例如Amazon,eBay和Netflix，已经采用现在称为<strong>微服务架构模式</strong>的方法来解决问题．而不是构建一个巨大的单个怪物－单体应用．这个方法是分解你的应用为一系列更小，内部互相连接的服务．</p>
+<pre><code>典型的，服务是一组明显的特征，或者功能的集合．例如订单管理，客户管理等．每个微服务是一个微小的应用．它们也有自己的__六边形架构__，有通过各种适配器组成的业务逻辑．一些微服务通过暴雷API来供其它微服务消费．其它微服务可能实现一Web UI.在运行时，每个实体可能是一个云上的虚拟机，或者是一个DOCKER容器．
+
+例如，解藕后的系统将由下图所示的微服务组成．
+
+![pics](imgs/arch/service/mircroservice/pic2.jpg)
+
+
+现在，上图中的每个功能区是由自己的微服务实现．例如WEB应用被分解为简单WEB应用的集合(例如打车应用中的乘客和司机)．这种方法对于用户，设备或特定的用例都非常容易．
+
+每个后端服务通过REST API来暴雷服务．并且大部分服务通过API来消费其它服务．然后，这些服务没有通过地址访问的方式来访问后端服务．反而代之的是，服务间内部通信是通过__API网关__来实现．__API网关__是用来处理负载均衡，缓存，访问控制，API测量和监控．这可能通过__NGINX__实现．后面的文章将讨论__API网关__.
+
+我们来看一看下面这张立方体图．
+
+![pics](imgs/arch/service/mircroservice/pic3.jpg)
+
+在这个立方体中，Y轴方向表示将应用进行切分解藉．X轴方向表示通过复制的方式进行水平扩展．Z轴表示对数据进行切分，例如通过主键进行分库分表．
+</code></pre><h2 id="u670D_u52A1_u5316_u7684_u4F18_u70B9"><a href="#u670D_u52A1_u5316_u7684_u4F18_u70B9" class="headerlink" title="服务化的优点"></a>服务化的优点</h2><p>　　微服务有很多优点．</p>
+<ul>
+<li>首先，它用来处理复杂的问题．它可以将复杂的单体应用解藉成一系列服务．并保持整体功能不变．这个应用被分解为可管理的服务．每个服务都有一个良好定义的边界．通过RPC或者消息驱动的API提供服务．微服务架构提供了模块性等级．在实践中通过单体应用它很难达到这种模块性级别．结果就是，单独的微服务可以更快开发，更易理解和维护．</li>
+<li>其次，微服务架构模式允许每个服务进行单独的部署，工程师不需要考虑外部的变更部署．这些变更易于测试．例如，UI团队可以执行AB测试和快速迭代．微服务架构模式提供了技术部署的可能性．</li>
+<li>第三，微服务架构模式允许每个微服务进行独立的开发．开发团队可以聚焦在特定的服务之上．工程师可以自由的选择他所擅长的技术．当然，大部分组织希望避免过多的技术选项．然后，这种自由度意味着工程师在新项目中可避免使用过时的技术．当启动一个新服务时，他们有选择流行技术的可能性．另外，这些服务相对较小，使得可以容易地通过最新技术进行重写．</li>
+<li>最后，微服务架构允许独立的进行伸缩，你可以通过调整实例的数量进行扩容．另外，你可以选择最适合的硬件来匹配微服务．例如，可以给CPU敏感的服务部署在EC2 cpu优化实例上．可以将内存数据库部署在EC2内存优化实体上．</li>
+</ul>
+<h2 id="u670D_u52A1_u5316_u7684_u7F3A_u70B9"><a href="#u670D_u52A1_u5316_u7684_u7F3A_u70B9" class="headerlink" title="服务化的缺点"></a>服务化的缺点</h2><p>在30年前的”人月神话”就已经提出．世人没有<strong>银弹</strong>．和其它技术一样，微服务架构也是有缺点的．</p>
+<ul>
+<li><p>首先：</p>
+</li>
+<li><p>其次,微服务意味着分布式,分布式将带来新的问题.</p>
+</li>
+<li><p>还有,测试微服务是比较复杂的.例如,通过现代框架例如spring boot,编写一个针对通过REST API单体web应用的测试用例是比较简单的.但测试微服务相对比较复杂.</p>
+</li>
+<li><p>还有,微服务之间存在依赖性, 这样将给部署带来问题.例如A,B,C服务中,B依赖于C,那么,需要C服务先启动.</p>
+</li>
+<li>部署微服务也存在困难.</li>
+</ul>
+<h2 id="u603B_u7ED3"><a href="#u603B_u7ED3" class="headerlink" title="总结"></a>总结</h2><p> 构建复杂应用本身就有内在的困难,一个单体架构适合在理解上简单,轻量的应用上.将你采用复杂的单体应用时,你将走向痛苦的境地.微服务架构模式是解决复杂的一个更优选择.</p>
+	  
+
+	  <div>
+  		<center>
+		  <div class="pagination">
+<ul class="pagination">
+	
+	
+	
+	
+	
+	
+		
+		
+	
+		
+		
+	
+		
+		
+	
+		
+		
+	
+		
+		
+	
+		
+		
+	
+		
+		
+	
+		
+		
+	
+		
+		
+	
+		
+		
+	
+		
+		
+	
+		
+		
+	
+		
+		
+	
+		
+		
+	
+		
+		
+	
+		
+		
+	
+		
+		
+	
+		
+		
+	
+		
+		
+	
+		
+		
+	
+		
+		
+	
+		
+		
+	
+		
+		
+	
+		
+		
+	
+		
+		
+	
+		
+		
+	
+		
+		
+	
+		
+		
+	
+		
+		
+	
+		
+		
+	
+		
+		
+	
+		
+		
+	
+		
+		
+	
+		
+		
+	
+		
+		
+	
+		
+		
+	
+		
+		
+			
+		
+	
+		
+		
+	
+		
+		
+	
+		
+		
+	
+		
+		
+	
+		
+		
+			
+		
+	
+		
+		
+			
+		
+	
+		
+		
+			
+		
+	
+		
+		
+			
+		
+	
+		
+		
+			
+		
+	
+		
+		
+			
+			
+		
+	
+		
+		
+	
+		
+		
+	
+		
+		
+			
+			
+			
+		
+		
+			
+		
+	
+		
+		
+			
+		
+	
+		
+		
+	
+		
+		
+	
+		
+		
+	
+		
+		
+	
+		
+		
+	
+		
+		
+	
+		
+		
+	
+		
+		
+	
+		
+		
+	
+		
+		
+	
+		
+		
+	
+		
+		
+	
+		
+		
+	
+		
+		
+	
+		
+		
+	
+		
+		
+	
+		
+		
+	
+		
+		
+	
+		
+		
+	
+		
+		
+	
+		
+		
+	
+		
+		
+	
+		
+		
+	
+		
+		
+	
+		
+		
+	
+		
+		
+	
+		
+		
+			
+		
+	
+		
+		
+	
+		
+		
+	
+		
+		
+	
+		
+		
+	
+		
+		
+	
+		
+		
+	
+		
+		
+			
+		
+	
+		
+		
+	
+		
+		
+			
+		
+	
+		
+		
+	
+		
+		
+			
+		
+	
+		
+		
+			
+		
+	
+		
+		
+	
+		
+		
+	
+		
+		
+	
+		
+		
+	
+		
+		
+	
+		
+		
+	
+		
+		
+	
+		
+		
+	
+		
+		
+			
+		
+	
+		
+		
+			
+		
+	
+		
+		
+	
+		
+		
+	
+		
+		
+			
+		
+	
+		
+		
+	
+		
+		
+	
+		
+		
+	
+		
+		
+	
+		
+		
+	
+		
+		
+	
+		
+		
+	
+	
+	
+		<li class="prev"><a href="/2016/03/11/api-gateway/" class="alignleft prev"><i class="fa fa-arrow-circle-o-left"></i>prev</a></li>
+	
+	<li><a href="/"><i class="fa fa-archive"></i>Home</a></li>
+	
+		<li class="next"><a href="/2016/03/03/android-gradle/" class="alignright next">next<i class="fa fa-arrow-circle-o-right"></i></a></li>
+	
+</ul>
+</div>
+
+		</center>
+	  </div>
+	  
+	</div> <!-- col-md-9/col-md-12 -->
+	
+  </div><!-- row -->
+
+	</div>
+  </div>
+  <div class="container-narrow">
+	<footer> <p>
+  &copy; 2016 niejinping
+  
+      with help from <a href="http://zespia.tw/hexo/" target="_blank">Hexo</a> and <a href="http://getbootstrap.com/" target="_blank">Twitter Bootstrap</a>. Theme by <a href="http://github.com/wzpan/hexo-theme-wixo/">Wixo</a>.    
+</p> </footer>
+  </div> <!-- container-narrow -->
+  
+<a id="gotop" href="#">   
+  <span>▲</span> 
+</a>
+
+<script src="/js/jquery.imagesloaded.min.js"></script>
+<script src="/js/gallery.js"></script>
+<script src="/js/bootstrap.min.js"></script>
+<script src="/js/jquery.tableofcontents.min.js"></script>
+<script src="/js/tocgenerator.min.js"></script>
+<script src="/js/main.js"></script>
+
+
+
+
+<link rel="stylesheet" href="/fancybox/jquery.fancybox.css" media="screen" type="text/css">
+<script src="/fancybox/jquery.fancybox.pack.js"></script>
+<script type="text/javascript">
+(function($){
+  $('.fancybox').fancybox();
+})(jQuery);
+</script>
+
+
+<script>
+var _hmt = _hmt || [];
+(function() {
+  var hm = document.createElement("script");
+  hm.src = "//hm.baidu.com/hm.js?78cd2d23583461b225b36bbf47433d64";
+  var s = document.getElementsByTagName("script")[0]; 
+  s.parentNode.insertBefore(hm, s);
+})();
+</script>
+
+</body>
+</html>

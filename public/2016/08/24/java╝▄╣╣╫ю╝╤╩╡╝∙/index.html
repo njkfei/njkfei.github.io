@@ -1,0 +1,551 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+  <meta charset="utf-8">
+  
+  <title>JAVA架构最佳实践 | 游骑爬，生命在于折腾</title>
+  <meta name="author" content="niejinping">
+  
+  <meta name="description" content="学习总结，知识管理">
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+  <meta property="og:title" content="JAVA架构最佳实践"/>
+  <meta property="og:site_name" content="游骑爬，生命在于折腾"/>
+
+  
+    <meta property="og:image" content="undefined"/>
+  
+
+  
+    <link rel="alternative" href="/atom.xml" title="游骑爬，生命在于折腾" type="application/atom+xml">
+  
+  
+    <link href="/favicon.png" rel="icon">
+  
+  
+  <link rel="stylesheet" href="/css/bootstrap.min.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/css/font-awesome.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/css/style.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/css/highlight.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/css/google-fonts.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/css/responsive.css" media="screen" type="text/css">  
+  <link rel="stylesheet" href="/css/sidenav.css" media="screen" type="text/css">  
+  <!--[if lt IE 9]><script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script><![endif]-->
+
+  <script src="/js/jquery-2.0.3.min.js"></script>
+
+  <!-- analytics -->
+  
+<script type="text/javascript">
+var _gaq = _gaq || [];
+_gaq.push(['_setAccount', 'UA-72124819-1']);
+_gaq.push(['_trackPageview']);
+(function() {
+var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+
+ga.src = ('https:' == document.location.protocol ? 'https://' : 'http://') + 'stats.g.doubleclick.net/dc.js';
+
+var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+})();
+</script>
+
+
+</head>
+
+<body id="body" data-spy="scroll" data-target=".toc">
+  <div class="container" id="container">
+	<div class="content">
+	  <div class="page-header">		
+  <h1><a class="brand" href="/">游骑爬，生命在于折腾</a><span class="split"></span><span class="title">JAVA架构最佳实践</span><span class="date" id="title-date"><i class="fa fa-clock-o"></i> 2016-08-24</span></h1>
+</div>		
+
+<div class="row page">
+  <!-- cols -->	
+  
+  
+
+  
+	<div class="col-md-12">
+	  
+
+	  <!-- content -->
+	  <h2 id="u4F9D_u8D56_u6846_u67B6"><a href="#u4F9D_u8D56_u6846_u67B6" class="headerlink" title="依赖框架"></a>依赖框架</h2><p> springboot 无脑上</p>
+<h2 id="ORM"><a href="#ORM" class="headerlink" title="ORM"></a>ORM</h2><p> mybatis，可以满足个性化SQL,必须上</p>
+<h3 id="u6CE8_u610F"><a href="#u6CE8_u610F" class="headerlink" title="注意"></a>注意</h3><ul>
+<li>建议配置SQL日志输出</li>
+</ul>
+<h2 id="API_u81EA_u52A8_u7EF4_u62A4"><a href="#API_u81EA_u52A8_u7EF4_u62A4" class="headerlink" title="API自动维护"></a>API自动维护</h2><p>有两种方式维护API：</p>
+<ul>
+<li>WIKI</li>
+<li>代码即文档，通过swagger,自动生成在线API文档。但要注意安全性问题，必须是授权的访问者可以看到API说明。</li>
+</ul>
+<p>swagger，你值得拥有</p>
+<h3 id="u8D44_u6E90_u53C2_u8003"><a href="#u8D44_u6E90_u53C2_u8003" class="headerlink" title="资源参考"></a>资源参考</h3><ul>
+<li><a href="http://swagger.io/" target="_blank" rel="external">http://swagger.io/</a></li>
+</ul>
+<h2 id="u6027_u80FD_u76D1_u63A7"><a href="#u6027_u80FD_u76D1_u63A7" class="headerlink" title="性能监控"></a>性能监控</h2><p>性能监控的指标有：</p>
+<ul>
+<li>响应时间</li>
+<li>吞吐量</li>
+<li>线程</li>
+<li>GC：GC是JAVA后台服务的最大一关。</li>
+</ul>
+<p>性能监控有两种方式：</p>
+<ul>
+<li>本地监控</li>
+<li>远程监控</li>
+</ul>
+<h3 id="u672C_u5730_u76D1_u63A7"><a href="#u672C_u5730_u76D1_u63A7" class="headerlink" title="本地监控"></a>本地监控</h3><p>在本地使用jstat命令进行监控。</p>
+<ul>
+<li>优点是即时使用。</li>
+<li>缺点是如果监控的是线上环境，需要开发人员在线上机器进行操作，上线操作是大忌。常在河边走，难免会湿靯。</li>
+</ul>
+<h3 id="u8FDC_u7A0B_u76D1_u63A7"><a href="#u8FDC_u7A0B_u76D1_u63A7" class="headerlink" title="远程监控"></a>远程监控</h3><p>对于线上机器，可以考虑远程监控。<br>开启远程监控的思路很简单：</p>
+<ul>
+<li>目标机运行监控agent,如jstatd,rmx</li>
+<li>通过visualVM或zabbix插件，远程查看目标机运行状态</li>
+</ul>
+<h3 id="u63A8_u8350_u5DE5_u5177"><a href="#u63A8_u8350_u5DE5_u5177" class="headerlink" title="推荐工具"></a>推荐工具</h3><ul>
+<li>JMeter : 批量发送HTTP请求，可进行压力测试</li>
+<li>apache ab: </li>
+<li>jstatd: 后台监控进程</li>
+<li>VisuamVM: 图形化的jstat</li>
+<li>jstat: 命令行工具，最简单高效</li>
+<li>jolokia： 通过WEB UI，即可查看JAVA进程的环境变量，URL映射，配置参数，BEAN列表等，相当强大</li>
+<li>zabbix集成的java监控插件</li>
+</ul>
+<h2 id="u63A8_u8350_u63D2_u4EF6"><a href="#u63A8_u8350_u63D2_u4EF6" class="headerlink" title="推荐插件"></a>推荐插件</h2><ul>
+<li>mvn helper</li>
+<li>lombok</li>
+<li>GsonFormat</li>
+</ul>
+<h3 id="u4F9D_u8D56_u5173_u7CFB_u68C0_u67E5"><a href="#u4F9D_u8D56_u5173_u7CFB_u68C0_u67E5" class="headerlink" title="依赖关系检查"></a>依赖关系检查</h3><p>mvn helper可以通过UI的方式，展现依赖之间的关系。<br>对于排队依赖错误很有帮助。</p>
+<h3 id="u7B80_u5316_u4EE3_u7801"><a href="#u7B80_u5316_u4EE3_u7801" class="headerlink" title="简化代码"></a>简化代码</h3><p>实体类有大量的getter/setter，通过lombok插件，可大量简化代码。</p>
+<h3 id="JSON_to_Bean_Class"><a href="#JSON_to_Bean_Class" class="headerlink" title="JSON to Bean Class"></a>JSON to Bean Class</h3><p>通过GsonFormat插件，可以将josn格式的文件，转化为类。从而简化代码的编写。</p>
+<h2 id="u65E5_u5FD7"><a href="#u65E5_u5FD7" class="headerlink" title="日志"></a>日志</h2><p>日志，和代码一样重要。在上线运行之后，日志比代码更重要。</p>
+<h3 id="u63A8_u8350"><a href="#u63A8_u8350" class="headerlink" title="推荐"></a>推荐</h3><p>log4j2,logback.<br>log4j在大量写日志时会阻塞，导致出现性能问题。<br>因此，推荐log4j2和logback.</p>
+<h3 id="u76D1_u63A7"><a href="#u76D1_u63A7" class="headerlink" title="监控"></a>监控</h3><p>建议日志监控，使用集中式日志监控平台，典型的如ELK.</p>
+<h2 id="u8C03_u7528_u94FE_u5206_u6790"><a href="#u8C03_u7528_u94FE_u5206_u6790" class="headerlink" title="调用链分析"></a>调用链分析</h2><p>调用链分析很难做，但分布式系统，如果出现了异常，肯定需要通过分析调用链来排查问题。一个小技巧是在调用链中传递惟一的上下文。</p>
+<h2 id="CI/CD"><a href="#CI/CD" class="headerlink" title="CI/CD"></a>CI/CD</h2><p>持续集成，持续部署</p>
+<h2 id="u9759_u6001_u68C0_u67E5"><a href="#u9759_u6001_u68C0_u67E5" class="headerlink" title="静态检查"></a>静态检查</h2><ul>
+<li>findbugs</li>
+</ul>
+	  
+
+	  <div>
+  		<center>
+		  <div class="pagination">
+<ul class="pagination">
+	
+	
+	
+	
+	
+	
+		
+		
+	
+		
+		
+	
+		
+		
+	
+		
+		
+	
+		
+		
+	
+		
+		
+	
+		
+		
+	
+		
+		
+			
+		
+	
+		
+		
+			
+			
+		
+	
+		
+		
+			
+			
+			
+		
+		
+			
+		
+	
+		
+		
+	
+		
+		
+	
+		
+		
+	
+		
+		
+	
+		
+		
+	
+		
+		
+	
+		
+		
+	
+		
+		
+	
+		
+		
+	
+		
+		
+	
+		
+		
+	
+		
+		
+	
+		
+		
+	
+		
+		
+	
+		
+		
+	
+		
+		
+	
+		
+		
+	
+		
+		
+	
+		
+		
+	
+		
+		
+	
+		
+		
+	
+		
+		
+	
+		
+		
+	
+		
+		
+	
+		
+		
+	
+		
+		
+	
+		
+		
+	
+		
+		
+	
+		
+		
+	
+		
+		
+	
+		
+		
+	
+		
+		
+	
+		
+		
+	
+		
+		
+	
+		
+		
+	
+		
+		
+	
+		
+		
+	
+		
+		
+	
+		
+		
+	
+		
+		
+	
+		
+		
+	
+		
+		
+	
+		
+		
+	
+		
+		
+	
+		
+		
+	
+		
+		
+	
+		
+		
+	
+		
+		
+	
+		
+		
+	
+		
+		
+	
+		
+		
+	
+		
+		
+	
+		
+		
+	
+		
+		
+	
+		
+		
+	
+		
+		
+	
+		
+		
+	
+		
+		
+	
+		
+		
+	
+		
+		
+	
+		
+		
+	
+		
+		
+	
+		
+		
+	
+		
+		
+	
+		
+		
+	
+		
+		
+	
+		
+		
+	
+		
+		
+	
+		
+		
+	
+		
+		
+	
+		
+		
+	
+		
+		
+	
+		
+		
+	
+		
+		
+	
+		
+		
+	
+		
+		
+	
+		
+		
+	
+		
+		
+	
+		
+		
+	
+		
+		
+	
+		
+		
+	
+		
+		
+	
+		
+		
+	
+		
+		
+	
+		
+		
+	
+		
+		
+	
+		
+		
+	
+		
+		
+	
+		
+		
+	
+		
+		
+	
+		
+		
+	
+		
+		
+	
+		
+		
+	
+		
+		
+	
+		
+		
+	
+		
+		
+	
+		
+		
+	
+		
+		
+	
+		
+		
+	
+		
+		
+	
+	
+	
+		<li class="prev"><a href="/2016/08/26/Java API文档一体化实践/" class="alignleft prev"><i class="fa fa-arrow-circle-o-left"></i>prev</a></li>
+	
+	<li><a href="/"><i class="fa fa-archive"></i>Home</a></li>
+	
+		<li class="next"><a href="/2016/08/24/rmi_vs_restfulapi/" class="alignright next">next<i class="fa fa-arrow-circle-o-right"></i></a></li>
+	
+</ul>
+</div>
+
+		</center>
+	  </div>
+	  
+	</div> <!-- col-md-9/col-md-12 -->
+	
+  </div><!-- row -->
+
+	</div>
+  </div>
+  <div class="container-narrow">
+	<footer> <p>
+  &copy; 2016 niejinping
+  
+      with help from <a href="http://zespia.tw/hexo/" target="_blank">Hexo</a> and <a href="http://getbootstrap.com/" target="_blank">Twitter Bootstrap</a>. Theme by <a href="http://github.com/wzpan/hexo-theme-wixo/">Wixo</a>.    
+</p> </footer>
+  </div> <!-- container-narrow -->
+  
+<a id="gotop" href="#">   
+  <span>▲</span> 
+</a>
+
+<script src="/js/jquery.imagesloaded.min.js"></script>
+<script src="/js/gallery.js"></script>
+<script src="/js/bootstrap.min.js"></script>
+<script src="/js/jquery.tableofcontents.min.js"></script>
+<script src="/js/tocgenerator.min.js"></script>
+<script src="/js/main.js"></script>
+
+
+
+
+<link rel="stylesheet" href="/fancybox/jquery.fancybox.css" media="screen" type="text/css">
+<script src="/fancybox/jquery.fancybox.pack.js"></script>
+<script type="text/javascript">
+(function($){
+  $('.fancybox').fancybox();
+})(jQuery);
+</script>
+
+
+<script>
+var _hmt = _hmt || [];
+(function() {
+  var hm = document.createElement("script");
+  hm.src = "//hm.baidu.com/hm.js?78cd2d23583461b225b36bbf47433d64";
+  var s = document.getElementsByTagName("script")[0]; 
+  s.parentNode.insertBefore(hm, s);
+})();
+</script>
+
+</body>
+</html>

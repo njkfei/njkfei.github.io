@@ -1,0 +1,39 @@
+# Header
+menu:
+  首页: /
+  归档: /archives
+  关于我: /about
+rss: /atom.xml
+
+# Content
+excerpt_link: Read More
+fancybox: true
+
+# Sidebar
+sidebar: right
+widgets:
+- category
+- tag
+- tagcloud
+- weibo
+- recent_posts
+- about
+- archive
+- links
+
+# Links:
+Links:
+  神奇的网站: http://www.58.com
+  让教育回归家庭: http://www.sanhao.com
+
+# Miscellaneous
+google_analytics: UA-72124819-1
+favicon: /favicon.png
+twitter:
+google_plus:
+fb_admins:
+fb_app_id:
+
+# 轮播图
+banner_count: 6
+switch_banner: true

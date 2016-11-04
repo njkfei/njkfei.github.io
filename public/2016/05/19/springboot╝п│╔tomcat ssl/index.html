@@ -1,0 +1,560 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+  <meta charset="utf-8">
+  
+  <title>springboot集成ssl tomcat | 游骑爬，生命在于折腾</title>
+  <meta name="author" content="niejinping">
+  
+  <meta name="description" content="学习总结，知识管理">
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+  <meta property="og:title" content="springboot集成ssl tomcat"/>
+  <meta property="og:site_name" content="游骑爬，生命在于折腾"/>
+
+  
+    <meta property="og:image" content="undefined"/>
+  
+
+  
+    <link rel="alternative" href="/atom.xml" title="游骑爬，生命在于折腾" type="application/atom+xml">
+  
+  
+    <link href="/favicon.png" rel="icon">
+  
+  
+  <link rel="stylesheet" href="/css/bootstrap.min.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/css/font-awesome.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/css/style.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/css/highlight.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/css/google-fonts.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/css/responsive.css" media="screen" type="text/css">  
+  <link rel="stylesheet" href="/css/sidenav.css" media="screen" type="text/css">  
+  <!--[if lt IE 9]><script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script><![endif]-->
+
+  <script src="/js/jquery-2.0.3.min.js"></script>
+
+  <!-- analytics -->
+  
+<script type="text/javascript">
+var _gaq = _gaq || [];
+_gaq.push(['_setAccount', 'UA-72124819-1']);
+_gaq.push(['_trackPageview']);
+(function() {
+var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+
+ga.src = ('https:' == document.location.protocol ? 'https://' : 'http://') + 'stats.g.doubleclick.net/dc.js';
+
+var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+})();
+</script>
+
+
+</head>
+
+<body id="body" data-spy="scroll" data-target=".toc">
+  <div class="container" id="container">
+	<div class="content">
+	  <div class="page-header">		
+  <h1><a class="brand" href="/">游骑爬，生命在于折腾</a><span class="split"></span><span class="title">springboot集成ssl tomcat</span><span class="date" id="title-date"><i class="fa fa-clock-o"></i> 2016-05-19</span></h1>
+</div>		
+
+<div class="row page">
+  <!-- cols -->	
+  
+  
+
+  
+	<div class="col-md-12">
+	  
+
+	  <!-- content -->
+	  <h2 id="u8BC1_u4E66_u5236_u4F5C"><a href="#u8BC1_u4E66_u5236_u4F5C" class="headerlink" title="证书制作"></a>证书制作</h2><figure class="highlight groovy"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br></pre></td><td class="code"><pre><span class="line"><span class="label"> C:</span>\Users\njp\sanhao\workspace-netty&gt;keytool -genkey -alias server -keyalg RSA -k</span><br><span class="line">eystore server.jks -validity <span class="number">3650</span></span><br><span class="line">输入密钥库口令:</span><br><span class="line">密钥库口令太短 - 至少必须为 <span class="number">6</span> 个字符</span><br><span class="line">输入密钥库口令:</span><br><span class="line">再次输入新口令:</span><br><span class="line">您的名字与姓氏是什么?</span><br><span class="line">  [Unknown]:  nie</span><br><span class="line">您的组织单位名称是什么?</span><br><span class="line">  [Unknown]:  sanhao</span><br><span class="line">您的组织名称是什么?</span><br><span class="line">  [Unknown]:  sanhao</span><br><span class="line">您所在的城市或区域名称是什么?</span><br><span class="line">  [Unknown]:  beijing</span><br><span class="line">您所在的省<span class="regexp">/市/</span>自治区名称是什么?</span><br><span class="line">  [Unknown]:  beijing</span><br><span class="line">该单位的双字母国家/地区代码是什么?</span><br><span class="line">  [Unknown]:  cn</span><br><span class="line">CN=nie, OU=sanhao, O=sanhao, L=beijing, ST=beijing, C=cn是否正确?</span><br><span class="line">  [否]:  yes</span><br><span class="line">您的名字与姓氏是什么?</span><br><span class="line">  [nie]:  niejinping</span><br><span class="line">您的组织单位名称是什么?</span><br><span class="line">  [sanhao]:</span><br><span class="line">您的组织名称是什么?</span><br><span class="line">  [sanhao]:</span><br><span class="line">您所在的城市或区域名称是什么?</span><br><span class="line">  [beijing]:</span><br><span class="line">您所在的省<span class="regexp">/市/</span>自治区名称是什么?</span><br><span class="line">  [beijing]:</span><br><span class="line">该单位的双字母国家/地区代码是什么?</span><br><span class="line">  [cn]:</span><br><span class="line">CN=niejinping, OU=sanhao, O=sanhao, L=beijing, ST=beijing, C=cn是否正确?</span><br><span class="line">  [否]:</span><br><span class="line">您的名字与姓氏是什么?</span><br><span class="line">  [niejinping]:</span><br><span class="line">您的组织单位名称是什么?</span><br><span class="line">  [sanhao]:</span><br><span class="line">您的组织名称是什么?</span><br><span class="line">  [sanhao]:</span><br><span class="line">您所在的城市或区域名称是什么?</span><br><span class="line">  [beijing]:</span><br><span class="line">您所在的省<span class="regexp">/市/</span>自治区名称是什么?</span><br><span class="line">  [beijing]:</span><br><span class="line">该单位的双字母国家/地区代码是什么?</span><br><span class="line">  [cn]:</span><br><span class="line">CN=niejinping, OU=sanhao, O=sanhao, L=beijing, ST=beijing, C=cn是否正确?</span><br><span class="line">  [否]:  y</span><br><span class="line"></span><br><span class="line">输入 &lt;server&gt; 的密钥口令</span><br><span class="line">        (如果和密钥库口令相同, 按回车):</span><br></pre></td></tr></table></figure>
+<h2 id="u4E70_u8BC1_u4E66"><a href="#u4E70_u8BC1_u4E66" class="headerlink" title="买证书"></a>买证书</h2><p>上<a href="/startssl.com">startssl.com</a>,免费的。但格式是P12格式的，需要转换为jks格式。方法如下：<br><figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">C:\&gt;keytool -importkeysto</span><br><span class="line">re -srckeystore <span class="string">"niejinping2014%40gmail.com.p12"</span> -srcstoretype pkcs12 -destkeyst</span><br><span class="line">ore startssl.jks</span><br><span class="line">输入目标密钥库口令:</span><br><span class="line">再次输入新口令:</span><br><span class="line">输入源密钥库口令:</span><br><span class="line">已成功导入别名 <span class="number">1</span> 的条目。</span><br><span class="line">已完成导入命令: <span class="number">1</span> 个条目成功导入, <span class="number">0</span> 个条目失败或取消</span><br></pre></td></tr></table></figure></p>
+<h2 id="APP_u4EE3_u7801"><a href="#APP_u4EE3_u7801" class="headerlink" title="APP代码"></a>APP代码</h2><figure class="highlight groovy"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="annotation">@SpringBootApplication</span></span><br><span class="line"><span class="annotation">@EnableAutoConfiguration</span>(exclude = &#123;DataSourceAutoConfiguration.<span class="keyword">class</span>, HibernateJpaAutoConfiguration.<span class="keyword">class</span>&#125;)</span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">App</span> &#123;</span></span><br><span class="line"></span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">static</span> <span class="typename">void</span> main(String[] args) <span class="keyword">throws</span> Exception &#123;</span><br><span class="line">        SpringApplication.run(App.<span class="keyword">class</span>, args);</span><br><span class="line">    &#125;</span><br></pre></td></tr></table></figure>
+<p>上面的exclude必须写上，要不然加报无法连接数据源的错误。</p>
+<h2 id="WEB_u4EE3_u7801"><a href="#WEB_u4EE3_u7801" class="headerlink" title="WEB代码"></a>WEB代码</h2><figure class="highlight css"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">import</span> <span class="tag">org</span><span class="class">.springframework</span><span class="class">.stereotype</span><span class="class">.Controller</span>;</span><br><span class="line"><span class="tag">import</span> <span class="tag">org</span><span class="class">.springframework</span><span class="class">.web</span><span class="class">.bind</span><span class="class">.annotation</span><span class="class">.RequestMapping</span>;</span><br><span class="line"><span class="tag">import</span> <span class="tag">org</span><span class="class">.springframework</span><span class="class">.web</span><span class="class">.bind</span><span class="class">.annotation</span><span class="class">.ResponseBody</span>;</span><br><span class="line"></span><br><span class="line"><span class="at_rule">@<span class="keyword">Controller</span></span><br><span class="line">public class SslController </span>&#123;</span><br><span class="line"></span><br><span class="line">    <span class="at_rule">@<span class="keyword">RequestMapping("/")</span></span><br><span class="line">    @ResponseBody</span><br><span class="line">    public String <span class="function">helloWorld</span>() </span>&#123;</span><br><span class="line">        <span class="tag">return</span> "<span class="tag">Hello</span>, <span class="tag">world</span>";</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>很简单，是吧。</p>
+<h2 id="u6D4B_u8BD5"><a href="#u6D4B_u8BD5" class="headerlink" title="测试"></a>测试</h2><p>在浏览器中输入：<br><figure class="highlight groovy"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="string">https:</span><span class="comment">//localhost:8443</span></span><br></pre></td></tr></table></figure></p>
+<p>这时浏览器会报警告，类似于12306的场景，继续前往即可。</p>
+<p>测试OK.</p>
+<h2 id="github"><a href="#github" class="headerlink" title="github"></a>github</h2><p>  <a href="https://github.com/njkfei/springboot-ssl-tomcat" target="_blank" rel="external">https://github.com/njkfei/springboot-ssl-tomcat</a></p>
+	  
+
+	  <div>
+  		<center>
+		  <div class="pagination">
+<ul class="pagination">
+	
+	
+	
+	
+	
+	
+		
+		
+	
+		
+		
+	
+		
+		
+	
+		
+		
+	
+		
+		
+	
+		
+		
+	
+		
+		
+	
+		
+		
+	
+		
+		
+	
+		
+		
+	
+		
+		
+	
+		
+		
+	
+		
+		
+	
+		
+		
+	
+		
+		
+	
+		
+		
+			
+			
+		
+	
+		
+		
+	
+		
+		
+	
+		
+		
+			
+			
+			
+		
+		
+	
+		
+		
+	
+		
+		
+	
+		
+		
+	
+		
+		
+	
+		
+		
+	
+		
+		
+			
+		
+	
+		
+		
+	
+		
+		
+			
+		
+	
+		
+		
+			
+		
+	
+		
+		
+			
+		
+	
+		
+		
+			
+		
+	
+		
+		
+			
+		
+	
+		
+		
+			
+		
+	
+		
+		
+			
+		
+	
+		
+		
+			
+		
+	
+		
+		
+	
+		
+		
+	
+		
+		
+			
+		
+	
+		
+		
+	
+		
+		
+			
+		
+	
+		
+		
+			
+		
+	
+		
+		
+	
+		
+		
+	
+		
+		
+	
+		
+		
+	
+		
+		
+	
+		
+		
+	
+		
+		
+			
+		
+	
+		
+		
+	
+		
+		
+	
+		
+		
+	
+		
+		
+	
+		
+		
+	
+		
+		
+	
+		
+		
+	
+		
+		
+	
+		
+		
+	
+		
+		
+	
+		
+		
+	
+		
+		
+	
+		
+		
+	
+		
+		
+	
+		
+		
+	
+		
+		
+	
+		
+		
+			
+		
+	
+		
+		
+			
+		
+	
+		
+		
+			
+		
+	
+		
+		
+			
+		
+	
+		
+		
+			
+		
+	
+		
+		
+			
+		
+	
+		
+		
+			
+		
+	
+		
+		
+	
+		
+		
+			
+		
+	
+		
+		
+	
+		
+		
+	
+		
+		
+	
+		
+		
+	
+		
+		
+			
+		
+	
+		
+		
+	
+		
+		
+			
+		
+	
+		
+		
+			
+		
+	
+		
+		
+	
+		
+		
+			
+		
+	
+		
+		
+	
+		
+		
+	
+		
+		
+	
+		
+		
+	
+		
+		
+	
+		
+		
+			
+		
+	
+		
+		
+	
+		
+		
+	
+		
+		
+			
+		
+	
+		
+		
+			
+		
+	
+		
+		
+	
+		
+		
+	
+		
+		
+	
+		
+		
+	
+		
+		
+			
+		
+	
+		
+		
+	
+		
+		
+	
+		
+		
+	
+		
+		
+	
+		
+		
+	
+		
+		
+	
+		
+		
+	
+		
+		
+			
+		
+	
+		
+		
+			
+		
+	
+		
+		
+			
+		
+	
+		
+		
+	
+		
+		
+	
+		
+		
+	
+	
+	
+		<li class="prev disabled"><a><i class="fa fa-arrow-circle-o-left"></i>prev</a></li>
+	
+	<li><a href="/"><i class="fa fa-archive"></i>Home</a></li>
+	
+		<li class="next"><a href="/2016/05/06/spring-netty-protobuffer集成/" class="alignright next">next<i class="fa fa-arrow-circle-o-right"></i></a></li>
+	
+</ul>
+</div>
+
+		</center>
+	  </div>
+	  
+	</div> <!-- col-md-9/col-md-12 -->
+	
+  </div><!-- row -->
+
+	</div>
+  </div>
+  <div class="container-narrow">
+	<footer> <p>
+  &copy; 2016 niejinping
+  
+      with help from <a href="http://zespia.tw/hexo/" target="_blank">Hexo</a> and <a href="http://getbootstrap.com/" target="_blank">Twitter Bootstrap</a>. Theme by <a href="http://github.com/wzpan/hexo-theme-wixo/">Wixo</a>.    
+</p> </footer>
+  </div> <!-- container-narrow -->
+  
+<a id="gotop" href="#">   
+  <span>▲</span> 
+</a>
+
+<script src="/js/jquery.imagesloaded.min.js"></script>
+<script src="/js/gallery.js"></script>
+<script src="/js/bootstrap.min.js"></script>
+<script src="/js/jquery.tableofcontents.min.js"></script>
+<script src="/js/tocgenerator.min.js"></script>
+<script src="/js/main.js"></script>
+
+
+
+
+<link rel="stylesheet" href="/fancybox/jquery.fancybox.css" media="screen" type="text/css">
+<script src="/fancybox/jquery.fancybox.pack.js"></script>
+<script type="text/javascript">
+(function($){
+  $('.fancybox').fancybox();
+})(jQuery);
+</script>
+
+
+<script>
+var _hmt = _hmt || [];
+(function() {
+  var hm = document.createElement("script");
+  hm.src = "//hm.baidu.com/hm.js?78cd2d23583461b225b36bbf47433d64";
+  var s = document.getElementsByTagName("script")[0]; 
+  s.parentNode.insertBefore(hm, s);
+})();
+</script>
+
+</body>
+</html>

@@ -1,0 +1,620 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+  <meta charset="utf-8">
+  
+  <title>mybatis分布式事务 | 游骑爬，生命在于折腾</title>
+  <meta name="author" content="niejinping">
+  
+  <meta name="description" content="学习总结，知识管理">
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+  <meta property="og:title" content="mybatis分布式事务"/>
+  <meta property="og:site_name" content="游骑爬，生命在于折腾"/>
+
+  
+    <meta property="og:image" content="undefined"/>
+  
+
+  
+    <link rel="alternative" href="/atom.xml" title="游骑爬，生命在于折腾" type="application/atom+xml">
+  
+  
+    <link href="/favicon.png" rel="icon">
+  
+  
+  <link rel="stylesheet" href="/css/bootstrap.min.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/css/font-awesome.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/css/style.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/css/highlight.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/css/google-fonts.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/css/responsive.css" media="screen" type="text/css">  
+  <link rel="stylesheet" href="/css/sidenav.css" media="screen" type="text/css">  
+  <!--[if lt IE 9]><script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script><![endif]-->
+
+  <script src="/js/jquery-2.0.3.min.js"></script>
+
+  <!-- analytics -->
+  
+<script type="text/javascript">
+var _gaq = _gaq || [];
+_gaq.push(['_setAccount', 'UA-72124819-1']);
+_gaq.push(['_trackPageview']);
+(function() {
+var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+
+ga.src = ('https:' == document.location.protocol ? 'https://' : 'http://') + 'stats.g.doubleclick.net/dc.js';
+
+var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+})();
+</script>
+
+
+</head>
+
+<body id="body" data-spy="scroll" data-target=".toc">
+  <div class="container" id="container">
+	<div class="content">
+	  <div class="page-header">		
+  <h1><a class="brand" href="/">游骑爬，生命在于折腾</a><span class="split"></span><span class="title">mybatis分布式事务</span><span class="date" id="title-date"><i class="fa fa-clock-o"></i> 2016-01-17</span></h1>
+</div>		
+
+<div class="row page">
+  <!-- cols -->	
+  
+  <div class="col-xs-12 col-sm-3 col-md-3 toc"> 
+	<!-- toc -->
+<script type="text/javascript">
+		jQuery(document).ready(function() {
+ 		   generateWikiTOC('.note', '.toc',  2 , 2 );
+		});
+</script>
+  </div><!-- col-md-3 -->
+  
+  
+
+  
+  <div class="col-xs-12 col-sm-9 col-md-9 note">
+	
+
+	  <!-- content -->
+	  <p>  <strong>mybatis</strong>提供了数据访问框架.相对hibernate，它更轻量化，相对jdbc，它更人性化．是java系访问数据库的最佳框架．mybatis的最佳实践，是与spring协同工作．</p>
+<h2 id="u4F9D_u8D56_u9879_u76EE"><a href="#u4F9D_u8D56_u9879_u76EE" class="headerlink" title="依赖项目"></a>依赖项目</h2> <figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br></pre></td><td class="code"><pre><span class="line">&lt;dependency&gt;</span><br><span class="line">	&lt;groupId&gt;org.mybatis&lt;/groupId&gt;</span><br><span class="line">	&lt;artifactId&gt;mybatis&lt;/artifactId&gt;</span><br><span class="line">	&lt;version&gt;<span class="number">3.3</span>.<span class="number">0</span>&lt;/version&gt;</span><br><span class="line">&lt;/dependency&gt;</span><br><span class="line">&lt;dependency&gt;</span><br><span class="line">	&lt;groupId&gt;org.mybatis&lt;/groupId&gt;</span><br><span class="line">	&lt;artifactId&gt;mybatis-spring&lt;/artifactId&gt;</span><br><span class="line">	&lt;version&gt;<span class="number">1.2</span>.<span class="number">2</span>&lt;/version&gt;</span><br><span class="line">&lt;/dependency&gt;</span><br><span class="line"></span><br><span class="line">&lt;!-- alibaba --&gt;</span><br><span class="line">&lt;dependency&gt;</span><br><span class="line">	&lt;groupId&gt;com.alibaba&lt;/groupId&gt;</span><br><span class="line">	&lt;artifactId&gt;druid&lt;/artifactId&gt;</span><br><span class="line">	&lt;version&gt;<span class="number">1.0</span>.<span class="number">2</span>&lt;/version&gt;</span><br><span class="line">&lt;/dependency&gt;</span><br><span class="line"></span><br><span class="line">&lt;!-- mysql 驱动 --&gt;</span><br><span class="line">&lt;dependency&gt;</span><br><span class="line">	&lt;groupId&gt;mysql&lt;/groupId&gt;</span><br><span class="line">	&lt;artifactId&gt;mysql-connector-java&lt;/artifactId&gt;</span><br><span class="line">	&lt;version&gt;<span class="number">5.1</span>.<span class="number">29</span>&lt;/version&gt;</span><br><span class="line">&lt;/dependency&gt;</span><br></pre></td></tr></table></figure>
+<h2 id="u4F7F_u7528_u65B9_u6CD5"><a href="#u4F7F_u7528_u65B9_u6CD5" class="headerlink" title="使用方法"></a>使用方法</h2><pre><code>mybatis，有两种使用方法．
+</code></pre><ul>
+<li>xml配置</li>
+<li>注解驱动<br>　xml配置功能强大，但配置麻烦，看着比较繁琐．<br>　注解配置功能稍弱，但可以满足大部分需求，看着比较清爽．<br>　个人建议，xml和注解配合使用．<br>xml完成动态sql功能．<br>注解完成常规功能和事务处理．<h2 id="xml_u914D_u7F6E"><a href="#xml_u914D_u7F6E" class="headerlink" title="xml配置"></a>xml配置</h2>xml配置，只要有：</li>
+<li>驱动源配置</li>
+<li>动态sql配置．</li>
+<li>自动扫包配置</li>
+<li>事务驱动配置</li>
+</ul>
+<h3 id="u9A71_u52A8_u6E90_u914D_u7F6E"><a href="#u9A71_u52A8_u6E90_u914D_u7F6E" class="headerlink" title="驱动源配置"></a>驱动源配置</h3><p>jdbc.properties<br><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">jdbc_driverClassName=com.mysql.jdbc.Driver</span><br><span class="line">jdbc_url=jdbc:mysql://localhost:<span class="number">3306</span>/hollysys?useUnicode=<span class="literal">true</span>&amp;amp;characterEncoding=utf-<span class="number">8</span></span><br><span class="line">jdbc_username=user</span><br><span class="line">jdbc_password=password</span><br></pre></td></tr></table></figure></p>
+<p>数据源<br><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br></pre></td><td class="code"><pre><span class="line">&lt;bean id=<span class="string">"dataSource"</span> class=<span class="string">"com.alibaba.druid.pool.DruidDataSource"</span></span><br><span class="line">	init-method=<span class="string">"init"</span> destroy-method=<span class="string">"close"</span>&gt;</span><br><span class="line">	&lt;property name=<span class="string">"driverClassName"</span>&gt;</span><br><span class="line">		&lt;value&gt;<span class="variable">$&#123;jdbc_driverClassName&#125;</span>&lt;/value&gt;</span><br><span class="line">	&lt;/property&gt;</span><br><span class="line">	&lt;property name=<span class="string">"url"</span>&gt;</span><br><span class="line">		&lt;value&gt;<span class="variable">$&#123;jdbc_url&#125;</span>&lt;/value&gt;</span><br><span class="line">	&lt;/property&gt;</span><br><span class="line">	&lt;property name=<span class="string">"username"</span>&gt;</span><br><span class="line">		&lt;value&gt;<span class="variable">$&#123;jdbc_username&#125;</span>&lt;/value&gt;</span><br><span class="line">	&lt;/property&gt;</span><br><span class="line">	&lt;property name=<span class="string">"password"</span>&gt;</span><br><span class="line">		&lt;value&gt;<span class="variable">$&#123;jdbc_password&#125;</span>&lt;/value&gt;</span><br><span class="line">	&lt;/property&gt;</span><br><span class="line">	&lt;!-- 连接池最大使用连接数 --&gt;</span><br><span class="line">	&lt;property name=<span class="string">"maxActive"</span>&gt;</span><br><span class="line">		&lt;value&gt;<span class="number">20</span>&lt;/value&gt;</span><br><span class="line">	&lt;/property&gt;</span><br><span class="line">	&lt;!-- 初始化连接大小 --&gt;</span><br><span class="line">	&lt;property name=<span class="string">"initialSize"</span>&gt;</span><br><span class="line">		&lt;value&gt;<span class="number">1</span>&lt;/value&gt;</span><br><span class="line">	&lt;/property&gt;</span><br><span class="line">	&lt;!-- 获取连接最大等待时间 --&gt;</span><br><span class="line">	&lt;property name=<span class="string">"maxWait"</span>&gt;</span><br><span class="line">		&lt;value&gt;<span class="number">60000</span>&lt;/value&gt;</span><br><span class="line">	&lt;/property&gt;</span><br><span class="line">	&lt;!-- 连接池最大空闲 --&gt;</span><br><span class="line">	&lt;property name=<span class="string">"maxIdle"</span>&gt;</span><br><span class="line">		&lt;value&gt;<span class="number">20</span>&lt;/value&gt;</span><br><span class="line">	&lt;/property&gt;</span><br><span class="line">	&lt;!-- 连接池最小空闲 --&gt;</span><br><span class="line">	&lt;property name=<span class="string">"minIdle"</span>&gt;</span><br><span class="line">		&lt;value&gt;<span class="number">3</span>&lt;/value&gt;</span><br><span class="line">	&lt;/property&gt;</span><br><span class="line">	&lt;!-- 自动清除无用连接 --&gt;</span><br><span class="line">	&lt;property name=<span class="string">"removeAbandoned"</span>&gt;</span><br><span class="line">		&lt;value&gt;<span class="literal">true</span>&lt;/value&gt;</span><br><span class="line">	&lt;/property&gt;</span><br><span class="line">	&lt;!-- 清除无用连接的等待时间 --&gt;</span><br><span class="line">	&lt;property name=<span class="string">"removeAbandonedTimeout"</span>&gt;</span><br><span class="line">		&lt;value&gt;<span class="number">180</span>&lt;/value&gt;</span><br><span class="line">	&lt;/property&gt;</span><br><span class="line">	&lt;!-- 连接属性 --&gt;</span><br><span class="line">	&lt;property name=<span class="string">"connectionProperties"</span>&gt;</span><br><span class="line">		&lt;value&gt;clientEncoding=UTF-<span class="number">8</span>&lt;/value&gt;</span><br><span class="line">	&lt;/property&gt;</span><br><span class="line">&lt;/bean&gt;</span><br></pre></td></tr></table></figure></p>
+<p>自动扫描配置<br><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">&lt;!-- configLocation为mybatis属性 mapperLocations为所有mapper --&gt;</span><br><span class="line">&lt;bean id=<span class="string">"sqlSessionFactory"</span> class=<span class="string">"org.mybatis.spring.SqlSessionFactoryBean"</span></span><br><span class="line">	p:dataSource-ref=<span class="string">"dataSource"</span> p:configLocation=<span class="string">"classpath:conf/mybatis-config.xml"</span></span><br><span class="line">	p:mapperLocations=<span class="string">"classpath:mapper/*.xml"</span> /&gt;</span><br></pre></td></tr></table></figure></p>
+<p>通过spring注入<br><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">&lt;!-- spring与mybatis整合配置，扫描所有dao --&gt;</span><br><span class="line">&lt;bean class=<span class="string">"org.mybatis.spring.mapper.MapperScannerConfigurer"</span></span><br><span class="line">	p:basePackage=<span class="string">"xyz.hollysys.api.dao"</span></span><br><span class="line">	p:sqlSessionFactoryBeanName=<span class="string">"sqlSessionFactory"</span> /&gt;</span><br></pre></td></tr></table></figure></p>
+<h3 id="u52A8_u6001sql_u914D_u7F6E"><a href="#u52A8_u6001sql_u914D_u7F6E" class="headerlink" title="动态sql配置"></a>动态sql配置</h3><pre><code>动态sql配置，是一个非常常用的高级功能，对于动态sql,使用xml还是比较方便的．
+</code></pre><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br></pre></td><td class="code"><pre><span class="line">&lt;!-- 示例中的UserDetail是POJO决不能类 --&gt;</span><br><span class="line">&lt;update id=<span class="string">"updateUserDetail"</span> parameterType=<span class="string">"UserDetail"</span>&gt;</span><br><span class="line">	update hls_user_detail <span class="built_in">set</span> user_id=<span class="comment">#&#123;user_id&#125; </span></span><br><span class="line">	&lt;<span class="keyword">if</span> <span class="built_in">test</span>=<span class="string">"user_idcard != null and user_idcard != '' "</span>&gt;</span><br><span class="line">		,user_idcard=<span class="comment">#&#123;user_idcard&#125;</span></span><br><span class="line">	&lt;/<span class="keyword">if</span>&gt;</span><br><span class="line">	&lt;<span class="keyword">if</span> <span class="built_in">test</span>=<span class="string">"user_idcardtype != null and user_idcardtype != '' "</span>&gt;</span><br><span class="line">		,user_idcardtype=<span class="comment">#&#123;user_idcardtype&#125;  </span></span><br><span class="line">	&lt;/<span class="keyword">if</span>&gt;</span><br><span class="line">	&lt;<span class="keyword">if</span> <span class="built_in">test</span>=<span class="string">" user_head != null and user_head != '' "</span>&gt;</span><br><span class="line">		,user_head=<span class="comment">#&#123;user_head&#125;  </span></span><br><span class="line">	&lt;/<span class="keyword">if</span>&gt;</span><br><span class="line">	&lt;<span class="keyword">if</span> <span class="built_in">test</span>=<span class="string">" user_nickname != null and user_nickname != '' "</span>&gt;</span><br><span class="line">		,user_nickname=<span class="comment">#&#123;user_nickname&#125;  </span></span><br><span class="line">	&lt;/<span class="keyword">if</span>&gt;</span><br><span class="line">	&lt;<span class="keyword">if</span> <span class="built_in">test</span>=<span class="string">" user_sex != null and user_sex != '' "</span>&gt;</span><br><span class="line">		,user_sex=<span class="comment">#&#123;user_sex&#125;  </span></span><br><span class="line">	&lt;/<span class="keyword">if</span>&gt;</span><br><span class="line">	&lt;<span class="keyword">if</span> <span class="built_in">test</span>=<span class="string">" user_birth_year != 0 "</span>&gt;</span><br><span class="line">		,user_birth_year=<span class="comment">#&#123;user_birth_year&#125;  </span></span><br><span class="line">	&lt;/<span class="keyword">if</span>&gt;</span><br><span class="line">	&lt;<span class="keyword">if</span> <span class="built_in">test</span>=<span class="string">" user_birth_month != 0 "</span>&gt;</span><br><span class="line">		,user_birth_month=<span class="comment">#&#123;user_birth_month&#125;  </span></span><br><span class="line">	&lt;/<span class="keyword">if</span>&gt;</span><br><span class="line">	&lt;<span class="keyword">if</span> <span class="built_in">test</span>=<span class="string">" user_birth_day != 0 "</span>&gt;</span><br><span class="line">		,user_birth_day=<span class="comment">#&#123;user_birth_day&#125;  </span></span><br><span class="line">	&lt;/<span class="keyword">if</span>&gt;</span><br><span class="line">	&lt;<span class="keyword">if</span> <span class="built_in">test</span>=<span class="string">" user_default_address != null and user_default_address != '' "</span>&gt;</span><br><span class="line">		,user_default_address=<span class="comment">#&#123;user_default_address&#125;  </span></span><br><span class="line">	&lt;/<span class="keyword">if</span>&gt;</span><br><span class="line">	&lt;<span class="keyword">if</span> <span class="built_in">test</span>=<span class="string">" user_default_mobile != null and user_default_mobile != '' "</span>&gt;</span><br><span class="line">		,user_default_mobile=<span class="comment">#&#123;user_default_mobile&#125;  </span></span><br><span class="line">	&lt;/<span class="keyword">if</span>&gt;</span><br><span class="line">	<span class="built_in">where</span> user_id = <span class="comment">#&#123;user_id&#125;</span></span><br><span class="line">&lt;/update&gt;</span><br></pre></td></tr></table></figure>
+<pre><code>当然，动态sql也可以使用注解来驱动．动态sql的注解有：
+</code></pre><ul>
+<li>@SelectProvider</li>
+<li>@InsertProvider</li>
+<li>@UpdateProvider</li>
+<li>@DeleteProvider</li>
+</ul>
+<h3 id="list_foreach_u914D_u7F6E"><a href="#list_foreach_u914D_u7F6E" class="headerlink" title="list foreach配置"></a>list foreach配置</h3><p><strong>select</strong>有时需要进行范围查询(in),通过xml也比较方便．<br><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">&lt;select id=<span class="string">"order_validAllTT"</span> &gt;</span><br><span class="line"> select sum(tt_num) as all_tt </span><br><span class="line"> from order_ct <span class="built_in">where</span> teacher_id = <span class="comment">#&#123;teacher_id&#125; </span></span><br><span class="line"> and oct_status <span class="keyword">in</span> </span><br><span class="line"> &lt;foreach item=<span class="string">"item"</span> index=<span class="string">"index"</span> collection=<span class="string">"list"</span> open=<span class="string">"("</span> separator=<span class="string">","</span> close=<span class="string">")"</span>&gt;</span><br><span class="line">  	<span class="comment">#&#123;oct_status_list&#125;</span></span><br><span class="line"> &lt;/foreach&gt;</span><br><span class="line">&lt;/select&gt;</span><br></pre></td></tr></table></figure></p>
+<h3 id="u4E8B_u52A1_u9A71_u52A8_u914D_u7F6E"><a href="#u4E8B_u52A1_u9A71_u52A8_u914D_u7F6E" class="headerlink" title="事务驱动配置"></a>事务驱动配置</h3><p>对数据源进行事务管理<br><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">&lt;!-- 对数据源进行事务管理 --&gt;</span><br><span class="line">&lt;bean id=<span class="string">"transactionManager"</span></span><br><span class="line">	class=<span class="string">"org.springframework.jdbc.datasource.DataSourceTransactionManager"</span></span><br><span class="line">	p:dataSource-ref=<span class="string">"dataSource"</span> /&gt;</span><br></pre></td></tr></table></figure></p>
+<p>管理事务注解，@Transational注解的方法，具有事务的特性<br><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">&lt;!-- 事务注解驱动，标注@Transactional的类和方法将具有事务性 --&gt;</span><br><span class="line">&lt;tx:annotation-driven transaction-manager=<span class="string">"transactionManager"</span> /&gt;</span><br></pre></td></tr></table></figure></p>
+<h2 id="u6CE8_u89E3_u914D_u7F6E"><a href="#u6CE8_u89E3_u914D_u7F6E" class="headerlink" title="注解配置"></a>注解配置</h2><p> 常用的注解有：</p>
+<ul>
+<li>@Select</li>
+<li>@Update</li>
+<li>@Insert</li>
+<li>@Delete</li>
+<li><p>@Transactional</p>
+<h3 id="@Select"><a href="#@Select" class="headerlink" title="@Select"></a>@Select</h3><p>查询操作，获取单个记录，简单如下：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">	@Select(<span class="string">"SELECT * FROM course where course_id=#&#123;course_id&#125; limit 1"</span>)</span><br><span class="line">Course getCourseInfo(@Param(<span class="string">"course_id"</span>)int course_id);</span><br></pre></td></tr></table></figure>
+</li>
+</ul>
+<p>获取多条记录，如下：<br><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">@Select(<span class="string">"SELECT `coupon_id` FROM `coupon` WHERE order_id=#&#123;order_id&#125;"</span>)</span><br><span class="line">List&lt;Integer&gt; getCouponIds(@Param(<span class="string">"order_id"</span>) int order_id);</span><br></pre></td></tr></table></figure></p>
+<p>如果实体类变量名与数据库field字段不一致，则需要配置映射关系．如下所示：<br><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"> @Results(value = &#123;  </span><br><span class="line">   @Result(property=<span class="string">"teacher_id"</span>,column=<span class="string">"teacher_id"</span>,javaType=Integer.class,jdbcType=JdbcType.INTEGER),  </span><br><span class="line">   @Result(property=<span class="string">"tt_time"</span>, column=<span class="string">"tt_time"</span>,javaType=Integer.class,jdbcType=JdbcType.INTEGER),</span><br><span class="line">   @Result(property=<span class="string">"free_num"</span>, column=<span class="string">"free_num"</span>,javaType=Short.class,jdbcType=JdbcType.TINYINT),</span><br><span class="line">   @Result(property=<span class="string">"timemap1"</span>, column=<span class="string">"timemap1"</span>,javaType=Integer.class,jdbcType=JdbcType.INTEGER),</span><br><span class="line">   @Result(property=<span class="string">"timemap2"</span>, column=<span class="string">"timemap2"</span>,javaType=Integer.class,jdbcType=JdbcType.INTEGER),</span><br><span class="line">   @Result(property=<span class="string">"timemap3"</span>,column=<span class="string">"timemap3"</span>,javaType=Integer.class,jdbcType=JdbcType.INTEGER)</span><br><span class="line"> &#125;) </span><br><span class="line">@Update(<span class="string">"update teacher_time set free_num=#&#123;free_num&#125;,timemap1=#&#123;timemap1&#125;,timemap2=#&#123;timemap2&#125;,timemap3=#&#123;timemap3&#125; where teacher_id=#&#123;teacher_id&#125; and tt_time=#&#123;tt_time&#125;"</span>)</span><br><span class="line">int updateTtByTt(TeacherTime tt);</span><br></pre></td></tr></table></figure></p>
+<h3 id="@Update"><a href="#@Update" class="headerlink" title="@Update"></a>@Update</h3><p>更新操作，简单如下：<br><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">@Update(<span class="string">"update `coupon` set `coupon_status` = #&#123;coupon_status&#125; where `order_id` =  #&#123;order_id&#125;"</span>)</span><br><span class="line">int updateCouponStatus(@Param(<span class="string">"order_id"</span>)int order_id,@Param(<span class="string">"coupon_status"</span>)short coupon_status);</span><br></pre></td></tr></table></figure></p>
+<p>如果实体类变量名与数据库field字段不一致，则需要配置映射关系．同上．</p>
+<h3 id="@Insert"><a href="#@Insert" class="headerlink" title="@Insert"></a>@Insert</h3><p>新增记录．简单如下：<br><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">@Insert(<span class="string">"insert into teacher_tag(teacher_id,tag_id) values(#&#123;teacher_id&#125;,#&#123;tag_id&#125;)"</span>)</span><br><span class="line">int insertTt(@Param(<span class="string">"teacher_id"</span>)int teacher_id,@Param(<span class="string">"tag_id"</span>)int tag_id);</span><br></pre></td></tr></table></figure></p>
+<p>如果实体类变量名与数据库field字段不一致，则需要配置映射关系．同上．</p>
+<h3 id="@Delete"><a href="#@Delete" class="headerlink" title="@Delete"></a>@Delete</h3><p>删除记录，如下：<br><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">@Delete(<span class="string">"delete from ysyy_teacher_tag where teacher_id=#&#123;teacher_id&#125;"</span>)</span><br><span class="line">int deleteTt(@Param(<span class="string">"teacher_id"</span>)int teacher_id);</span><br></pre></td></tr></table></figure></p>
+<h3 id="@Transactional"><a href="#@Transactional" class="headerlink" title="@Transactional"></a>@Transactional</h3><p>用于注解事务，没有事务的业务系统不是真的业务系统，所以这个必须会．其实很简单，在需要事务操作的方法前加上注解即可．<br><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">// 用户注册</span><br><span class="line">@Transactional</span><br><span class="line">public ApiResult register(Map&lt;String, String&gt; params, String body) &#123;&#125;</span><br></pre></td></tr></table></figure></p>
+<h3 id="u81EA_u52A8_u751F_u6210_u4E3B_u5EFA"><a href="#u81EA_u52A8_u751F_u6210_u4E3B_u5EFA" class="headerlink" title="自动生成主建"></a>自动生成主建</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">@Insert(<span class="string">"INSERT INTO STUDENTS(NAME,EMAIL,ADDR_ID, PHONE)</span><br><span class="line">        VALUES(#&#123;name&#125;,#&#123;email&#125;,#&#123;address.addrId&#125;,#&#123;phone&#125;)"</span>)</span><br><span class="line">@Options(useGeneratedKeys = <span class="literal">true</span>, keyProperty = <span class="string">"studId"</span>)</span><br><span class="line">int insertStudent(Student student);</span><br></pre></td></tr></table></figure>
+<p>这里STUD_ID列值将会通过MySQL数据库自动生成。并且生成的值将会被设置到student对象的studId属性中。</p>
+<h3 id="u7ED3_u679C_u6620_u5C04"><a href="#u7ED3_u679C_u6620_u5C04" class="headerlink" title="结果映射"></a>结果映射</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">@Select(<span class="string">"select * from app_user where sso_id=#&#123;sso_id&#125;"</span>)</span><br><span class="line">@Results(value = &#123;</span><br><span class="line">		@Result(property = <span class="string">"ssoId"</span>, column = <span class="string">"sso_id"</span>, javaType = String.class, jdbcType = JdbcType.VARCHAR),</span><br><span class="line">		@Result(property = <span class="string">"firstName"</span>, column = <span class="string">"first_name"</span>, javaType = String.class, jdbcType = JdbcType.VARCHAR),</span><br><span class="line">		@Result(property = <span class="string">"lastName"</span>, column = <span class="string">"last_name"</span>, javaType = String.class, jdbcType = JdbcType.VARCHAR) &#125;)</span><br><span class="line">User findBySSO(@Param(<span class="string">"sso_id"</span>) String sso_id);</span><br></pre></td></tr></table></figure>
+<h2 id="u5173_u7CFB_u6620_u5C04"><a href="#u5173_u7CFB_u6620_u5C04" class="headerlink" title="关系映射"></a>关系映射</h2><p>　关系映射这种功能，在关系数据库表中相当常见．关系映射有：</p>
+<ul>
+<li>一对一映射</li>
+<li>一对多映射</li>
+<li>多对多映射</li>
+</ul>
+<h3 id="u4E00_u5BF9_u4E00_u6620_u5C04"><a href="#u4E00_u5BF9_u4E00_u6620_u5C04" class="headerlink" title="一对一映射"></a>一对一映射</h3><p>MyBatis提供了@One注解来使用嵌套select语句（Nested-Select）加载一对一关联查询数据。</p>
+<h3 id="u4E00_u5BF9_u591A_u6620_u5C04"><a href="#u4E00_u5BF9_u591A_u6620_u5C04" class="headerlink" title="一对多映射"></a>一对多映射</h3><p>MyBatis提供了@Many注解，用来使用嵌套Select语句加载一对多关联查询。<br><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">@Select(<span class="string">"select * from app_user where id=#&#123;id&#125;"</span>)</span><br><span class="line">@Results(value = &#123;</span><br><span class="line">		 @Result(id = <span class="literal">true</span>, column = <span class="string">"id"</span>, property = <span class="string">"id"</span>),  </span><br><span class="line">           @Result(property=<span class="string">"userProfiles"</span>, javaType=List.class, column=<span class="string">"id"</span>,</span><br><span class="line">                  many=@Many(select=<span class="string">"xyz.hollysys.spring.mybatis_super.dao.UserProfileDao.getUserProfiles"</span>))</span><br><span class="line">           &#125;)</span><br><span class="line">User findById(@Param(<span class="string">"id"</span>) int id);</span><br></pre></td></tr></table></figure></p>
+<p><strong>getUserProfiles</strong>的实现在这里<br><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">@Select(<span class="string">"select uu.user_id as id, p.type as type from app_user_user_profile uu,user_profile p,app_user au where uu.user_profile_id=p.id and uu.user_id=#&#123;user_id&#125; and au.state='Active' and au.id=uu.user_id"</span>)</span><br><span class="line">List&lt;UserProfile&gt; getUserProfiles(@Param(<span class="string">"user_id"</span>)int user_id);</span><br></pre></td></tr></table></figure></p>
+<h3 id="u591A_u5BF9_u591A_u6620_u5C04"><a href="#u591A_u5BF9_u591A_u6620_u5C04" class="headerlink" title="多对多映射"></a>多对多映射</h3><h2 id="u52A8_u6001sql_28_u4F7F_u7528_u6CE8_u89E3_29"><a href="#u52A8_u6001sql_28_u4F7F_u7528_u6CE8_u89E3_29" class="headerlink" title="动态sql(使用注解)"></a>动态sql(使用注解)</h2><h3 id="sql_u8BED_u53E5_u6765_u6E90_u4E8E_u6CE8_u89E3"><a href="#sql_u8BED_u53E5_u6765_u6E90_u4E8E_u6CE8_u89E3" class="headerlink" title="sql语句来源于注解"></a>sql语句来源于注解</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">@SelectProvider(<span class="built_in">type</span> = SqlProvider.class, method = <span class="string">"updateUser"</span>)</span><br><span class="line">void update(User user);</span><br></pre></td></tr></table></figure>
+<h3 id="u52A8_u6001sql_u6CE8_u89E3"><a href="#u52A8_u6001sql_u6CE8_u89E3" class="headerlink" title="动态sql注解"></a>动态sql注解</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br></pre></td><td class="code"><pre><span class="line">import org.apache.ibatis.jdbc.SQL;</span><br><span class="line">import org.apache.log4j.Logger;</span><br><span class="line">import xyz.hollysys.spring.mybatis_super.model.User;</span><br><span class="line"></span><br><span class="line">public class SqlProvider &#123;</span><br><span class="line">	static Logger logger = Logger.getLogger(SqlProvider.class);</span><br><span class="line">	public String selectUser(int id)&#123;</span><br><span class="line">		String sql = <span class="string">"select * from app_user where id="</span> + id;</span><br><span class="line">		logger.info(sql);</span><br><span class="line">		<span class="built_in">return</span> sql;</span><br><span class="line">	&#125;</span><br><span class="line">	</span><br><span class="line">	public String updateUser(final User user)&#123;</span><br><span class="line">		String sql =  new <span class="function"><span class="title">SQL</span></span>() &#123;</span><br><span class="line">            &#123;</span><br><span class="line">                UPDATE(<span class="string">"app_user"</span>);</span><br><span class="line">                <span class="keyword">if</span> (user.getEmail() != null) &#123;</span><br><span class="line">                    SET(<span class="string">"email = #&#123;email&#125;"</span>);</span><br><span class="line">                &#125;</span><br><span class="line">                <span class="keyword">if</span> (user.getFirst_name() != null) &#123;</span><br><span class="line">                    SET(<span class="string">"first_name = #&#123;first_name&#125;"</span>);</span><br><span class="line">                &#125;</span><br><span class="line">                WHERE(<span class="string">"id = #&#123;id&#125;"</span>);</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;.toString();</span><br><span class="line">		</span><br><span class="line">        logger.info(sql);</span><br><span class="line">        </span><br><span class="line">		<span class="built_in">return</span> sql;</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>  mybatis的基本操作已经完成，其实通过一点小技巧，mybatis还可以搞更高级的操作，如分库分表，读写分离，后继会有介绍．</p>
+	  
+
+	  <div>
+  		<center>
+		  <div class="pagination">
+<ul class="pagination">
+	
+	
+	
+	
+	
+	
+		
+		
+	
+		
+		
+	
+		
+		
+	
+		
+		
+	
+		
+		
+	
+		
+		
+	
+		
+		
+	
+		
+		
+	
+		
+		
+	
+		
+		
+	
+		
+		
+	
+		
+		
+	
+		
+		
+	
+		
+		
+	
+		
+		
+	
+		
+		
+			
+		
+	
+		
+		
+	
+		
+		
+	
+		
+		
+			
+		
+	
+		
+		
+	
+		
+		
+	
+		
+		
+	
+		
+		
+	
+		
+		
+	
+		
+		
+	
+		
+		
+			
+		
+	
+		
+		
+	
+		
+		
+			
+		
+	
+		
+		
+			
+		
+	
+		
+		
+			
+		
+	
+		
+		
+			
+		
+	
+		
+		
+			
+		
+	
+		
+		
+			
+		
+	
+		
+		
+			
+		
+	
+		
+		
+			
+		
+	
+		
+		
+	
+		
+		
+	
+		
+		
+			
+		
+	
+		
+		
+	
+		
+		
+			
+		
+	
+		
+		
+			
+		
+	
+		
+		
+	
+		
+		
+	
+		
+		
+	
+		
+		
+	
+		
+		
+	
+		
+		
+	
+		
+		
+			
+		
+	
+		
+		
+	
+		
+		
+	
+		
+		
+	
+		
+		
+	
+		
+		
+	
+		
+		
+	
+		
+		
+	
+		
+		
+	
+		
+		
+	
+		
+		
+	
+		
+		
+	
+		
+		
+	
+		
+		
+	
+		
+		
+	
+		
+		
+	
+		
+		
+	
+		
+		
+			
+		
+	
+		
+		
+			
+		
+	
+		
+		
+			
+		
+	
+		
+		
+			
+		
+	
+		
+		
+			
+		
+	
+		
+		
+			
+		
+	
+		
+		
+			
+		
+	
+		
+		
+	
+		
+		
+			
+			
+		
+	
+		
+		
+	
+		
+		
+	
+		
+		
+	
+		
+		
+	
+		
+		
+			
+			
+			
+		
+		
+	
+		
+		
+			
+		
+	
+		
+		
+			
+		
+	
+		
+		
+	
+		
+		
+			
+		
+	
+		
+		
+	
+		
+		
+	
+		
+		
+	
+		
+		
+	
+		
+		
+	
+		
+		
+			
+		
+	
+		
+		
+	
+		
+		
+	
+		
+		
+			
+		
+	
+		
+		
+			
+		
+	
+		
+		
+	
+		
+		
+	
+		
+		
+	
+		
+		
+	
+		
+		
+			
+		
+	
+		
+		
+	
+		
+		
+	
+		
+		
+	
+		
+		
+	
+		
+		
+	
+		
+		
+	
+		
+		
+	
+		
+		
+			
+		
+	
+		
+		
+			
+		
+	
+		
+		
+			
+		
+	
+		
+		
+	
+		
+		
+	
+		
+		
+	
+	
+	
+		<li class="prev"><a href="/2016/01/17/mybatis分布式事务/" class="alignleft prev"><i class="fa fa-arrow-circle-o-left"></i>prev</a></li>
+	
+	<li><a href="/"><i class="fa fa-archive"></i>Home</a></li>
+	
+		<li class="next"><a href="/2016/01/13/java-json-map/" class="alignright next">next<i class="fa fa-arrow-circle-o-right"></i></a></li>
+	
+</ul>
+</div>
+
+		</center>
+	  </div>
+	  
+	</div> <!-- col-md-9/col-md-12 -->
+	
+  </div><!-- row -->
+
+	</div>
+  </div>
+  <div class="container-narrow">
+	<footer> <p>
+  &copy; 2016 niejinping
+  
+      with help from <a href="http://zespia.tw/hexo/" target="_blank">Hexo</a> and <a href="http://getbootstrap.com/" target="_blank">Twitter Bootstrap</a>. Theme by <a href="http://github.com/wzpan/hexo-theme-wixo/">Wixo</a>.    
+</p> </footer>
+  </div> <!-- container-narrow -->
+  
+<a id="gotop" href="#">   
+  <span>▲</span> 
+</a>
+
+<script src="/js/jquery.imagesloaded.min.js"></script>
+<script src="/js/gallery.js"></script>
+<script src="/js/bootstrap.min.js"></script>
+<script src="/js/jquery.tableofcontents.min.js"></script>
+<script src="/js/tocgenerator.min.js"></script>
+<script src="/js/main.js"></script>
+
+
+
+
+<link rel="stylesheet" href="/fancybox/jquery.fancybox.css" media="screen" type="text/css">
+<script src="/fancybox/jquery.fancybox.pack.js"></script>
+<script type="text/javascript">
+(function($){
+  $('.fancybox').fancybox();
+})(jQuery);
+</script>
+
+
+<script>
+var _hmt = _hmt || [];
+(function() {
+  var hm = document.createElement("script");
+  hm.src = "//hm.baidu.com/hm.js?78cd2d23583461b225b36bbf47433d64";
+  var s = document.getElementsByTagName("script")[0]; 
+  s.parentNode.insertBefore(hm, s);
+})();
+</script>
+
+</body>
+</html>
