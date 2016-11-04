@@ -26,5 +26,5 @@ branches:
   only:
     - source
 env:
- global:
-   - GH_REF: github.com/njkfei/njkfei.github.io.git
+  global:
+    - GH_REF: github.com/njkfei/njkfei.github.io.git
