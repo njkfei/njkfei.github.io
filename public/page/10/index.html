@@ -96,6 +96,94 @@ ga('send', 'pageview');
       <div class="outer">
         <section id="main">
   
+    <article id="post-servlet" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2016/01/08/servlet/" class="article-date">
+  <time datetime="2016-01-07T16:00:00.000Z" itemprop="datePublished">2016-01-08</time>
+</a>
+    
+  <div class="article-category">
+    <a class="article-category-link" href="/categories/java/">java</a>
+  </div>
+
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2016/01/08/servlet/">servlet实践</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <!-- Table of Contents -->
+        
+        <pre><code>从事java web开发，必须了解servlet．servlet是基础性的东西，springmvc,tomcat都是servlet容器．
+</code></pre><h2 id="u57FA_u672C_u6982_u5FF5"><a href="#u57FA_u672C_u6982_u5FF5" class="headerlink" title="基本概念"></a><a href="https://zh.wikipedia.org/wiki/Java_Servlet" target="_blank" rel="external">基本概念</a></h2><p>Servlet（Server Applet），全称Java Servlet，未有中文译文。是用Java编写的服务器端程序。其主要功能在于交互式地浏览和修改数据，生成动态Web内容。狭义的Servlet是指Java语言实现的一个接口，广义的Servlet是指任何实现了这个Servlet接口的类，一般情况下，人们将Servlet理解为后者。<br>Servlet运行于支持Java的应用服务器中。从实现上讲，Servlet可以响应任何类型的请求，但绝大多数情况下Servlet只用来扩展基于HTTP协议的Web服务器。<br>最早支持Servlet标准的是JavaSoft的Java Web Server。此后，一些其它的基于Java的Web服务器开始支持标准的Servlet。<br>　上面这段话抄自<a href="https://zh.wikipedia.org/wiki/Java_Servlet" target="_blank" rel="external">WIKI</a>.<br>　简单来说：servlet是一个前端控制器，它接收来自外部的(http)请求．经过业务处理后，生成响应结果提供给外部系统．</p>
+<h2 id="u9898_u5916_u8BDD_uFF1Aweb_u4E09_u5927_u7EC4_u4EF6"><a href="#u9898_u5916_u8BDD_uFF1Aweb_u4E09_u5927_u7EC4_u4EF6" class="headerlink" title="题外话：web三大组件"></a>题外话：web三大组件</h2><ul>
+<li>servlet : 本文的重点</li>
+<li>listerner : 监听器，可以监听配置文件，可以监听session的变化．</li>
+<li>filter : 过滤器，可以做一些比较琐碎的工作，比如统一编码，比如检查入口参数，比如在输出时，统一添加数据等等．</li>
+</ul>
+<h2 id="u5173_u952E_u5BF9_u8C61"><a href="#u5173_u952E_u5BF9_u8C61" class="headerlink" title="关键对象"></a>关键对象</h2><ul>
+<li>HttpServlet : 处理<em>Http</em>请求的类．</li>
+<li>HttpServletRequest : 外部的<em>Http</em>请求数据</li>
+<li>HttpServletResponse : 响应<em>Http</em>结果</li>
+</ul>
+<h2 id="u5173_u952E_u65B9_u6CD5"><a href="#u5173_u952E_u65B9_u6CD5" class="headerlink" title="关键方法"></a>关键方法</h2><ul>
+<li>doGet : 处理<em>Get</em>请求</li>
+<li>doPost : 处理<em>Post</em>请求</li>
+<li>doPut : 处理<em>Put</em>请求</li>
+<li>doDelete : 处理<em>Delete</em>请求</li>
+<li>doOptions : 处理<em>Options</em>请求</li>
+<li>doTrace　: 处理<em>Trace</em>请求</li>
+<li>doService : 处理<em>Http</em>请求，并根据请求类型，调用上面6个中的方法．</li>
+</ul>
+<p>下面一一介绍</p>
+<h2 id="HttpServlet"><a href="#HttpServlet" class="headerlink" title="HttpServlet"></a>HttpServlet</h2><pre><code>_HttpServlet_用于通过_doService_方法,处理来自外部的_Get_或_Post_请求．并生成响应结果．一般需要根据业务需要，_extends_该类．
+</code></pre><p>再<em>override</em>掉<em>doGet</em>或<em>doPost</em>方法．在<em>doGet</em>或<em>doPost</em>里面，完成业务逻辑的处理．<br>示例如下：<br><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br></pre></td><td class="code"><pre><span class="line">/**</span><br><span class="line"> * 最简单的Servlet</span><br><span class="line"> * @author niejinping</span><br><span class="line"> */</span><br><span class="line">public class HelloServlet extends HttpServlet &#123;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">/*	最好不要这样做哈</span><br><span class="line">	@Override</span><br><span class="line">	protected void service(HttpServletRequest req, HttpServletResponse res)</span><br><span class="line">			throws ServletException, IOException &#123;</span><br><span class="line">		res.getWriter().println(<span class="string">"Hello World!"</span>);</span><br><span class="line">	&#125; */</span><br><span class="line"></span><br><span class="line">	// 处理Get请求</span><br><span class="line">	 public void <span class="keyword">do</span>Get(HttpServletRequest request,</span><br><span class="line">             HttpServletResponse response)</span><br><span class="line">     throws ServletException, IOException&#123;</span><br><span class="line">	      PrintWriter out = response.getWriter();</span><br><span class="line">	      out.println(<span class="string">"hello world"</span>);</span><br><span class="line">	  &#125;</span><br><span class="line">	 </span><br><span class="line">	 // 处理Post请求</span><br><span class="line">	 public void <span class="keyword">do</span>Post(HttpServletRequest request,</span><br><span class="line">             HttpServletResponse response)</span><br><span class="line">     throws ServletException, IOException&#123;</span><br><span class="line">		  PrintWriter out = response.getWriter();</span><br><span class="line">	      out.println(<span class="string">"hello world"</span>);</span><br><span class="line">		&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<h2 id="HttpServletRequest"><a href="#HttpServletRequest" class="headerlink" title="HttpServletRequest"></a>HttpServletRequest</h2><pre><code>_HttpServletRequest_里面，含有request的上下文，包括：
+</code></pre><ul>
+<li>header信息</li>
+<li>路径信息</li>
+<li>query信息</li>
+<li>session信息</li>
+<li>cookie信息</li>
+<li>body请求<h3 id="header_u4FE1_u606F"><a href="#header_u4FE1_u606F" class="headerlink" title="header信息"></a>header信息</h3></li>
+</ul>
+<h3 id="u8DEF_u5F84_u4FE1_u606F"><a href="#u8DEF_u5F84_u4FE1_u606F" class="headerlink" title="路径信息"></a>路径信息</h3><h3 id="query_u4FE1_u606F"><a href="#query_u4FE1_u606F" class="headerlink" title="query信息"></a>query信息</h3><h3 id="session_u4FE1_u606F"><a href="#session_u4FE1_u606F" class="headerlink" title="session信息"></a>session信息</h3><h3 id="cookie_u4FE1_u606F"><a href="#cookie_u4FE1_u606F" class="headerlink" title="cookie信息"></a>cookie信息</h3><h2 id="HttpServletResponse"><a href="#HttpServletResponse" class="headerlink" title="HttpServletResponse"></a>HttpServletResponse</h2><pre><code>_HttpServletResponse_里面，含有response的上下文，包括：
+</code></pre><ul>
+<li>session设置信息</li>
+<li>cookie设置信息</li>
+<li>body响应信息</li>
+</ul>
+<h3 id="session_u8BBE_u7F6E_u4FE1_u606F"><a href="#session_u8BBE_u7F6E_u4FE1_u606F" class="headerlink" title="session设置信息"></a>session设置信息</h3><h3 id="cookie_u8BBE_u7F6E_u4FE1_u606F"><a href="#cookie_u8BBE_u7F6E_u4FE1_u606F" class="headerlink" title="cookie设置信息"></a>cookie设置信息</h3><h3 id="body_u54CD_u5E94_u4FE1_u606F"><a href="#body_u54CD_u5E94_u4FE1_u606F" class="headerlink" title="body响应信息"></a>body响应信息</h3><h2 id="web-xml_u914D_u7F6E"><a href="#web-xml_u914D_u7F6E" class="headerlink" title="web.xml配置"></a>web.xml配置</h2><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br></pre></td><td class="code"><pre><span class="line">&lt;?xml version=<span class="string">"1.0"</span> encoding=<span class="string">"ISO-8859-1"</span>?&gt;</span><br><span class="line">&lt;web-app xmlns=<span class="string">"http://java.sun.com/xml/ns/javaee"</span></span><br><span class="line">  xmlns:xsi=<span class="string">"http://www.w3.org/2001/XMLSchema-instance"</span></span><br><span class="line">  xsi:schemaLocation=<span class="string">"http://java.sun.com/xml/ns/javaee</span><br><span class="line">                      http://java.sun.com/xml/ns/javaee/web-app_3_0.xsd"</span></span><br><span class="line">  version=<span class="string">"3.0"</span></span><br><span class="line">  metadata-complete=<span class="string">"true"</span>&gt;</span><br><span class="line">  &lt;display-name&gt;Welcome to Tomcat&lt;/display-name&gt;</span><br><span class="line">  &lt;description&gt;</span><br><span class="line">     Welcome to Tomcat</span><br><span class="line">  &lt;/description&gt;</span><br><span class="line">	&lt;filter&gt;</span><br><span class="line">		&lt;filter-name&gt;helloFilter&lt;/filter-name&gt;</span><br><span class="line">		&lt;filter-class&gt;cn.njp.learn.io.servlet_demo.HelloFilter&lt;/filter-class&gt;</span><br><span class="line">	&lt;/filter&gt;</span><br><span class="line">	&lt;filter-mapping&gt;</span><br><span class="line">		&lt;filter-name&gt;helloFilter&lt;/filter-name&gt;</span><br><span class="line">		&lt;url-pattern&gt;/*&lt;/url-pattern&gt;</span><br><span class="line">	&lt;/filter-mapping&gt;</span><br><span class="line">	&lt;servlet&gt;</span><br><span class="line">		&lt;servlet-name&gt;hello_world&lt;/servlet-name&gt;</span><br><span class="line">		&lt;servlet-class&gt;cn.njp.learn.io.servlet_demo.HelloServlet&lt;/servlet-class&gt;</span><br><span class="line">		&lt;load-on-startup&gt;<span class="number">1</span>&lt;/load-on-startup&gt;</span><br><span class="line">	&lt;/servlet&gt;</span><br><span class="line">	&lt;servlet-mapping&gt;</span><br><span class="line">		&lt;servlet-name&gt;hello_world&lt;/servlet-name&gt;</span><br><span class="line">		&lt;url-pattern&gt;/hello&lt;/url-pattern&gt;</span><br><span class="line">	&lt;/servlet-mapping&gt;</span><br><span class="line"></span><br><span class="line">&lt;/web-app&gt;</span><br></pre></td></tr></table></figure>
+<h2 id="u5168_u90E8_u4EE3_u7801"><a href="#u5168_u90E8_u4EE3_u7801" class="headerlink" title="全部代码"></a>全部代码</h2><p>下面这段代码，基本上包含了所有常用的方法调用了．<br>HelloServlet.java<br><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br><span class="line">101</span><br><span class="line">102</span><br><span class="line">103</span><br><span class="line">104</span><br><span class="line">105</span><br><span class="line">106</span><br><span class="line">107</span><br><span class="line">108</span><br><span class="line">109</span><br><span class="line">110</span><br><span class="line">111</span><br><span class="line">112</span><br><span class="line">113</span><br><span class="line">114</span><br><span class="line">115</span><br><span class="line">116</span><br><span class="line">117</span><br><span class="line">118</span><br><span class="line">119</span><br><span class="line">120</span><br><span class="line">121</span><br><span class="line">122</span><br><span class="line">123</span><br><span class="line">124</span><br><span class="line">125</span><br><span class="line">126</span><br><span class="line">127</span><br><span class="line">128</span><br><span class="line">129</span><br><span class="line">130</span><br><span class="line">131</span><br><span class="line">132</span><br><span class="line">133</span><br><span class="line">134</span><br><span class="line">135</span><br><span class="line">136</span><br><span class="line">137</span><br><span class="line">138</span><br><span class="line">139</span><br><span class="line">140</span><br><span class="line">141</span><br><span class="line">142</span><br><span class="line">143</span><br><span class="line">144</span><br><span class="line">145</span><br><span class="line">146</span><br><span class="line">147</span><br><span class="line">148</span><br><span class="line">149</span><br><span class="line">150</span><br><span class="line">151</span><br><span class="line">152</span><br><span class="line">153</span><br><span class="line">154</span><br><span class="line">155</span><br><span class="line">156</span><br><span class="line">157</span><br><span class="line">158</span><br><span class="line">159</span><br><span class="line">160</span><br><span class="line">161</span><br><span class="line">162</span><br><span class="line">163</span><br><span class="line">164</span><br><span class="line">165</span><br><span class="line">166</span><br><span class="line">167</span><br><span class="line">168</span><br><span class="line">169</span><br><span class="line">170</span><br><span class="line">171</span><br><span class="line">172</span><br><span class="line">173</span><br><span class="line">174</span><br><span class="line">175</span><br><span class="line">176</span><br><span class="line">177</span><br><span class="line">178</span><br><span class="line">179</span><br><span class="line">180</span><br><span class="line">181</span><br><span class="line">182</span><br><span class="line">183</span><br><span class="line">184</span><br><span class="line">185</span><br><span class="line">186</span><br><span class="line">187</span><br><span class="line">188</span><br><span class="line">189</span><br><span class="line">190</span><br><span class="line">191</span><br><span class="line">192</span><br><span class="line">193</span><br><span class="line">194</span><br><span class="line">195</span><br><span class="line">196</span><br><span class="line">197</span><br><span class="line">198</span><br><span class="line">199</span><br><span class="line">200</span><br><span class="line">201</span><br><span class="line">202</span><br></pre></td><td class="code"><pre><span class="line">package cn.njp.learn.io.servlet_demo;</span><br><span class="line"></span><br><span class="line">import java.io.IOException;</span><br><span class="line">import java.io.PrintWriter;</span><br><span class="line">import java.util.Enumeration;</span><br><span class="line">import java.util.Map;</span><br><span class="line">import java.util.Set;</span><br><span class="line"></span><br><span class="line">import javax.servlet.ServletException;</span><br><span class="line">import javax.servlet.http.Cookie;</span><br><span class="line">import javax.servlet.http.HttpServlet;</span><br><span class="line">import javax.servlet.http.HttpServletRequest;</span><br><span class="line">import javax.servlet.http.HttpServletResponse;</span><br><span class="line">import javax.servlet.http.HttpSession;</span><br><span class="line"></span><br><span class="line">import com.google.gson.*;</span><br><span class="line">/**</span><br><span class="line"> * 最简单的Servlet</span><br><span class="line"> * @author niejinping</span><br><span class="line"> */</span><br><span class="line">public class HelloServlet extends HttpServlet &#123;</span><br><span class="line"></span><br><span class="line">	/**</span><br><span class="line">	 * </span><br><span class="line">	 */</span><br><span class="line">	private static final long serialVersionUID = <span class="number">1</span>L;</span><br><span class="line"></span><br><span class="line">/*	@Override</span><br><span class="line">	protected void service(HttpServletRequest req, HttpServletResponse res)</span><br><span class="line">			throws ServletException, IOException &#123;</span><br><span class="line">		res.getWriter().println(<span class="string">"Hello World!"</span>);</span><br><span class="line">	&#125;*/</span><br><span class="line"></span><br><span class="line">	 public void <span class="keyword">do</span>Get(HttpServletRequest request,</span><br><span class="line">             HttpServletResponse response)</span><br><span class="line">     throws ServletException, IOException&#123;</span><br><span class="line">/*		 	User user = new User(<span class="number">1</span>,<span class="string">"niejinping"</span>);</span><br><span class="line">		 	String json = new Gson().toJson(user);</span><br><span class="line">			// 设置响应内容类型</span><br><span class="line">			response.setContentType(<span class="string">"text/html"</span>);</span><br><span class="line">			response.setCharacterEncoding(<span class="string">"utf-8"</span>);</span><br><span class="line">			response.setHeader(<span class="string">"cookee"</span>,<span class="string">"mycooki"</span>);</span><br><span class="line">			//response.setStatus(<span class="number">404</span>);</span><br><span class="line">			Cookie cookie = new Cookie(<span class="string">"cookie1"</span>, <span class="string">"cookie1"</span>);</span><br><span class="line">			response.addCookie(cookie);</span><br><span class="line">			response.addIntHeader(<span class="string">"h1"</span>, <span class="number">111</span>);</span><br><span class="line">			response.addHeader(<span class="string">"h2"</span>, <span class="string">"header2"</span>);</span><br><span class="line">			// response.sendRedirect(<span class="string">"localhost:8080/hello/index.html"</span>);</span><br><span class="line">			</span><br><span class="line">			// 实际的逻辑是在这里</span><br><span class="line">			PrintWriter out = response.getWriter();</span><br><span class="line">			out.println(json);*/</span><br><span class="line">			// System.out.println(<span class="string">"处理URI="</span>+request.getRequestURI());</span><br><span class="line">			// 设置响应内容类型</span><br><span class="line">	   	  	//response.setContentType(<span class="string">"text/html"</span>);</span><br><span class="line">	      	//response.setContentType(<span class="string">"utf-8"</span>);</span><br><span class="line">	      	//response.setCharacterEncoding(<span class="string">"utf-8"</span>);</span><br><span class="line">		 	</span><br><span class="line">			Cookie cookie = new Cookie(<span class="string">"cookie1"</span>, <span class="string">"cookie1"</span>);</span><br><span class="line">			cookie.setMaxAge(<span class="number">3600</span>*<span class="number">12</span>);</span><br><span class="line">			response.addCookie(cookie);</span><br><span class="line">			</span><br><span class="line">			Cookie cookie2 = new Cookie(<span class="string">"cookie2"</span>, <span class="string">"cookie2"</span>);</span><br><span class="line">			cookie2.setMaxAge(<span class="number">3600</span>*<span class="number">24</span>);</span><br><span class="line">			response.addCookie(cookie2);</span><br><span class="line">	     	response.setHeader(<span class="string">"Content-Type"</span>, <span class="string">"text/html;charset=UTF-8"</span>);</span><br><span class="line">	      </span><br><span class="line">	      	PrintWriter out = response.getWriter();</span><br><span class="line">		  	String title = <span class="string">"使用 GET 方法读取表单数据"</span>;</span><br><span class="line">	      	String docType =</span><br><span class="line">	      	<span class="string">"&lt;!doctype html public \"-//w3c//dtd html 4.0 "</span> +</span><br><span class="line">	      	<span class="string">"transitional//en\"&gt;\n"</span>;</span><br><span class="line">	      	out.println(docType +</span><br><span class="line">	                <span class="string">"&lt;html&gt;\n"</span> +</span><br><span class="line">	                <span class="string">"&lt;head&gt;&lt;title&gt;"</span> + title + <span class="string">"&lt;/title&gt;&lt;/head&gt;\n"</span> +</span><br><span class="line">	                <span class="string">"&lt;body bgcolor=\"#f0f0f0\"&gt;\n"</span> +</span><br><span class="line">	                <span class="string">"&lt;h1 align=\"center\"&gt;"</span> + title + <span class="string">"&lt;/h1&gt;\n"</span> +</span><br><span class="line">	                <span class="string">"&lt;ul&gt;\n"</span> +</span><br><span class="line">	                <span class="string">"  &lt;li&gt;&lt;b&gt;名字&lt;/b&gt;："</span></span><br><span class="line">	                + request.getParameter(<span class="string">"first_name"</span>) + <span class="string">"\n"</span> +</span><br><span class="line">	                <span class="string">"  &lt;li&gt;&lt;b&gt;姓氏&lt;/b&gt;："</span></span><br><span class="line">	                + request.getParameter(<span class="string">"last_name"</span>) + <span class="string">"\n"</span> +</span><br><span class="line">	                <span class="string">"&lt;/ul&gt;\n"</span> +</span><br><span class="line">	                <span class="string">"&lt;/body&gt;&lt;/html&gt;"</span>);</span><br><span class="line">	  &#125;</span><br><span class="line">	 </span><br><span class="line">/*	 <span class="number">1</span>. 获得客户机信息</span><br><span class="line">	    getRequestURL方法返回客户端发出请求时的完整URL。</span><br><span class="line">	    getRequestURI方法返回请求行中的资源名部分。</span><br><span class="line">	    getQueryString 方法返回请求行中的参数部分。</span><br><span class="line">	    getRemoteAddr方法返回发出请求的客户机的IP地址 </span><br><span class="line">	    getRemoteHost方法返回发出请求的客户机的完整主机名</span><br><span class="line">	    getRemotePort方法返回客户机所使用的网络端口号</span><br><span class="line">	    getLocalAddr方法返回WEB服务器的IP地址。</span><br><span class="line">	    getLocalName方法返回WEB服务器的主机名 </span><br><span class="line">	    getMethod得到客户机请求方式</span><br><span class="line">	 <span class="number">2</span>.获得客户机请求头 </span><br><span class="line">	    getHeader(string name)方法 </span><br><span class="line">	    getHeaders(String name)方法 </span><br><span class="line">	    getHeaderNames方法 </span><br><span class="line"></span><br><span class="line">	 <span class="number">3</span>. 获得客户机请求参数(客户端提交的数据)</span><br><span class="line">	    getParameter(name)方法</span><br><span class="line">	    getParameterValues（String name）方法</span><br><span class="line">	    getParameterNames方法 </span><br><span class="line">	    getParameterMap方法*/</span><br><span class="line">	 public void <span class="keyword">do</span>Post(HttpServletRequest request,</span><br><span class="line">             HttpServletResponse response)</span><br><span class="line">     throws ServletException, IOException&#123;</span><br><span class="line">		StringBuilder sb = new StringBuilder();</span><br><span class="line">		</span><br><span class="line">		sb.append(<span class="string">"characterencoding : "</span>);</span><br><span class="line">		sb.append(request.getCharacterEncoding()); </span><br><span class="line">		</span><br><span class="line">		sb.append(<span class="string">"\nauthtype:"</span>);</span><br><span class="line">		sb.append(request.getAuthType());</span><br><span class="line">		</span><br><span class="line">		sb.append(<span class="string">"\ngetContentLength : "</span>);</span><br><span class="line">		sb.append(request.getContentLength());</span><br><span class="line">		</span><br><span class="line">		sb.append(<span class="string">"\ngetContextPath : "</span>);</span><br><span class="line">		sb.append(request.getContextPath());</span><br><span class="line">		</span><br><span class="line">		sb.append(<span class="string">"\ngetLocalAddr:"</span>);</span><br><span class="line">		sb.append(request.getLocalAddr());</span><br><span class="line">		</span><br><span class="line">		sb.append(<span class="string">"\ngetLocalName"</span>);</span><br><span class="line">		sb.append(request.getLocalName());</span><br><span class="line">		</span><br><span class="line">		sb.append(<span class="string">"\n requesturl : "</span>);</span><br><span class="line">		sb.append(request.getRequestURL().toString());</span><br><span class="line">		</span><br><span class="line">		sb.append(<span class="string">"\n requestURI :"</span>);</span><br><span class="line">		sb.append(request.getRequestURI());</span><br><span class="line">		</span><br><span class="line">		sb.append(<span class="string">"\n requestQueryString : "</span>);</span><br><span class="line">		sb.append(request.getQueryString());</span><br><span class="line">		</span><br><span class="line">		sb.append(<span class="string">"\n q1 ="</span>);</span><br><span class="line">		sb.append(request.getParameter(<span class="string">"q1"</span>));</span><br><span class="line">		</span><br><span class="line">		sb.append(<span class="string">"\n q4 ="</span>);</span><br><span class="line">		sb.append(request.getParameter(<span class="string">"q4"</span>));</span><br><span class="line">		</span><br><span class="line">		sb.append(<span class="string">"\n remotehost"</span>);</span><br><span class="line">		sb.append(request.getRemoteHost());</span><br><span class="line">		</span><br><span class="line">		sb.append(<span class="string">"\n method :"</span>);</span><br><span class="line">		sb.append(request.getMethod());</span><br><span class="line">		</span><br><span class="line">		sb.append(<span class="string">"\n header : h1 = "</span>);</span><br><span class="line">		sb.append(request.getHeader(<span class="string">"h1"</span>));</span><br><span class="line">		</span><br><span class="line">		sb.append(<span class="string">"\n queryMap : "</span>);</span><br><span class="line">		//得到请求的参数Map，注意map的value是String数组类型  </span><br><span class="line">		Map map = request.getParameterMap();</span><br><span class="line">		Set&lt;String&gt; keySet = map.keySet();</span><br><span class="line">		<span class="keyword">for</span> (String key : keySet) &#123;</span><br><span class="line">			String[] values = (String[]) map.get(key);</span><br><span class="line">			<span class="keyword">for</span> (String value : values) &#123;</span><br><span class="line">				sb.append(key + <span class="string">"="</span> + value + <span class="string">" \t"</span>);</span><br><span class="line">			&#125;</span><br><span class="line">		&#125;</span><br><span class="line">		</span><br><span class="line">		<span class="keyword">for</span> (String key : keySet) &#123;</span><br><span class="line">			String[] values = (String[]) map.get(key);</span><br><span class="line">			sb.append(<span class="string">"key : \t"</span>);</span><br><span class="line">			sb.append(key);</span><br><span class="line">			</span><br><span class="line">			<span class="keyword">for</span> (String value : values) &#123;</span><br><span class="line">				sb.append( value + <span class="string">" \t"</span>);</span><br><span class="line">			&#125;</span><br><span class="line">		&#125;</span><br><span class="line">		</span><br><span class="line">		sb.append(<span class="string">"\n getSession : session = "</span>);</span><br><span class="line">		HttpSession session = request.getSession();</span><br><span class="line">		sb.append(session.getId());</span><br><span class="line">		Enumeration en = session.getAttributeNames();</span><br><span class="line">		</span><br><span class="line">		<span class="keyword">while</span>(en.hasMoreElements())&#123;</span><br><span class="line">			sb.append(<span class="string">"\n"</span>);</span><br><span class="line">			sb.append(en.nextElement());</span><br><span class="line">		&#125;</span><br><span class="line">		</span><br><span class="line">		session.setAttribute(<span class="string">"name"</span>, <span class="string">"Njp"</span>);</span><br><span class="line">		</span><br><span class="line">		sb.append(<span class="string">"\n cookie : "</span>);</span><br><span class="line">		</span><br><span class="line">		<span class="keyword">for</span>(Cookie item : request.getCookies())&#123;</span><br><span class="line">			sb.append(item.getName() + <span class="string">" _ "</span> +  item.getValue());</span><br><span class="line">			sb.append(<span class="string">"\n"</span>);</span><br><span class="line">		&#125;</span><br><span class="line">		</span><br><span class="line">		// 设置响应内容类型</span><br><span class="line">		response.setContentType(<span class="string">"text/html"</span>);</span><br><span class="line">		response.setCharacterEncoding(<span class="string">"utf-8"</span>);</span><br><span class="line">		</span><br><span class="line">		// 实际的逻辑是在这里</span><br><span class="line">		PrintWriter out = response.getWriter();</span><br><span class="line">		out.println(sb.toString());</span><br><span class="line">		&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>HelloFilter.java<br><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br></pre></td><td class="code"><pre><span class="line">package cn.njp.learn.io.servlet_demo;</span><br><span class="line"></span><br><span class="line">import java.io.IOException;</span><br><span class="line"></span><br><span class="line">import javax.servlet.Filter;</span><br><span class="line">import javax.servlet.FilterChain;</span><br><span class="line">import javax.servlet.FilterConfig;</span><br><span class="line">import javax.servlet.ServletException;</span><br><span class="line">import javax.servlet.ServletRequest;</span><br><span class="line">import javax.servlet.ServletResponse;</span><br><span class="line">import javax.servlet.http.HttpServletRequest;</span><br><span class="line"></span><br><span class="line">public class HelloFilter implements Filter &#123;</span><br><span class="line"></span><br><span class="line">	public void init(FilterConfig arg0) throws ServletException &#123;</span><br><span class="line">		System.out.println(<span class="string">"Filter 初始化"</span>);</span><br><span class="line">	&#125;</span><br><span class="line"></span><br><span class="line">	// 过滤器，可以记录日志，可以设置编码，但不要读content哦，否则后面拿不到数据了</span><br><span class="line">	public void <span class="keyword">do</span>Filter(ServletRequest req, ServletResponse res,</span><br><span class="line">			FilterChain chain) throws IOException, ServletException &#123;</span><br><span class="line">		HttpServletRequest request = (HttpServletRequest)req;</span><br><span class="line">		System.out.println(<span class="string">"拦截 URI="</span>+request.getRequestURI());</span><br><span class="line">		long before = System.currentTimeMillis(); </span><br><span class="line">		System.out.println(<span class="string">"开始过滤... "</span>); </span><br><span class="line">		chain.doFilter(req, res);</span><br><span class="line">		long after = System.currentTimeMillis(); </span><br><span class="line">	    // 记录日志 </span><br><span class="line">		System.out.println(<span class="string">"过滤结束"</span>); </span><br><span class="line">	     // 再次记录日志 </span><br><span class="line">		System.out.println(<span class="string">" 请求被定位到"</span> + ((HttpServletRequest) request).getRequestURI() </span><br><span class="line">	                + <span class="string">"所花的时间为: "</span> + (after - before)); </span><br><span class="line">	&#125;</span><br><span class="line"></span><br><span class="line">	public void <span class="function"><span class="title">destroy</span></span>() &#123;</span><br><span class="line">		System.out.println(<span class="string">"Filter 结束"</span>);</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+
+      
+    </div>
+    <footer class="article-footer">
+      <div class="bshare-custom"><a title="分享到QQ空间" class="bshare-qzone"></a><a title="分享到新浪微博" class="bshare-sinaminiblog"></a><a title="分享到人人网" class="bshare-renren"></a><a title="分享到腾讯微博" class="bshare-qqmb"></a><a title="分享到网易微博" class="bshare-neteasemb"></a><a title="更多平台" class="bshare-more bshare-more-icon more-style-addthis"></a><span class="BSHARE_COUNT bshare-share-count">0</span></div><script type="text/javascript" charset="utf-8" src="http://static.bshare.cn/b/buttonLite.js#style=-1&amp;uuid=&amp;pophcol=2&amp;lang=zh"></script><script type="text/javascript" charset="utf-8" src="http://static.bshare.cn/b/bshareC0.js"></script>
+    <!-- 分享  <a data-url="http://wiki.niejinkun.com/2016/01/08/servlet/" data-id="cixa0ludb0079lvv8bpskyfmz" class="article-share-link">Share</a> -->
+      
+      
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/java/">java</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/mvc/">mvc</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/servlet/">servlet</a></li></ul>
+
+    </footer>
+  </div>
+  
+</article>
+
+ 
+
+  
     <article id="post-sms" class="article article-type-post" itemscope itemprop="blogPost">
   <div class="article-meta">
     <a href="/2016/01/08/sms/" class="article-date">
@@ -142,7 +230,7 @@ ga('send', 'pageview');
     </div>
     <footer class="article-footer">
       <div class="bshare-custom"><a title="分享到QQ空间" class="bshare-qzone"></a><a title="分享到新浪微博" class="bshare-sinaminiblog"></a><a title="分享到人人网" class="bshare-renren"></a><a title="分享到腾讯微博" class="bshare-qqmb"></a><a title="分享到网易微博" class="bshare-neteasemb"></a><a title="更多平台" class="bshare-more bshare-more-icon more-style-addthis"></a><span class="BSHARE_COUNT bshare-share-count">0</span></div><script type="text/javascript" charset="utf-8" src="http://static.bshare.cn/b/buttonLite.js#style=-1&amp;uuid=&amp;pophcol=2&amp;lang=zh"></script><script type="text/javascript" charset="utf-8" src="http://static.bshare.cn/b/bshareC0.js"></script>
-    <!-- 分享  <a data-url="http://wiki.niejinkun.com/2016/01/08/sms/" data-id="civ3y6df10071o4uxdvk8tmeh" class="article-share-link">Share</a> -->
+    <!-- 分享  <a data-url="http://wiki.niejinkun.com/2016/01/08/sms/" data-id="cixa0lud60071lvv8kap7av7y" class="article-share-link">Share</a> -->
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/java/">java</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/sms/">sms</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/短信/">短信</a></li></ul>
@@ -155,14 +243,14 @@ ga('send', 'pageview');
  
 
   
-    <article id="post-mybatis关系映射" class="article article-type-post" itemscope itemprop="blogPost">
+    <article id="post-╚╚┤╩╦╤╦ў╖■╬ё" class="article article-type-post" itemscope itemprop="blogPost">
   <div class="article-meta">
-    <a href="/2016/01/08/mybatis关系映射/" class="article-date">
+    <a href="/2016/01/08/╚╚┤╩╦╤╦ў╖■╬ё/" class="article-date">
   <time datetime="2016-01-07T16:00:00.000Z" itemprop="datePublished">2016-01-08</time>
 </a>
     
   <div class="article-category">
-    <a class="article-category-link" href="/categories/java/">java</a>
+    <a class="article-category-link" href="/categories/linux/">linux</a>
   </div>
 
   </div>
@@ -173,7 +261,7 @@ ga('send', 'pageview');
         
   
     <h1 itemprop="name">
-      <a class="article-title" href="/2016/01/08/mybatis关系映射/">mybatis入门指南</a>
+      <a class="article-title" href="/2016/01/08/╚╚┤╩╦╤╦ў╖■╬ё/">crontab使用方法</a>
     </h1>
   
 
@@ -183,16 +271,29 @@ ga('send', 'pageview');
       
         <!-- Table of Contents -->
         
-        <p>  <strong>mybatis</strong>提供了数据访问框架.相对hibernate，它更轻量化，相对jdbc，它更人性化．是java系访问数据库的最佳框架．mybatis的最佳实践，是与spring协同工作．<br>在数据库理论中，关系表是基础．下面看看mybatis如何完成关系表映射</p>
-<h2 id="u4E00_u5BF9_u4E00"><a href="#u4E00_u5BF9_u4E00" class="headerlink" title="一对一"></a>一对一</h2><h2 id="u4E00_u5BF9_u591A"><a href="#u4E00_u5BF9_u591A" class="headerlink" title="一对多"></a>一对多</h2><h2 id="u591A_u5BF9_u591A"><a href="#u591A_u5BF9_u591A" class="headerlink" title="多对多"></a>多对多</h2>
+        <p>  　定时服务是很常见的业务需求，例如：</p>
+<ul>
+<li>每天晚上1点清理不用的文件</li>
+<li>每天晚上对日志进行清理</li>
+<li>每天晚上1点重启机器</li>
+<li>每天晚上统计运营数据<br>等等等等．<br>　　最简单的定时任务就是:<h2 id="crontab"><a href="#crontab" class="headerlink" title="crontab"></a>crontab</h2></li>
+</ul>
+<h2 id="u4F7F_u7528_u65B9_u6CD5"><a href="#u4F7F_u7528_u65B9_u6CD5" class="headerlink" title="使用方法"></a>使用方法</h2><ul>
+<li>查看</li>
+<li>编辑</li>
+<li>生效</li>
+</ul>
+<h3 id="u67E5_u770B"><a href="#u67E5_u770B" class="headerlink" title="查看"></a>查看</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ crontab <span class="operator">-l</span></span><br></pre></td></tr></table></figure>
+<h3 id="u7F16_u8F91"><a href="#u7F16_u8F91" class="headerlink" title="编辑"></a>编辑</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ crontab <span class="operator">-e</span></span><br></pre></td></tr></table></figure>
+<h3 id="u751F_u6548"><a href="#u751F_u6548" class="headerlink" title="生效"></a>生效</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ sudo /etc/init.d/crond restart</span><br></pre></td></tr></table></figure>
       
     </div>
     <footer class="article-footer">
       <div class="bshare-custom"><a title="分享到QQ空间" class="bshare-qzone"></a><a title="分享到新浪微博" class="bshare-sinaminiblog"></a><a title="分享到人人网" class="bshare-renren"></a><a title="分享到腾讯微博" class="bshare-qqmb"></a><a title="分享到网易微博" class="bshare-neteasemb"></a><a title="更多平台" class="bshare-more bshare-more-icon more-style-addthis"></a><span class="BSHARE_COUNT bshare-share-count">0</span></div><script type="text/javascript" charset="utf-8" src="http://static.bshare.cn/b/buttonLite.js#style=-1&amp;uuid=&amp;pophcol=2&amp;lang=zh"></script><script type="text/javascript" charset="utf-8" src="http://static.bshare.cn/b/bshareC0.js"></script>
-    <!-- 分享  <a data-url="http://wiki.niejinkun.com/2016/01/08/mybatis关系映射/" data-id="civ3y6dhc00aho4uxvzellyq3" class="article-share-link">Share</a> -->
+    <!-- 分享  <a data-url="http://wiki.niejinkun.com/2016/01/08/╚╚┤╩╦╤╦ў╖■╬ё/" data-id="cixa0lu78000qlvv8gka1khyl" class="article-share-link">Share</a> -->
       
       
-  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/java/">java</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/mybatis/">mybatis</a></li></ul>
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/crontab/">crontab</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/job/">job</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/linux/">linux</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/定时任务/">定时任务</a></li></ul>
 
     </footer>
   </div>
@@ -240,7 +341,7 @@ ga('send', 'pageview');
     </div>
     <footer class="article-footer">
       <div class="bshare-custom"><a title="分享到QQ空间" class="bshare-qzone"></a><a title="分享到新浪微博" class="bshare-sinaminiblog"></a><a title="分享到人人网" class="bshare-renren"></a><a title="分享到腾讯微博" class="bshare-qqmb"></a><a title="分享到网易微博" class="bshare-neteasemb"></a><a title="更多平台" class="bshare-more bshare-more-icon more-style-addthis"></a><span class="BSHARE_COUNT bshare-share-count">0</span></div><script type="text/javascript" charset="utf-8" src="http://static.bshare.cn/b/buttonLite.js#style=-1&amp;uuid=&amp;pophcol=2&amp;lang=zh"></script><script type="text/javascript" charset="utf-8" src="http://static.bshare.cn/b/bshareC0.js"></script>
-    <!-- 分享  <a data-url="http://wiki.niejinkun.com/2016/01/08/spring-jetty/" data-id="civ3y6dei0068o4uxxb30tz8s" class="article-share-link">Share</a> -->
+    <!-- 分享  <a data-url="http://wiki.niejinkun.com/2016/01/08/spring-jetty/" data-id="cixa0lucj0068lvv881wta6l4" class="article-share-link">Share</a> -->
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/java/">java</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/jetty/">jetty</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/spring/">spring</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/web/">web</a></li></ul>
@@ -253,14 +354,14 @@ ga('send', 'pageview');
  
 
   
-    <article id="post-mina" class="article article-type-post" itemscope itemprop="blogPost">
+    <article id="post-mybatis╣╪╧╡╙│╔ф" class="article article-type-post" itemscope itemprop="blogPost">
   <div class="article-meta">
-    <a href="/2016/01/08/mina/" class="article-date">
+    <a href="/2016/01/08/mybatis╣╪╧╡╙│╔ф/" class="article-date">
   <time datetime="2016-01-07T16:00:00.000Z" itemprop="datePublished">2016-01-08</time>
 </a>
     
   <div class="article-category">
-    <a class="article-category-link" href="/categories/linux/">linux</a>
+    <a class="article-category-link" href="/categories/java/">java</a>
   </div>
 
   </div>
@@ -271,7 +372,7 @@ ga('send', 'pageview');
         
   
     <h1 itemprop="name">
-      <a class="article-title" href="/2016/01/08/mina/">crontab使用方法</a>
+      <a class="article-title" href="/2016/01/08/mybatis╣╪╧╡╙│╔ф/">mybatis入门指南</a>
     </h1>
   
 
@@ -281,29 +382,16 @@ ga('send', 'pageview');
       
         <!-- Table of Contents -->
         
-        <p>  　定时服务是很常见的业务需求，例如：</p>
-<ul>
-<li>每天晚上1点清理不用的文件</li>
-<li>每天晚上对日志进行清理</li>
-<li>每天晚上1点重启机器</li>
-<li>每天晚上统计运营数据<br>等等等等．<br>　　最简单的定时任务就是:<h2 id="crontab"><a href="#crontab" class="headerlink" title="crontab"></a>crontab</h2></li>
-</ul>
-<h2 id="u4F7F_u7528_u65B9_u6CD5"><a href="#u4F7F_u7528_u65B9_u6CD5" class="headerlink" title="使用方法"></a>使用方法</h2><ul>
-<li>查看</li>
-<li>编辑</li>
-<li>生效</li>
-</ul>
-<h3 id="u67E5_u770B"><a href="#u67E5_u770B" class="headerlink" title="查看"></a>查看</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ crontab <span class="operator">-l</span></span><br></pre></td></tr></table></figure>
-<h3 id="u7F16_u8F91"><a href="#u7F16_u8F91" class="headerlink" title="编辑"></a>编辑</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ crontab <span class="operator">-e</span></span><br></pre></td></tr></table></figure>
-<h3 id="u751F_u6548"><a href="#u751F_u6548" class="headerlink" title="生效"></a>生效</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ sudo /etc/init.d/crond restart</span><br></pre></td></tr></table></figure>
+        <p>  <strong>mybatis</strong>提供了数据访问框架.相对hibernate，它更轻量化，相对jdbc，它更人性化．是java系访问数据库的最佳框架．mybatis的最佳实践，是与spring协同工作．<br>在数据库理论中，关系表是基础．下面看看mybatis如何完成关系表映射</p>
+<h2 id="u4E00_u5BF9_u4E00"><a href="#u4E00_u5BF9_u4E00" class="headerlink" title="一对一"></a>一对一</h2><h2 id="u4E00_u5BF9_u591A"><a href="#u4E00_u5BF9_u591A" class="headerlink" title="一对多"></a>一对多</h2><h2 id="u591A_u5BF9_u591A"><a href="#u591A_u5BF9_u591A" class="headerlink" title="多对多"></a>多对多</h2>
       
     </div>
     <footer class="article-footer">
       <div class="bshare-custom"><a title="分享到QQ空间" class="bshare-qzone"></a><a title="分享到新浪微博" class="bshare-sinaminiblog"></a><a title="分享到人人网" class="bshare-renren"></a><a title="分享到腾讯微博" class="bshare-qqmb"></a><a title="分享到网易微博" class="bshare-neteasemb"></a><a title="更多平台" class="bshare-more bshare-more-icon more-style-addthis"></a><span class="BSHARE_COUNT bshare-share-count">0</span></div><script type="text/javascript" charset="utf-8" src="http://static.bshare.cn/b/buttonLite.js#style=-1&amp;uuid=&amp;pophcol=2&amp;lang=zh"></script><script type="text/javascript" charset="utf-8" src="http://static.bshare.cn/b/bshareC0.js"></script>
-    <!-- 分享  <a data-url="http://wiki.niejinkun.com/2016/01/08/mina/" data-id="civ3y6di000b7o4uxgp6wwkuq" class="article-share-link">Share</a> -->
+    <!-- 分享  <a data-url="http://wiki.niejinkun.com/2016/01/08/mybatis╣╪╧╡╙│╔ф/" data-id="cixa0lug900aalvv8qa8x32rs" class="article-share-link">Share</a> -->
       
       
-  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/crontab/">crontab</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/job/">job</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/linux/">linux</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/定时任务/">定时任务</a></li></ul>
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/java/">java</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/mybatis/">mybatis</a></li></ul>
 
     </footer>
   </div>
@@ -347,10 +435,115 @@ ga('send', 'pageview');
     </div>
     <footer class="article-footer">
       <div class="bshare-custom"><a title="分享到QQ空间" class="bshare-qzone"></a><a title="分享到新浪微博" class="bshare-sinaminiblog"></a><a title="分享到人人网" class="bshare-renren"></a><a title="分享到腾讯微博" class="bshare-qqmb"></a><a title="分享到网易微博" class="bshare-neteasemb"></a><a title="更多平台" class="bshare-more bshare-more-icon more-style-addthis"></a><span class="BSHARE_COUNT bshare-share-count">0</span></div><script type="text/javascript" charset="utf-8" src="http://static.bshare.cn/b/buttonLite.js#style=-1&amp;uuid=&amp;pophcol=2&amp;lang=zh"></script><script type="text/javascript" charset="utf-8" src="http://static.bshare.cn/b/bshareC0.js"></script>
-    <!-- 分享  <a data-url="http://wiki.niejinkun.com/2016/01/08/zookeeper/" data-id="civ3y6dbk001to4uxyxrdxzgg" class="article-share-link">Share</a> -->
+    <!-- 分享  <a data-url="http://wiki.niejinkun.com/2016/01/08/zookeeper/" data-id="cixa0lu84001tlvv8kptls590" class="article-share-link">Share</a> -->
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/zookeeper/">zookeeper</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/分布式/">分布式</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/协调/">协调</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/大数据/">大数据</a></li></ul>
+
+    </footer>
+  </div>
+  
+</article>
+
+ 
+
+  
+    <article id="post-mysql" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2016/01/08/mysql/" class="article-date">
+  <time datetime="2016-01-07T16:00:00.000Z" itemprop="datePublished">2016-01-08</time>
+</a>
+    
+  <div class="article-category">
+    <a class="article-category-link" href="/categories/数据库/">数据库</a>
+  </div>
+
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2016/01/08/mysql/">mysql常用命令</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <!-- Table of Contents -->
+        
+        <p>  　</p>
+<h3 id="u589E"><a href="#u589E" class="headerlink" title="增"></a>增</h3><h3 id="u5220"><a href="#u5220" class="headerlink" title="删"></a>删</h3><h3 id="u6539"><a href="#u6539" class="headerlink" title="改"></a>改</h3><h3 id="u67E5"><a href="#u67E5" class="headerlink" title="查"></a>查</h3><h3 id="u5907_u4EFD"><a href="#u5907_u4EFD" class="headerlink" title="备份"></a>备份</h3><h3 id="u5BFC_u51FA"><a href="#u5BFC_u51FA" class="headerlink" title="导出"></a>导出</h3><p>导出某表某列的数据<br><figure class="highlight stata"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ mysql -<span class="keyword">h</span> host -<span class="keyword">u</span> root -p database --execute=<span class="string">"select teacher_id,user_id,teacher_pic from user_teacher"</span> -X teacherpics.xml</span><br></pre></td></tr></table></figure></p>
+<p>导出的文件存储方式为xml.</p>
+
+      
+    </div>
+    <footer class="article-footer">
+      <div class="bshare-custom"><a title="分享到QQ空间" class="bshare-qzone"></a><a title="分享到新浪微博" class="bshare-sinaminiblog"></a><a title="分享到人人网" class="bshare-renren"></a><a title="分享到腾讯微博" class="bshare-qqmb"></a><a title="分享到网易微博" class="bshare-neteasemb"></a><a title="更多平台" class="bshare-more bshare-more-icon more-style-addthis"></a><span class="BSHARE_COUNT bshare-share-count">0</span></div><script type="text/javascript" charset="utf-8" src="http://static.bshare.cn/b/buttonLite.js#style=-1&amp;uuid=&amp;pophcol=2&amp;lang=zh"></script><script type="text/javascript" charset="utf-8" src="http://static.bshare.cn/b/bshareC0.js"></script>
+    <!-- 分享  <a data-url="http://wiki.niejinkun.com/2016/01/08/mysql/" data-id="cixa0lug500a4lvv8ii61o15m" class="article-share-link">Share</a> -->
+      
+      
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/mysql/">mysql</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/数据库/">数据库</a></li></ul>
+
+    </footer>
+  </div>
+  
+</article>
+
+ 
+
+  
+    <article id="post-springmvc" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2016/01/08/springmvc/" class="article-date">
+  <time datetime="2016-01-07T16:00:00.000Z" itemprop="datePublished">2016-01-08</time>
+</a>
+    
+  <div class="article-category">
+    <a class="article-category-link" href="/categories/java/">java</a>
+  </div>
+
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2016/01/08/springmvc/">springmvc入门指南</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <!-- Table of Contents -->
+        
+        <p>  springmvc是java系mvc框架的后起之秀．用起来确实非常清爽．特别是与restful进行结合，通过springmvc和restful可以非常方便的构造针对web或者是app的api服务．</p>
+<h2 id="u57FA_u672C_u6982_u5FF5"><a href="#u57FA_u672C_u6982_u5FF5" class="headerlink" title="基本概念"></a>基本概念</h2><h2 id="u5E38_u7528_u6CE8_u89E3"><a href="#u5E38_u7528_u6CE8_u89E3" class="headerlink" title="常用注解"></a>常用注解</h2><ul>
+<li>@RequestMapping</li>
+<li>@RequestHeader</li>
+<li>@RequestParam</li>
+<li>@CookieValue</li>
+<li>@PathVariable</li>
+<li>@ResponseBody</li>
+<li>@SessionAttributes</li>
+</ul>
+<h3 id="@RequestMapping"><a href="#@RequestMapping" class="headerlink" title="@RequestMapping"></a>@RequestMapping</h3><h3 id="@RequestHeader"><a href="#@RequestHeader" class="headerlink" title="@RequestHeader"></a>@RequestHeader</h3><h3 id="@RequestParam"><a href="#@RequestParam" class="headerlink" title="@RequestParam"></a>@RequestParam</h3><h3 id="@CookieValue"><a href="#@CookieValue" class="headerlink" title="@CookieValue"></a>@CookieValue</h3><h3 id="@PathVariable"><a href="#@PathVariable" class="headerlink" title="@PathVariable"></a>@PathVariable</h3><h3 id="@ResponseBody"><a href="#@ResponseBody" class="headerlink" title="@ResponseBody"></a>@ResponseBody</h3><h3 id="@SessionAttributes"><a href="#@SessionAttributes" class="headerlink" title="@SessionAttributes"></a>@SessionAttributes</h3>
+      
+    </div>
+    <footer class="article-footer">
+      <div class="bshare-custom"><a title="分享到QQ空间" class="bshare-qzone"></a><a title="分享到新浪微博" class="bshare-sinaminiblog"></a><a title="分享到人人网" class="bshare-renren"></a><a title="分享到腾讯微博" class="bshare-qqmb"></a><a title="分享到网易微博" class="bshare-neteasemb"></a><a title="更多平台" class="bshare-more bshare-more-icon more-style-addthis"></a><span class="BSHARE_COUNT bshare-share-count">0</span></div><script type="text/javascript" charset="utf-8" src="http://static.bshare.cn/b/buttonLite.js#style=-1&amp;uuid=&amp;pophcol=2&amp;lang=zh"></script><script type="text/javascript" charset="utf-8" src="http://static.bshare.cn/b/bshareC0.js"></script>
+    <!-- 分享  <a data-url="http://wiki.niejinkun.com/2016/01/08/springmvc/" data-id="cixa0lu8y002mlvv8swy2tfk7" class="article-share-link">Share</a> -->
+      
+      
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/java/">java</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/springmvc/">springmvc</a></li></ul>
 
     </footer>
   </div>
@@ -405,7 +598,7 @@ ga('send', 'pageview');
     </div>
     <footer class="article-footer">
       <div class="bshare-custom"><a title="分享到QQ空间" class="bshare-qzone"></a><a title="分享到新浪微博" class="bshare-sinaminiblog"></a><a title="分享到人人网" class="bshare-renren"></a><a title="分享到腾讯微博" class="bshare-qqmb"></a><a title="分享到网易微博" class="bshare-neteasemb"></a><a title="更多平台" class="bshare-more bshare-more-icon more-style-addthis"></a><span class="BSHARE_COUNT bshare-share-count">0</span></div><script type="text/javascript" charset="utf-8" src="http://static.bshare.cn/b/buttonLite.js#style=-1&amp;uuid=&amp;pophcol=2&amp;lang=zh"></script><script type="text/javascript" charset="utf-8" src="http://static.bshare.cn/b/bshareC0.js"></script>
-    <!-- 分享  <a data-url="http://wiki.niejinkun.com/2016/01/08/links/" data-id="civ3y6diy00c0o4uxy26hn36z" class="article-share-link">Share</a> -->
+    <!-- 分享  <a data-url="http://wiki.niejinkun.com/2016/01/08/links/" data-id="cixa0lui300c0lvv8oqtcynyz" class="article-share-link">Share</a> -->
       
       
     </footer>
@@ -456,174 +649,10 @@ ga('send', 'pageview');
     </div>
     <footer class="article-footer">
       <div class="bshare-custom"><a title="分享到QQ空间" class="bshare-qzone"></a><a title="分享到新浪微博" class="bshare-sinaminiblog"></a><a title="分享到人人网" class="bshare-renren"></a><a title="分享到腾讯微博" class="bshare-qqmb"></a><a title="分享到网易微博" class="bshare-neteasemb"></a><a title="更多平台" class="bshare-more bshare-more-icon more-style-addthis"></a><span class="BSHARE_COUNT bshare-share-count">0</span></div><script type="text/javascript" charset="utf-8" src="http://static.bshare.cn/b/buttonLite.js#style=-1&amp;uuid=&amp;pophcol=2&amp;lang=zh"></script><script type="text/javascript" charset="utf-8" src="http://static.bshare.cn/b/bshareC0.js"></script>
-    <!-- 分享  <a data-url="http://wiki.niejinkun.com/2016/01/08/life/" data-id="civ3y6dj000c2o4ux8m01wnvv" class="article-share-link">Share</a> -->
+    <!-- 分享  <a data-url="http://wiki.niejinkun.com/2016/01/08/life/" data-id="cixa0lui600c2lvv8futpcywu" class="article-share-link">Share</a> -->
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/java/">java</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/mybatis/">mybatis</a></li></ul>
-
-    </footer>
-  </div>
-  
-</article>
-
- 
-
-  
-    <article id="post-springmvc" class="article article-type-post" itemscope itemprop="blogPost">
-  <div class="article-meta">
-    <a href="/2016/01/08/springmvc/" class="article-date">
-  <time datetime="2016-01-07T16:00:00.000Z" itemprop="datePublished">2016-01-08</time>
-</a>
-    
-  <div class="article-category">
-    <a class="article-category-link" href="/categories/java/">java</a>
-  </div>
-
-  </div>
-  <div class="article-inner">
-    
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2016/01/08/springmvc/">springmvc入门指南</a>
-    </h1>
-  
-
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <!-- Table of Contents -->
-        
-        <p>  springmvc是java系mvc框架的后起之秀．用起来确实非常清爽．特别是与restful进行结合，通过springmvc和restful可以非常方便的构造针对web或者是app的api服务．</p>
-<h2 id="u57FA_u672C_u6982_u5FF5"><a href="#u57FA_u672C_u6982_u5FF5" class="headerlink" title="基本概念"></a>基本概念</h2><h2 id="u5E38_u7528_u6CE8_u89E3"><a href="#u5E38_u7528_u6CE8_u89E3" class="headerlink" title="常用注解"></a>常用注解</h2><ul>
-<li>@RequestMapping</li>
-<li>@RequestHeader</li>
-<li>@RequestParam</li>
-<li>@CookieValue</li>
-<li>@PathVariable</li>
-<li>@ResponseBody</li>
-<li>@SessionAttributes</li>
-</ul>
-<h3 id="@RequestMapping"><a href="#@RequestMapping" class="headerlink" title="@RequestMapping"></a>@RequestMapping</h3><h3 id="@RequestHeader"><a href="#@RequestHeader" class="headerlink" title="@RequestHeader"></a>@RequestHeader</h3><h3 id="@RequestParam"><a href="#@RequestParam" class="headerlink" title="@RequestParam"></a>@RequestParam</h3><h3 id="@CookieValue"><a href="#@CookieValue" class="headerlink" title="@CookieValue"></a>@CookieValue</h3><h3 id="@PathVariable"><a href="#@PathVariable" class="headerlink" title="@PathVariable"></a>@PathVariable</h3><h3 id="@ResponseBody"><a href="#@ResponseBody" class="headerlink" title="@ResponseBody"></a>@ResponseBody</h3><h3 id="@SessionAttributes"><a href="#@SessionAttributes" class="headerlink" title="@SessionAttributes"></a>@SessionAttributes</h3>
-      
-    </div>
-    <footer class="article-footer">
-      <div class="bshare-custom"><a title="分享到QQ空间" class="bshare-qzone"></a><a title="分享到新浪微博" class="bshare-sinaminiblog"></a><a title="分享到人人网" class="bshare-renren"></a><a title="分享到腾讯微博" class="bshare-qqmb"></a><a title="分享到网易微博" class="bshare-neteasemb"></a><a title="更多平台" class="bshare-more bshare-more-icon more-style-addthis"></a><span class="BSHARE_COUNT bshare-share-count">0</span></div><script type="text/javascript" charset="utf-8" src="http://static.bshare.cn/b/buttonLite.js#style=-1&amp;uuid=&amp;pophcol=2&amp;lang=zh"></script><script type="text/javascript" charset="utf-8" src="http://static.bshare.cn/b/bshareC0.js"></script>
-    <!-- 分享  <a data-url="http://wiki.niejinkun.com/2016/01/08/springmvc/" data-id="civ3y6dc3002mo4uxw7o07rnl" class="article-share-link">Share</a> -->
-      
-      
-  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/java/">java</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/springmvc/">springmvc</a></li></ul>
-
-    </footer>
-  </div>
-  
-</article>
-
- 
-
-  
-    <article id="post-mysql" class="article article-type-post" itemscope itemprop="blogPost">
-  <div class="article-meta">
-    <a href="/2016/01/08/mysql/" class="article-date">
-  <time datetime="2016-01-07T16:00:00.000Z" itemprop="datePublished">2016-01-08</time>
-</a>
-    
-  <div class="article-category">
-    <a class="article-category-link" href="/categories/数据库/">数据库</a>
-  </div>
-
-  </div>
-  <div class="article-inner">
-    
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2016/01/08/mysql/">mysql常用命令</a>
-    </h1>
-  
-
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <!-- Table of Contents -->
-        
-        <p>  　</p>
-<h3 id="u589E"><a href="#u589E" class="headerlink" title="增"></a>增</h3><h3 id="u5220"><a href="#u5220" class="headerlink" title="删"></a>删</h3><h3 id="u6539"><a href="#u6539" class="headerlink" title="改"></a>改</h3><h3 id="u67E5"><a href="#u67E5" class="headerlink" title="查"></a>查</h3><h3 id="u5907_u4EFD"><a href="#u5907_u4EFD" class="headerlink" title="备份"></a>备份</h3><h3 id="u5BFC_u51FA"><a href="#u5BFC_u51FA" class="headerlink" title="导出"></a>导出</h3><p>导出某表某列的数据<br><figure class="highlight stata"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ mysql -<span class="keyword">h</span> host -<span class="keyword">u</span> root -p database --execute=<span class="string">"select teacher_id,user_id,teacher_pic from user_teacher"</span> -X teacherpics.xml</span><br></pre></td></tr></table></figure></p>
-<p>导出的文件存储方式为xml.</p>
-
-      
-    </div>
-    <footer class="article-footer">
-      <div class="bshare-custom"><a title="分享到QQ空间" class="bshare-qzone"></a><a title="分享到新浪微博" class="bshare-sinaminiblog"></a><a title="分享到人人网" class="bshare-renren"></a><a title="分享到腾讯微博" class="bshare-qqmb"></a><a title="分享到网易微博" class="bshare-neteasemb"></a><a title="更多平台" class="bshare-more bshare-more-icon more-style-addthis"></a><span class="BSHARE_COUNT bshare-share-count">0</span></div><script type="text/javascript" charset="utf-8" src="http://static.bshare.cn/b/buttonLite.js#style=-1&amp;uuid=&amp;pophcol=2&amp;lang=zh"></script><script type="text/javascript" charset="utf-8" src="http://static.bshare.cn/b/bshareC0.js"></script>
-    <!-- 分享  <a data-url="http://wiki.niejinkun.com/2016/01/08/mysql/" data-id="civ3y6dh500a4o4ux272s6gi7" class="article-share-link">Share</a> -->
-      
-      
-  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/mysql/">mysql</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/数据库/">数据库</a></li></ul>
-
-    </footer>
-  </div>
-  
-</article>
-
- 
-
-  
-    <article id="post-push" class="article article-type-post" itemscope itemprop="blogPost">
-  <div class="article-meta">
-    <a href="/2016/01/08/push/" class="article-date">
-  <time datetime="2016-01-07T16:00:00.000Z" itemprop="datePublished">2016-01-08</time>
-</a>
-    
-  <div class="article-category">
-    <a class="article-category-link" href="/categories/服务/">服务</a>
-  </div>
-
-  </div>
-  <div class="article-inner">
-    
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2016/01/08/push/">push推送服务</a>
-    </h1>
-  
-
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <!-- Table of Contents -->
-        
-        <p>  推送服务是主流APP的必备服务，典型场景有：</p>
-<ul>
-<li>营销服务，向用户推送优惠信息</li>
-<li>推荐服务，向用户发送推荐信息</li>
-<li>交易提示服务，向用户发送交易变化信息</li>
-<li>其它提示<br>向用户推送信息，以利于提高用户体验，增加用户粘住，提高APP活跃度．研究表明，推送服务与APP的活跃度之间存在线性关系．<br>但过于频繁的向用户推送信息，可能会导致用户反感，从而卸载APP,因此，推送服务需要考虑推送策略．</li>
-</ul>
-<p>推送服务开发有几个注意点：</p>
-<ul>
-<li>供应商选型</li>
-<li>推送方案</li>
-<li>技术方案</li>
-</ul>
-<h2 id="u4F9B_u5E94_u5546_u9009_u578B"><a href="#u4F9B_u5E94_u5546_u9009_u578B" class="headerlink" title="供应商选型"></a>供应商选型</h2><h2 id="u63A8_u9001_u65B9_u6848"><a href="#u63A8_u9001_u65B9_u6848" class="headerlink" title="推送方案"></a>推送方案</h2><h2 id="u6280_u672F_u65B9_u6848"><a href="#u6280_u672F_u65B9_u6848" class="headerlink" title="技术方案"></a>技术方案</h2>
-      
-    </div>
-    <footer class="article-footer">
-      <div class="bshare-custom"><a title="分享到QQ空间" class="bshare-qzone"></a><a title="分享到新浪微博" class="bshare-sinaminiblog"></a><a title="分享到人人网" class="bshare-renren"></a><a title="分享到腾讯微博" class="bshare-qqmb"></a><a title="分享到网易微博" class="bshare-neteasemb"></a><a title="更多平台" class="bshare-more bshare-more-icon more-style-addthis"></a><span class="BSHARE_COUNT bshare-share-count">0</span></div><script type="text/javascript" charset="utf-8" src="http://static.bshare.cn/b/buttonLite.js#style=-1&amp;uuid=&amp;pophcol=2&amp;lang=zh"></script><script type="text/javascript" charset="utf-8" src="http://static.bshare.cn/b/bshareC0.js"></script>
-    <!-- 分享  <a data-url="http://wiki.niejinkun.com/2016/01/08/push/" data-id="civ3y6dg4008co4ux3h6xj17w" class="article-share-link">Share</a> -->
-      
-      
-  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/java/">java</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/push/">push</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/推送/">推送</a></li></ul>
 
     </footer>
   </div>
@@ -679,23 +708,23 @@ ga('send', 'pageview');
       <ul>
         
           <li>
+            <a href="/2016/12/29/ffmpeg/">ffmpeg媒体编解码使用方法</a>
+          </li>
+        
+          <li>
             <a href="/2016/11/04/my-tools/">我的工具经验(不定期更新)</a>
           </li>
         
           <li>
-            <a href="/2016/11/04/nginx日志分析/">线上ngnix日志分析</a>
+            <a href="/2016/11/04/nginx╚╒╓╛╖╓╬Ў/">线上ngnix日志分析</a>
           </li>
         
           <li>
-            <a href="/2016/10/28/性能优化之O2O/">性能优化之O2O大法</a>
+            <a href="/2016/10/28/╨╘─▄╙┼╗п╓оO2O/">性能优化之O2O大法</a>
           </li>
         
           <li>
-            <a href="/2016/10/24/git最佳实践/">git最佳实践</a>
-          </li>
-        
-          <li>
-            <a href="/2016/10/24/文件安全/">web文件安全</a>
+            <a href="/2016/10/24/╬─╝■░▓╚л/">web文件安全</a>
           </li>
         
       </ul>
@@ -719,7 +748,7 @@ ga('send', 'pageview');
   <div class="widget-wrap">
     <h3 class="widget-title">Archives</h3>
     <div class="widget">
-      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/11/">十一月 2016</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/10/">十月 2016</a><span class="archive-list-count">6</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/08/">八月 2016</a><span class="archive-list-count">4</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/06/">六月 2016</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/05/">五月 2016</a><span class="archive-list-count">7</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/04/">四月 2016</a><span class="archive-list-count">3</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/03/">三月 2016</a><span class="archive-list-count">26</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/02/">二月 2016</a><span class="archive-list-count">4</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/01/">一月 2016</a><span class="archive-list-count">57</span></li></ul>
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/12/">十二月 2016</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/11/">十一月 2016</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/10/">十月 2016</a><span class="archive-list-count">5</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/08/">八月 2016</a><span class="archive-list-count">4</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/06/">六月 2016</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/05/">五月 2016</a><span class="archive-list-count">7</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/04/">四月 2016</a><span class="archive-list-count">3</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/03/">三月 2016</a><span class="archive-list-count">26</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/02/">二月 2016</a><span class="archive-list-count">4</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/01/">一月 2016</a><span class="archive-list-count">57</span></li></ul>
     </div>
   </div>
 

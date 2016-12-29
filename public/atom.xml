@@ -4,7 +4,7 @@
   <subtitle><![CDATA[记录点滴]]></subtitle>
   <link href="/atom.xml" rel="self"/>
   <link href="http://wiki.niejinkun.com/"/>
-  <updated>2016-11-04T15:40:03.626Z</updated>
+  <updated>2016-12-29T05:56:48.738Z</updated>
   <id>http://wiki.niejinkun.com/</id>
   
   <author>
@@ -15,12 +15,54 @@
   <generator uri="http://hexo.io/">Hexo</generator>
   
   <entry>
+    <title><![CDATA[ffmpeg媒体编解码使用方法]]></title>
+    <link href="http://wiki.niejinkun.com/2016/12/29/ffmpeg/"/>
+    <id>http://wiki.niejinkun.com/2016/12/29/ffmpeg/</id>
+    <published>2016-12-29T05:56:48.738Z</published>
+    <updated>2016-12-29T05:56:48.738Z</updated>
+    <content type="html"><![CDATA[<p>  ffmpeg是主流的媒体编解码基本工具，市场上主流的播放器，都是基于ffmpeg开发的。</p>
+<h2 id="ffmpeg_u7528_u9014"><a href="#ffmpeg_u7528_u9014" class="headerlink" title="ffmpeg用途"></a>ffmpeg用途</h2><p>  通过ffmpeg，可以构建流媒体服务。基本思路是：通过ffmpeg，将原始的媒体文件转化为流文件，再通过segment工具，将流文件切分为小文件，用户通过边听边看边下载的方式，来<br>享受无缝无扰的流媒体服务。</p>
+<h2 id="ffmpeg_u5B89_u88C5"><a href="#ffmpeg_u5B89_u88C5" class="headerlink" title="ffmpeg安装"></a>ffmpeg安装</h2><p>　可以在<a href="/www.ffmpeg.org">ffmpeg</a>首页上直接下载编译好的二进制文件。如果需要特殊的插件，则需要进行编译安装。</p>
+<h3 id="u97F3_u9891_u8F6C_u7801"><a href="#u97F3_u9891_u8F6C_u7801" class="headerlink" title="音频转码"></a>音频转码</h3><p> 将原始音频文件，转码为流媒体文件。<br><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ ffmpeg -i demo.mp3 -acodec libfaac demo.ts</span><br></pre></td></tr></table></figure></p>
+<p>解释如下：</p>
+<h4 id="i_3A__u8F93_u5165_u6587_u4EF6_demo-mp3_u8F93_u5165_u6587_u4EF6_u540D"><a href="#i_3A__u8F93_u5165_u6587_u4EF6_demo-mp3_u8F93_u5165_u6587_u4EF6_u540D" class="headerlink" title="-i: 输入文件　demo.mp3输入文件名"></a>-i: 输入文件　demo.mp3输入文件名</h4><h4 id="acodec_3A__u7F16_u7801_u683C_u5F0F_2C_u4F7F_u7528faac"><a href="#acodec_3A__u7F16_u7801_u683C_u5F0F_2C_u4F7F_u7528faac" class="headerlink" title="-acodec: 编码格式,使用faac"></a>-acodec: 编码格式,使用faac</h4><h4 id="demo-ts_u8F93_u51FA_u7684_u6D41_u5A92_u4F53_u6587_u4EF6_uFF0C_u8BE5_u6587_u4EF6_u540E_u7EED_u5C06_u7528_u4E8E_u5207_u5206"><a href="#demo-ts_u8F93_u51FA_u7684_u6D41_u5A92_u4F53_u6587_u4EF6_uFF0C_u8BE5_u6587_u4EF6_u540E_u7EED_u5C06_u7528_u4E8E_u5207_u5206" class="headerlink" title="demo.ts输出的流媒体文件，该文件后续将用于切分"></a>demo.ts输出的流媒体文件，该文件后续将用于切分</h4><h3 id="u89C6_u9891_u8F6C_u7801"><a href="#u89C6_u9891_u8F6C_u7801" class="headerlink" title="视频转码"></a>视频转码</h3><p>　将原始视频文件，转码为流媒体文件。</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ ffmpeg -i demo.mp4 -acodec copy -vcodec libx264 demo.ts</span><br></pre></td></tr></table></figure>
+<h3 id="u6D41_u5A92_u4F53_u5207_u5206"><a href="#u6D41_u5A92_u4F53_u5207_u5206" class="headerlink" title="流媒体切分"></a>流媒体切分</h3><p>　转码后的流媒体文件一般比较大，因此，需要进行切分，这样用户可以边看边听边下载媒体文件，这当中的中介，就是一个索引文件，通过segmenter工具，可以对文件进行切分，并生成相应的索引文件。<br>　流媒体切分工具segment,不是ffmpeg的组件，需要gcc编译环境，进行编译安装。<br><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ segmenter -i demo.ts <span class="operator">-d</span> <span class="number">10</span> -p demo -m demo.m3u8 -u http://m3u8.s.cn/data/</span><br></pre></td></tr></table></figure></p>
+<p>解释如下：</p>
+<h4 id="i_3A__u8F93_u5165_u7684_u6D41_u5A92_u4F53_u6587_u4EF6_demo-ts"><a href="#i_3A__u8F93_u5165_u7684_u6D41_u5A92_u4F53_u6587_u4EF6_demo-ts" class="headerlink" title="-i: 输入的流媒体文件　 demo.ts"></a>-i: 输入的流媒体文件　 demo.ts</h4><h4 id="d_3A__u5207_u5206_u540E_u7684_u5A92_u4F53_u6587_u4EF6_u65F6_u95F4_u5355_u4F4D_28_u79D2_29"><a href="#d_3A__u5207_u5206_u540E_u7684_u5A92_u4F53_u6587_u4EF6_u65F6_u95F4_u5355_u4F4D_28_u79D2_29" class="headerlink" title="-d: 切分后的媒体文件时间单位(秒)"></a>-d: 切分后的媒体文件时间单位(秒)</h4><h4 id="p_3A__u6587_u4EF6_u540D_u524D_u7F00"><a href="#p_3A__u6587_u4EF6_u540D_u524D_u7F00" class="headerlink" title="-p: 文件名前缀"></a>-p: 文件名前缀</h4><h4 id="u_3A_m3u8_u7D22_u5F15_u6587_u4EF6_u524D_u7F00"><a href="#u_3A_m3u8_u7D22_u5F15_u6587_u4EF6_u524D_u7F00" class="headerlink" title="-u: m3u8索引文件前缀"></a>-u: m3u8索引文件前缀</h4><h3 id="u89C6_u9891_u622A_u56FE"><a href="#u89C6_u9891_u622A_u56FE" class="headerlink" title="视频截图"></a>视频截图</h3><p>　视频一般都会有一张封面，因此，可以将视频媒体文件里的图片截取出来。<br><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ ffmpeg -i demo.mp4 -y <span class="operator">-f</span> mjpeg -ss <span class="number">3</span> -t <span class="number">1</span>  demo.jpg</span><br></pre></td></tr></table></figure></p>
+<h3 id="u6DFB_u52A0_u6C34_u5370"><a href="#u6DFB_u52A0_u6C34_u5370" class="headerlink" title="添加水印"></a>添加水印</h3><p>  加水印，有两大作用：</p>
+<ul>
+<li>保护版权</li>
+<li>广告<br>正中位置加水印<figure class="highlight stylus"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ ./ffmpeg -<span class="tag">i</span> south_pacific<span class="class">.mp4</span> -<span class="tag">i</span> wm<span class="class">.png</span> -filter_complex <span class="string">"overlay=(main_w-overlay_w)/2:(main_h-overlay_h)/2"</span> -codec:<span class="tag">a</span> copy output.mp4</span><br></pre></td></tr></table></figure>
+</li>
+</ul>
+<p>右下角位置加水印<br><figure class="highlight stylus"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ ./ffmpeg -<span class="tag">i</span> south_pacific<span class="class">.mp4</span> -<span class="tag">i</span> wm<span class="class">.png</span> -filter_complex <span class="string">"overlay=(main_w-overlay_w):(main_h-overlay_h)"</span> -codec:<span class="tag">a</span> copy output.mp4</span><br></pre></td></tr></table></figure></p>
+<h3 id="u73AF_u5883_u8BF4_u660E"><a href="#u73AF_u5883_u8BF4_u660E" class="headerlink" title="环境说明"></a>环境说明</h3><p>　上述命令：在centos6.5环境下，测试通过。</p>
+]]></content>
+    <summary type="html">
+    <![CDATA[<p>  ffmpeg是主流的媒体编解码基本工具，市场上主流的播放器，都是基于ffmpeg开发的。</p>
+<h2 id="ffmpeg_u7528_u9014"><a href="#ffmpeg_u7528_u9014" class="headerlink" title="ff]]>
+    </summary>
+    
+      <category term="audio" scheme="http://wiki.niejinkun.com/tags/audio/"/>
+    
+      <category term="video" scheme="http://wiki.niejinkun.com/tags/video/"/>
+    
+      <category term="编程开发" scheme="http://wiki.niejinkun.com/categories/%E7%BC%96%E7%A8%8B%E5%BC%80%E5%8F%91/"/>
+    
+  </entry>
+  
+  <entry>
     <title><![CDATA[我的工具经验(不定期更新)]]></title>
     <link href="http://wiki.niejinkun.com/2016/11/04/my-tools/"/>
     <id>http://wiki.niejinkun.com/2016/11/04/my-tools/</id>
     <published>2016-11-03T16:00:00.000Z</published>
-    <updated>2016-11-04T15:40:03.626Z</updated>
+    <updated>2016-12-29T05:56:48.837Z</updated>
     <content type="html"><![CDATA[<ul>
+<li>在线修改表结构：pt-online-schema-change dba神器，在线扩充表结构</li>
+<li>图床：微博图床，配合markdown,发文利器</li>
+<li>全链路压测：tcpcopy</li>
+<li>mysql慢查询可视化：box anemometer</li>
 <li>gc log analyst online : 在线GC日志分析：<a href="http://gceasy.io/" target="_blank" rel="external">http://gceasy.io/</a></li>
 <li><p>gc log demo : <a href="http://gceasy.io/my-gc-report.jsp?p=c2hhcmVkLzIwMTYvMTEvNC8tLWdjLmxvZy0tMTUtMTctNTE=" target="_blank" rel="external">http://gceasy.io/my-gc-report.jsp?p=c2hhcmVkLzIwMTYvMTEvNC8tLWdjLmxvZy0tMTUtMTctNTE=</a></p>
 </li>
@@ -66,8 +108,10 @@
 ]]></content>
     <summary type="html">
     <![CDATA[<ul>
-<li>gc log analyst online : 在线GC日志分析：<a href="http://gceasy.io/" target="_blank" rel="external">http://gceasy.io/</a></li>
-<li><p>gc lo]]>
+<li>在线修改表结构：pt-online-schema-change dba神器，在线扩充表结构</li>
+<li>图床：微博图床，配合markdown,发文利器</li>
+<li>全链路压测：tcpcopy</li>
+<li>mysql慢查询可视化：box anem]]>
     </summary>
     
       <category term="架构" scheme="http://wiki.niejinkun.com/tags/%E6%9E%B6%E6%9E%84/"/>
@@ -78,10 +122,10 @@
   
   <entry>
     <title><![CDATA[线上ngnix日志分析]]></title>
-    <link href="http://wiki.niejinkun.com/2016/11/04/nginx%E6%97%A5%E5%BF%97%E5%88%86%E6%9E%90/"/>
-    <id>http://wiki.niejinkun.com/2016/11/04/nginx日志分析/</id>
+    <link href="http://wiki.niejinkun.com/2016/11/04/nginx%E2%95%9A%E2%95%92%E2%95%93%E2%95%9B%E2%95%96%E2%95%93%E2%95%AC%D0%8E/"/>
+    <id>http://wiki.niejinkun.com/2016/11/04/nginx╚╒╓╛╖╓╬Ў/</id>
     <published>2016-11-03T16:00:00.000Z</published>
-    <updated>2016-11-04T08:43:14.135Z</updated>
+    <updated>2016-12-29T05:56:48.848Z</updated>
     <content type="html"><![CDATA[<h2 id="u5B89_u88C5goaccess"><a href="#u5B89_u88C5goaccess" class="headerlink" title="安装goaccess"></a>安装goaccess</h2><p>goaccess是免费开源的nginx日志分析神器，他可以分析很多有用的数据。<br>goaccess，你值得拥有。</p>
 <h3 id="centos"><a href="#centos" class="headerlink" title="centos"></a>centos</h3><figure class="highlight cmake"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sudo yum <span class="keyword">install</span> goaccess</span><br></pre></td></tr></table></figure>
 <p>关于goaccess的使用方法，建议前往goacces官网.</p>
@@ -119,10 +163,10 @@
   
   <entry>
     <title><![CDATA[性能优化之O2O大法]]></title>
-    <link href="http://wiki.niejinkun.com/2016/10/28/%E6%80%A7%E8%83%BD%E4%BC%98%E5%8C%96%E4%B9%8BO2O/"/>
-    <id>http://wiki.niejinkun.com/2016/10/28/性能优化之O2O/</id>
+    <link href="http://wiki.niejinkun.com/2016/10/28/%E2%95%A8%E2%95%98%E2%94%80%E2%96%84%E2%95%99%E2%94%BC%E2%95%97%D0%BF%E2%95%93%D0%BEO2O/"/>
+    <id>http://wiki.niejinkun.com/2016/10/28/╨╘─▄╙┼╗п╓оO2O/</id>
     <published>2016-10-27T16:00:00.000Z</published>
-    <updated>2016-10-28T06:56:24.025Z</updated>
+    <updated>2016-12-29T05:56:48.893Z</updated>
     <content type="html"><![CDATA[<h2 id="u4EC0_u4E48_u662F_u6027_u80FD_u4F18_u5316O2O"><a href="#u4EC0_u4E48_u662F_u6027_u80FD_u4F18_u5316O2O" class="headerlink" title="什么是性能优化O2O"></a>什么是性能优化O2O</h2><figure class="highlight gcode"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">    <span class="preprocessor">O2</span>O是互联网的热词，不过，在这里的<span class="preprocessor">O2</span>O是指架构设计的<span class="preprocessor">O2</span>O，即架构设计之线上到线下。</span><br><span class="line">通过将线上的业务逻辑，转到线下提前计划，将极大的提高线上的响应速度，吞吐量，以及用户体验。</span><br></pre></td></tr></table></figure>
 <h2 id="u600E_u4E48_u8BB2"><a href="#u600E_u4E48_u8BB2" class="headerlink" title="怎么讲"></a>怎么讲</h2><figure class="highlight x86asm"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">    公司业务刚启动时，业务量相对较小，也比较简单。通过简单地返回数据库当中的内部，即可汇总用户需求。</span><br><span class="line">当业务慢慢增加时，为了省事，可能数据库系统，变成了文件系统，数据库里面，存储的数据，不再是纯的结构化数据了，而是二级，三级结构化数据，字段不再是保持惟一性了。</span><br><span class="line">这样，中间的业务系统在拿到数据库的数据后，需要在<span class="built_in">CPU</span>和内存中进行搜索，过滤等业务处理。</span><br><span class="line">从而，导致大量无用的数据在网络上传递，占用大量的内存，然后<span class="built_in">CPU</span>中进行过滤，排重处理，导致系统对外整体性能慢，用户体验差。</span><br></pre></td></tr></table></figure>
 <h2 id="u539F_u56E0"><a href="#u539F_u56E0" class="headerlink" title="原因"></a>原因</h2><figure class="highlight"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">用户离数据远，中间环节太多</span><br></pre></td></tr></table></figure>
@@ -151,11 +195,53 @@
   </entry>
   
   <entry>
-    <title><![CDATA[git最佳实践]]></title>
-    <link href="http://wiki.niejinkun.com/2016/10/24/git%E6%9C%80%E4%BD%B3%E5%AE%9E%E8%B7%B5/"/>
-    <id>http://wiki.niejinkun.com/2016/10/24/git最佳实践/</id>
+    <title><![CDATA[web文件安全]]></title>
+    <link href="http://wiki.niejinkun.com/2016/10/24/%E2%95%AC%E2%94%80%E2%95%9D%E2%96%A0%E2%96%91%E2%96%93%E2%95%9A%D0%BB/"/>
+    <id>http://wiki.niejinkun.com/2016/10/24/╬─╝■░▓╚л/</id>
     <published>2016-10-23T16:00:00.000Z</published>
-    <updated>2016-10-24T07:05:31.633Z</updated>
+    <updated>2016-12-29T05:56:48.896Z</updated>
+    <content type="html"><![CDATA[<h1 id="u6587_u4EF6_u5B89_u5168_u6280_u672F_u65B9_u6848"><a href="#u6587_u4EF6_u5B89_u5168_u6280_u672F_u65B9_u6848" class="headerlink" title="文件安全技术方案"></a>文件安全技术方案</h1><h2 id="u95EE_u9898_u63D0_u51FA"><a href="#u95EE_u9898_u63D0_u51FA" class="headerlink" title="问题提出"></a>问题提出</h2><p>公司需要向用户提供下载文件的接口。<br>如果直接向用户提供url，那么用户通过修改Url可以拿到别的用户的文件。<br>如果这份文件是关于用户账户的数据，<br>那么，这实在是太可怕了？</p>
+<h2 id="u539F_u5219"><a href="#u539F_u5219" class="headerlink" title="原则"></a>原则</h2><ul>
+<li>就是不要把 后端存储 直接暴露出去，不能让 客户端知道你的 文件服务器的 ip</li>
+<li>权限控制</li>
+</ul>
+<h2 id="u600E_u4E48_u529E"><a href="#u600E_u4E48_u529E" class="headerlink" title="怎么办"></a>怎么办</h2><p>如果通过url提供用户下载，那么，通过猜的方法，理论上，肯定可以拿到别人的文件。<br>所以，需要从这方面做文章。</p>
+<p>不能让用户知道你的文件路径url。<br>直接输出文件的二进制流，带个http response body当中。</p>
+<p>伪代码如下：</p>
+<figure class="highlight vbscript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line">@RequestMapping(<span class="string">"user/file/&#123;file_index&#125;"</span>)</span><br><span class="line"><span class="keyword">public</span> HttpServletResponse(<span class="built_in">int</span> file_index,HttpServletResponse <span class="built_in">response</span>)&#123;</span><br><span class="line">    user_id = userService.getUserId();</span><br><span class="line">    user_file = fileService.getFileByUserId(user_id,file_index);</span><br><span class="line">    <span class="built_in">String</span> file = FileUtils.getBody(user_file);</span><br><span class="line"> </span><br><span class="line">    <span class="built_in">response</span>.addHeader(<span class="string">"Content-Disposition"</span>, <span class="string">"attachment;filename="</span> + <span class="keyword">new</span> <span class="built_in">String</span>(filename.getBytes()));</span><br><span class="line">    <span class="built_in">response</span>.addHeader(<span class="string">"Content-Length"</span>, <span class="string">""</span> + file.length());</span><br><span class="line">    OutputStream toClient = <span class="keyword">new</span> BufferedOutputStream(<span class="built_in">response</span>.getOutputStream());</span><br><span class="line">    <span class="built_in">response</span>.setContentType(<span class="string">"application/octet-stream"</span>);</span><br><span class="line">    toClient.write(buffer);</span><br><span class="line">    toClient.flush();</span><br><span class="line">    toClient.close();</span><br><span class="line"></span><br><span class="line">    return <span class="built_in">response</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h2 id="u4F18_u7F3A_u70B9"><a href="#u4F18_u7F3A_u70B9" class="headerlink" title="优缺点"></a>优缺点</h2><h3 id="u4F18_u70B9"><a href="#u4F18_u70B9" class="headerlink" title="优点"></a>优点</h3><ul>
+<li>安全</li>
+</ul>
+<h3 id="u7F3A_u70B9"><a href="#u7F3A_u70B9" class="headerlink" title="缺点"></a>缺点</h3><ul>
+<li>慢,因为文件需要走业务流量</li>
+<li>性能差</li>
+</ul>
+<h2 id="u7ED3_u8BBA"><a href="#u7ED3_u8BBA" class="headerlink" title="结论"></a>结论</h2><p>如果能接受慢，性能差的缺点，那就OK了。</p>
+<h2 id="u611F_u8C22"><a href="#u611F_u8C22" class="headerlink" title="感谢"></a>感谢</h2><p>感谢 “Alibaba Dubbo交流群2 472841355” 【Alibaba Dubbo交流群2】：<a href="http://jq.qq.com/?_wv=1027&amp;k=40lpJ14" target="_blank" rel="external">http://jq.qq.com/?_wv=1027&amp;k=40lpJ14</a><br>感谢群里面的各位大神。</p>
+<ul>
+<li>凌封</li>
+<li>想</li>
+<li>rubin</li>
+<li>tea</li>
+<li>等等</li>
+</ul>
+]]></content>
+    <summary type="html">
+    <![CDATA[<h1 id="u6587_u4EF6_u5B89_u5168_u6280_u672F_u65B9_u6848"><a href="#u6587_u4EF6_u5B89_u5168_u6280_u672F_u65B9_u6848" class="headerlink" title]]>
+    </summary>
+    
+      <category term="安全" scheme="http://wiki.niejinkun.com/tags/%E5%AE%89%E5%85%A8/"/>
+    
+      <category term="安全" scheme="http://wiki.niejinkun.com/categories/%E5%AE%89%E5%85%A8/"/>
+    
+  </entry>
+  
+  <entry>
+    <title><![CDATA[git最佳实践]]></title>
+    <link href="http://wiki.niejinkun.com/2016/10/24/git%E2%95%AB%D1%8E%E2%95%9D%E2%95%A4%E2%95%A9%E2%95%A1%E2%95%9D%E2%88%99/"/>
+    <id>http://wiki.niejinkun.com/2016/10/24/git╫ю╝╤╩╡╝∙/</id>
+    <published>2016-10-23T16:00:00.000Z</published>
+    <updated>2016-12-29T05:56:48.741Z</updated>
     <content type="html"><![CDATA[<h2 id="u524D_u8A00"><a href="#u524D_u8A00" class="headerlink" title="前言"></a>前言</h2><ul>
 <li>git是分布式版本控制系统</li>
 <li>git是协作系统</li>
@@ -213,53 +299,11 @@
   </entry>
   
   <entry>
-    <title><![CDATA[web文件安全]]></title>
-    <link href="http://wiki.niejinkun.com/2016/10/24/%E6%96%87%E4%BB%B6%E5%AE%89%E5%85%A8/"/>
-    <id>http://wiki.niejinkun.com/2016/10/24/文件安全/</id>
-    <published>2016-10-23T16:00:00.000Z</published>
-    <updated>2016-10-24T09:25:48.573Z</updated>
-    <content type="html"><![CDATA[<h1 id="u6587_u4EF6_u5B89_u5168_u6280_u672F_u65B9_u6848"><a href="#u6587_u4EF6_u5B89_u5168_u6280_u672F_u65B9_u6848" class="headerlink" title="文件安全技术方案"></a>文件安全技术方案</h1><h2 id="u95EE_u9898_u63D0_u51FA"><a href="#u95EE_u9898_u63D0_u51FA" class="headerlink" title="问题提出"></a>问题提出</h2><p>公司需要向用户提供下载文件的接口。<br>如果直接向用户提供url，那么用户通过修改Url可以拿到别的用户的文件。<br>如果这份文件是关于用户账户的数据，<br>那么，这实在是太可怕了？</p>
-<h2 id="u539F_u5219"><a href="#u539F_u5219" class="headerlink" title="原则"></a>原则</h2><ul>
-<li>就是不要把 后端存储 直接暴露出去，不能让 客户端知道你的 文件服务器的 ip</li>
-<li>权限控制</li>
-</ul>
-<h2 id="u600E_u4E48_u529E"><a href="#u600E_u4E48_u529E" class="headerlink" title="怎么办"></a>怎么办</h2><p>如果通过url提供用户下载，那么，通过猜的方法，理论上，肯定可以拿到别人的文件。<br>所以，需要从这方面做文章。</p>
-<p>不能让用户知道你的文件路径url。<br>直接输出文件的二进制流，带个http response body当中。</p>
-<p>伪代码如下：</p>
-<figure class="highlight vbscript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line">@RequestMapping(<span class="string">"user/file/&#123;file_index&#125;"</span>)</span><br><span class="line"><span class="keyword">public</span> HttpServletResponse(<span class="built_in">int</span> file_index,HttpServletResponse <span class="built_in">response</span>)&#123;</span><br><span class="line">    user_id = userService.getUserId();</span><br><span class="line">    user_file = fileService.getFileByUserId(user_id,file_index);</span><br><span class="line">    <span class="built_in">String</span> file = FileUtils.getBody(user_file);</span><br><span class="line"> </span><br><span class="line">    <span class="built_in">response</span>.addHeader(<span class="string">"Content-Disposition"</span>, <span class="string">"attachment;filename="</span> + <span class="keyword">new</span> <span class="built_in">String</span>(filename.getBytes()));</span><br><span class="line">    <span class="built_in">response</span>.addHeader(<span class="string">"Content-Length"</span>, <span class="string">""</span> + file.length());</span><br><span class="line">    OutputStream toClient = <span class="keyword">new</span> BufferedOutputStream(<span class="built_in">response</span>.getOutputStream());</span><br><span class="line">    <span class="built_in">response</span>.setContentType(<span class="string">"application/octet-stream"</span>);</span><br><span class="line">    toClient.write(buffer);</span><br><span class="line">    toClient.flush();</span><br><span class="line">    toClient.close();</span><br><span class="line"></span><br><span class="line">    return <span class="built_in">response</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<h2 id="u4F18_u7F3A_u70B9"><a href="#u4F18_u7F3A_u70B9" class="headerlink" title="优缺点"></a>优缺点</h2><h3 id="u4F18_u70B9"><a href="#u4F18_u70B9" class="headerlink" title="优点"></a>优点</h3><ul>
-<li>安全</li>
-</ul>
-<h3 id="u7F3A_u70B9"><a href="#u7F3A_u70B9" class="headerlink" title="缺点"></a>缺点</h3><ul>
-<li>慢,因为文件需要走业务流量</li>
-<li>性能差</li>
-</ul>
-<h2 id="u7ED3_u8BBA"><a href="#u7ED3_u8BBA" class="headerlink" title="结论"></a>结论</h2><p>如果能接受慢，性能差的缺点，那就OK了。</p>
-<h2 id="u611F_u8C22"><a href="#u611F_u8C22" class="headerlink" title="感谢"></a>感谢</h2><p>感谢 “Alibaba Dubbo交流群2 472841355” 【Alibaba Dubbo交流群2】：<a href="http://jq.qq.com/?_wv=1027&amp;k=40lpJ14" target="_blank" rel="external">http://jq.qq.com/?_wv=1027&amp;k=40lpJ14</a><br>感谢群里面的各位大神。</p>
-<ul>
-<li>凌封</li>
-<li>想</li>
-<li>rubin</li>
-<li>tea</li>
-<li>等等</li>
-</ul>
-]]></content>
-    <summary type="html">
-    <![CDATA[<h1 id="u6587_u4EF6_u5B89_u5168_u6280_u672F_u65B9_u6848"><a href="#u6587_u4EF6_u5B89_u5168_u6280_u672F_u65B9_u6848" class="headerlink" title]]>
-    </summary>
-    
-      <category term="安全" scheme="http://wiki.niejinkun.com/tags/%E5%AE%89%E5%85%A8/"/>
-    
-      <category term="安全" scheme="http://wiki.niejinkun.com/categories/%E5%AE%89%E5%85%A8/"/>
-    
-  </entry>
-  
-  <entry>
     <title><![CDATA[MySql编码规范]]></title>
-    <link href="http://wiki.niejinkun.com/2016/10/20/mysql%E7%BC%96%E7%A0%81%E8%A7%84%E8%8C%83/"/>
-    <id>http://wiki.niejinkun.com/2016/10/20/mysql编码规范/</id>
+    <link href="http://wiki.niejinkun.com/2016/10/20/mysql%E2%96%92%D1%80%E2%94%AC%D1%8B%E2%95%A3%D1%86%E2%95%96%E2%95%A2/"/>
+    <id>http://wiki.niejinkun.com/2016/10/20/mysql▒р┬ы╣ц╖╢/</id>
     <published>2016-10-19T16:00:00.000Z</published>
-    <updated>2016-10-21T09:16:37.189Z</updated>
+    <updated>2016-12-29T05:56:48.847Z</updated>
     <content type="html"><![CDATA[<h2 id="u524D_u8A00"><a href="#u524D_u8A00" class="headerlink" title="前言"></a>前言</h2><ul>
 <li>mysql是互联网事实上的标准</li>
 <li>mysql性能对付中小型网站足够了，在没有到性能瓶颈前，可以先不上缓存系统。</li>
@@ -360,49 +404,11 @@
   </entry>
   
   <entry>
-    <title><![CDATA[ffmpeg媒体编解码使用方法]]></title>
-    <link href="http://wiki.niejinkun.com/2016/10/18/ffmpeg/"/>
-    <id>http://wiki.niejinkun.com/2016/10/18/ffmpeg/</id>
-    <published>2016-10-18T13:31:29.435Z</published>
-    <updated>2016-01-21T09:59:19.000Z</updated>
-    <content type="html"><![CDATA[<p>  ffmpeg是主流的媒体编解码基本工具，市场上主流的播放器，都是基于ffmpeg开发的。</p>
-<h2 id="ffmpeg_u7528_u9014"><a href="#ffmpeg_u7528_u9014" class="headerlink" title="ffmpeg用途"></a>ffmpeg用途</h2><p>  通过ffmpeg，可以构建流媒体服务。基本思路是：通过ffmpeg，将原始的媒体文件转化为流文件，再通过segment工具，将流文件切分为小文件，用户通过边听边看边下载的方式，来<br>享受无缝无扰的流媒体服务。</p>
-<h2 id="ffmpeg_u5B89_u88C5"><a href="#ffmpeg_u5B89_u88C5" class="headerlink" title="ffmpeg安装"></a>ffmpeg安装</h2><p>　可以在<a href="/www.ffmpeg.org">ffmpeg</a>首页上直接下载编译好的二进制文件。如果需要特殊的插件，则需要进行编译安装。</p>
-<h3 id="u97F3_u9891_u8F6C_u7801"><a href="#u97F3_u9891_u8F6C_u7801" class="headerlink" title="音频转码"></a>音频转码</h3><p> 将原始音频文件，转码为流媒体文件。<br><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ ffmpeg -i demo.mp3 -acodec libfaac demo.ts</span><br></pre></td></tr></table></figure></p>
-<p>解释如下：</p>
-<h4 id="i_3A__u8F93_u5165_u6587_u4EF6_demo-mp3_u8F93_u5165_u6587_u4EF6_u540D"><a href="#i_3A__u8F93_u5165_u6587_u4EF6_demo-mp3_u8F93_u5165_u6587_u4EF6_u540D" class="headerlink" title="-i: 输入文件　demo.mp3输入文件名"></a>-i: 输入文件　demo.mp3输入文件名</h4><h4 id="acodec_3A__u7F16_u7801_u683C_u5F0F_2C_u4F7F_u7528faac"><a href="#acodec_3A__u7F16_u7801_u683C_u5F0F_2C_u4F7F_u7528faac" class="headerlink" title="-acodec: 编码格式,使用faac"></a>-acodec: 编码格式,使用faac</h4><h4 id="demo-ts_u8F93_u51FA_u7684_u6D41_u5A92_u4F53_u6587_u4EF6_uFF0C_u8BE5_u6587_u4EF6_u540E_u7EED_u5C06_u7528_u4E8E_u5207_u5206"><a href="#demo-ts_u8F93_u51FA_u7684_u6D41_u5A92_u4F53_u6587_u4EF6_uFF0C_u8BE5_u6587_u4EF6_u540E_u7EED_u5C06_u7528_u4E8E_u5207_u5206" class="headerlink" title="demo.ts输出的流媒体文件，该文件后续将用于切分"></a>demo.ts输出的流媒体文件，该文件后续将用于切分</h4><h3 id="u89C6_u9891_u8F6C_u7801"><a href="#u89C6_u9891_u8F6C_u7801" class="headerlink" title="视频转码"></a>视频转码</h3><p>　将原始视频文件，转码为流媒体文件。</p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ ffmpeg -i demo.mp4 -acodec copy -vcodec libx264 demo.ts</span><br></pre></td></tr></table></figure>
-<h3 id="u6D41_u5A92_u4F53_u5207_u5206"><a href="#u6D41_u5A92_u4F53_u5207_u5206" class="headerlink" title="流媒体切分"></a>流媒体切分</h3><p>　转码后的流媒体文件一般比较大，因此，需要进行切分，这样用户可以边看边听边下载媒体文件，这当中的中介，就是一个索引文件，通过segmenter工具，可以对文件进行切分，并生成相应的索引文件。<br>　流媒体切分工具segment,不是ffmpeg的组件，需要gcc编译环境，进行编译安装。<br><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ segmenter -i demo.ts <span class="operator">-d</span> <span class="number">10</span> -p demo -m demo.m3u8 -u http://m3u8.s.cn/data/</span><br></pre></td></tr></table></figure></p>
-<p>解释如下：</p>
-<h4 id="i_3A__u8F93_u5165_u7684_u6D41_u5A92_u4F53_u6587_u4EF6_demo-ts"><a href="#i_3A__u8F93_u5165_u7684_u6D41_u5A92_u4F53_u6587_u4EF6_demo-ts" class="headerlink" title="-i: 输入的流媒体文件　 demo.ts"></a>-i: 输入的流媒体文件　 demo.ts</h4><h4 id="d_3A__u5207_u5206_u540E_u7684_u5A92_u4F53_u6587_u4EF6_u65F6_u95F4_u5355_u4F4D_28_u79D2_29"><a href="#d_3A__u5207_u5206_u540E_u7684_u5A92_u4F53_u6587_u4EF6_u65F6_u95F4_u5355_u4F4D_28_u79D2_29" class="headerlink" title="-d: 切分后的媒体文件时间单位(秒)"></a>-d: 切分后的媒体文件时间单位(秒)</h4><h4 id="p_3A__u6587_u4EF6_u540D_u524D_u7F00"><a href="#p_3A__u6587_u4EF6_u540D_u524D_u7F00" class="headerlink" title="-p: 文件名前缀"></a>-p: 文件名前缀</h4><h4 id="u_3A_m3u8_u7D22_u5F15_u6587_u4EF6_u524D_u7F00"><a href="#u_3A_m3u8_u7D22_u5F15_u6587_u4EF6_u524D_u7F00" class="headerlink" title="-u: m3u8索引文件前缀"></a>-u: m3u8索引文件前缀</h4><h3 id="u89C6_u9891_u622A_u56FE"><a href="#u89C6_u9891_u622A_u56FE" class="headerlink" title="视频截图"></a>视频截图</h3><p>　视频一般都会有一张封面，因此，可以将视频媒体文件里的图片截取出来。<br><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ ffmpeg -i demo.mp4 -y <span class="operator">-f</span> mjpeg -ss <span class="number">3</span> -t <span class="number">1</span>  demo.jpg</span><br></pre></td></tr></table></figure></p>
-<h3 id="u6DFB_u52A0_u6C34_u5370"><a href="#u6DFB_u52A0_u6C34_u5370" class="headerlink" title="添加水印"></a>添加水印</h3><p>  加水印，有两大作用：</p>
-<ul>
-<li>保护版权</li>
-<li>广告<br>正中位置加水印<figure class="highlight stylus"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ ./ffmpeg -<span class="tag">i</span> south_pacific<span class="class">.mp4</span> -<span class="tag">i</span> wm<span class="class">.png</span> -filter_complex <span class="string">"overlay=(main_w-overlay_w)/2:(main_h-overlay_h)/2"</span> -codec:<span class="tag">a</span> copy output.mp4</span><br></pre></td></tr></table></figure>
-</li>
-</ul>
-<p>右下角位置加水印<br><figure class="highlight stylus"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ ./ffmpeg -<span class="tag">i</span> south_pacific<span class="class">.mp4</span> -<span class="tag">i</span> wm<span class="class">.png</span> -filter_complex <span class="string">"overlay=(main_w-overlay_w):(main_h-overlay_h)"</span> -codec:<span class="tag">a</span> copy output.mp4</span><br></pre></td></tr></table></figure></p>
-<h3 id="u73AF_u5883_u8BF4_u660E"><a href="#u73AF_u5883_u8BF4_u660E" class="headerlink" title="环境说明"></a>环境说明</h3><p>　上述命令：在centos6.5环境下，测试通过。</p>
-]]></content>
-    <summary type="html">
-    <![CDATA[<p>  ffmpeg是主流的媒体编解码基本工具，市场上主流的播放器，都是基于ffmpeg开发的。</p>
-<h2 id="ffmpeg_u7528_u9014"><a href="#ffmpeg_u7528_u9014" class="headerlink" title="ff]]>
-    </summary>
-    
-      <category term="audio" scheme="http://wiki.niejinkun.com/tags/audio/"/>
-    
-      <category term="video" scheme="http://wiki.niejinkun.com/tags/video/"/>
-    
-      <category term="编程开发" scheme="http://wiki.niejinkun.com/categories/%E7%BC%96%E7%A8%8B%E5%BC%80%E5%8F%91/"/>
-    
-  </entry>
-  
-  <entry>
     <title><![CDATA[性能优化总结]]></title>
-    <link href="http://wiki.niejinkun.com/2016/10/18/%E6%80%A7%E8%83%BD%E4%BC%98%E5%8C%96%E6%80%BB%E7%BB%93/"/>
-    <id>http://wiki.niejinkun.com/2016/10/18/性能优化总结/</id>
+    <link href="http://wiki.niejinkun.com/2016/10/18/%E2%95%A8%E2%95%98%E2%94%80%E2%96%84%E2%95%99%E2%94%BC%E2%95%97%D0%BF%E2%95%AB%E2%96%84%E2%95%9C%D1%81/"/>
+    <id>http://wiki.niejinkun.com/2016/10/18/╨╘─▄╙┼╗п╫▄╜с/</id>
     <published>2016-10-17T16:00:00.000Z</published>
-    <updated>2016-10-18T03:14:56.000Z</updated>
+    <updated>2016-12-29T05:56:48.894Z</updated>
     <content type="html"><![CDATA[<h1 id="u6027_u80FD_u4F18_u5316_u600E_u4E48_u641E"><a href="#u6027_u80FD_u4F18_u5316_u600E_u4E48_u641E" class="headerlink" title="性能优化怎么搞"></a>性能优化怎么搞</h1><h2 id="u95EE_u9898_u63D0_u51FA"><a href="#u95EE_u9898_u63D0_u51FA" class="headerlink" title="问题提出"></a>问题提出</h2><ul>
 <li>压力不大,系统居然挂了</li>
 <li>QPS,TPS上不来</li>
@@ -555,10 +561,10 @@
   
   <entry>
     <title><![CDATA[java API文档一体化集成实践]]></title>
-    <link href="http://wiki.niejinkun.com/2016/08/26/Java%20API%E6%96%87%E6%A1%A3%E4%B8%80%E4%BD%93%E5%8C%96%E5%AE%9E%E8%B7%B5/"/>
-    <id>http://wiki.niejinkun.com/2016/08/26/Java API文档一体化实践/</id>
+    <link href="http://wiki.niejinkun.com/2016/08/26/Java%20API%E2%95%AC%E2%94%80%E2%95%A1%E2%95%A1%E2%95%A5%E2%95%97%E2%95%A0%D1%85%E2%95%97%D0%BF%E2%95%A9%E2%95%A1%E2%95%9D%E2%88%99/"/>
+    <id>http://wiki.niejinkun.com/2016/08/26/Java API╬─╡╡╥╗╠х╗п╩╡╝∙/</id>
     <published>2016-08-25T16:00:00.000Z</published>
-    <updated>2016-08-26T09:03:03.874Z</updated>
+    <updated>2016-12-29T05:56:48.721Z</updated>
     <content type="html"><![CDATA[<h1 id="springboot_api_u6587_u6863_u5728_u7EBF_u751F_u6210demo"><a href="#springboot_api_u6587_u6863_u5728_u7EBF_u751F_u6210demo" class="headerlink" title="springboot api文档在线生成demo"></a>springboot api文档在线生成demo</h1><p> api文档和代码同步是一个麻烦的问题。程序员中有一个笑话是：</p>
 <ul>
 <li>我讨厌写文档</li>
@@ -601,10 +607,10 @@
   
   <entry>
     <title><![CDATA[JAVA架构最佳实践]]></title>
-    <link href="http://wiki.niejinkun.com/2016/08/24/java%E6%9E%B6%E6%9E%84%E6%9C%80%E4%BD%B3%E5%AE%9E%E8%B7%B5/"/>
-    <id>http://wiki.niejinkun.com/2016/08/24/java架构最佳实践/</id>
+    <link href="http://wiki.niejinkun.com/2016/08/24/java%E2%95%9D%E2%96%84%E2%95%A3%E2%95%A3%E2%95%AB%D1%8E%E2%95%9D%E2%95%A4%E2%95%A9%E2%95%A1%E2%95%9D%E2%88%99/"/>
+    <id>http://wiki.niejinkun.com/2016/08/24/java╝▄╣╣╫ю╝╤╩╡╝∙/</id>
     <published>2016-08-23T16:00:00.000Z</published>
-    <updated>2016-08-24T03:34:48.524Z</updated>
+    <updated>2016-12-29T05:56:48.765Z</updated>
     <content type="html"><![CDATA[<h2 id="u4F9D_u8D56_u6846_u67B6"><a href="#u4F9D_u8D56_u6846_u67B6" class="headerlink" title="依赖框架"></a>依赖框架</h2><p> springboot 无脑上</p>
 <h2 id="ORM"><a href="#ORM" class="headerlink" title="ORM"></a>ORM</h2><p> mybatis，可以满足个性化SQL,必须上</p>
 <h3 id="u6CE8_u610F"><a href="#u6CE8_u610F" class="headerlink" title="注意"></a>注意</h3><ul>
@@ -683,7 +689,7 @@
     <link href="http://wiki.niejinkun.com/2016/08/24/rmi_vs_restfulapi/"/>
     <id>http://wiki.niejinkun.com/2016/08/24/rmi_vs_restfulapi/</id>
     <published>2016-08-23T16:00:00.000Z</published>
-    <updated>2016-08-24T02:36:57.289Z</updated>
+    <updated>2016-12-29T05:56:48.859Z</updated>
     <content type="html"><![CDATA[<h2 id="RMI"><a href="#RMI" class="headerlink" title="RMI"></a>RMI</h2><h3 id="u4F18_u70B9"><a href="#u4F18_u70B9" class="headerlink" title="优点"></a>优点</h3><ul>
 <li>性能高</li>
 <li>基于TCP</li>
@@ -720,10 +726,10 @@
   
   <entry>
     <title><![CDATA[java开启远程监控]]></title>
-    <link href="http://wiki.niejinkun.com/2016/08/24/java%E5%BC%80%E5%90%AF%E8%BF%9C%E7%A8%8B%E7%9B%91%E6%8E%A7/"/>
-    <id>http://wiki.niejinkun.com/2016/08/24/java开启远程监控/</id>
+    <link href="http://wiki.niejinkun.com/2016/08/24/java%E2%94%90%D0%BA%E2%95%9E%D0%87%E2%95%98%E2%95%A2%E2%94%82%E2%95%A0%E2%95%9D%D1%80%E2%94%90%E2%95%AA/"/>
+    <id>http://wiki.niejinkun.com/2016/08/24/java┐к╞Ї╘╢│╠╝р┐╪/</id>
     <published>2016-08-23T16:00:00.000Z</published>
-    <updated>2016-08-24T03:48:00.601Z</updated>
+    <updated>2016-12-29T05:56:48.762Z</updated>
     <content type="html"><![CDATA[<p>线上运行的服务，如果没有监控，无异于盲人摸象。<br>裸奔的机器，根据墨菲定律，盲点必须出现问题。<br>所以，必须要上监控。</p>
 <p>监控手段有两种：</p>
 <ul>
@@ -768,7 +774,7 @@
     <link href="http://wiki.niejinkun.com/2016/06/12/solr%20vs%20es/"/>
     <id>http://wiki.niejinkun.com/2016/06/12/solr vs es/</id>
     <published>2016-06-11T16:00:00.000Z</published>
-    <updated>2016-06-12T03:33:35.334Z</updated>
+    <updated>2016-12-29T05:56:48.864Z</updated>
     <content type="html"><![CDATA[<h3 id="u5173_u952E_u7ED3_u8BBA"><a href="#u5173_u952E_u7ED3_u8BBA" class="headerlink" title="关键结论"></a>关键结论</h3><ul>
 <li>两者性能相当</li>
 <li>es查询性能稍差</li>
@@ -793,10 +799,10 @@
   
   <entry>
     <title><![CDATA[zuul]]></title>
-    <link href="http://wiki.niejinkun.com/2016/06/07/zuul%E7%AE%80%E4%BB%8B/"/>
-    <id>http://wiki.niejinkun.com/2016/06/07/zuul简介/</id>
+    <link href="http://wiki.niejinkun.com/2016/06/07/zuul%E2%95%9D%D0%84%E2%95%9C%D1%89/"/>
+    <id>http://wiki.niejinkun.com/2016/06/07/zuul╝Є╜щ/</id>
     <published>2016-06-06T16:00:00.000Z</published>
-    <updated>2016-06-07T03:23:12.558Z</updated>
+    <updated>2016-12-29T05:56:48.888Z</updated>
     <content type="html"><![CDATA[<h3 id="u4E3A_u4EC0_u4E48_u4F7F_u7528zuul"><a href="#u4E3A_u4EC0_u4E48_u4F7F_u7528zuul" class="headerlink" title="为什么使用zuul"></a>为什么使用zuul</h3><p>Zuul提供了一个框架，可以对过滤器进行动态的加载，编译，运行。过滤器之间没有直接的相互通信。他们是通过一个RequestContext的静态类来进行数据传递的。RequestContext类中有ThreadLocal变量来记录每个Request所需要传递的数据。<br>过滤器是由Groovy写成。这些过滤器文件被放在Zuul Server上的特定目录下面。Zuul会定期轮询这些目录。修改过的过滤器会动态的加载到Zuul Server中以便于request使用。<br>下面有几种标准的过滤器类型：</p>
 <ul>
 <li>PRE：这种过滤器在请求到达Origin Server之前调用。比如身份验证，在集群中选择请求的Origin Server，记log等。</li>
@@ -840,7 +846,7 @@
     <link href="http://wiki.niejinkun.com/2016/05/31/protobuf-hello/"/>
     <id>http://wiki.niejinkun.com/2016/05/31/protobuf-hello/</id>
     <published>2016-05-30T16:00:00.000Z</published>
-    <updated>2016-05-31T09:39:33.000Z</updated>
+    <updated>2016-12-29T05:56:48.853Z</updated>
     <content type="html"><![CDATA[<p> netty是高性能的异步io框架，阿里的dubbo,58系的scf和微博的motan的通信框架，都是选用了netty。<br> protoc buf是高性能的序列化方案。 因此，把他们集成在一起，非常地有必要了。<br> 通过netty，可以非常方便的构建高性能的后台服务。</p>
 <p>本demo分别来源于netty和pb的官方手册，目前集成的比较乱，以后应该会重新整理。</p>
 <h2 id="u4F9D_u8D56"><a href="#u4F9D_u8D56" class="headerlink" title="依赖"></a>依赖</h2><p>maven依赖<br>    <dependencies><br>        <dependency><br>            <groupid>io.netty</groupid><br>            <artifactid>netty-all</artifactid><br>            <version>4.0.23.Final</version><br>        </dependency><br>        <dependency><br>            <groupid>com.google.protobuf</groupid><br>            <artifactid>protobuf-java</artifactid><br>            <version>2.5.0</version><br>        </dependency><br>    </dependencies></p>
@@ -866,10 +872,10 @@
   
   <entry>
     <title><![CDATA[springboot集成ssl tomcat]]></title>
-    <link href="http://wiki.niejinkun.com/2016/05/19/springboot%E9%9B%86%E6%88%90tomcat%20ssl/"/>
-    <id>http://wiki.niejinkun.com/2016/05/19/springboot集成tomcat ssl/</id>
+    <link href="http://wiki.niejinkun.com/2016/05/19/springboot%E2%95%9D%D0%BF%E2%94%82%E2%95%94tomcat%20ssl/"/>
+    <id>http://wiki.niejinkun.com/2016/05/19/springboot╝п│╔tomcat ssl/</id>
     <published>2016-05-18T16:00:00.000Z</published>
-    <updated>2016-05-19T04:45:14.451Z</updated>
+    <updated>2016-12-29T05:56:48.881Z</updated>
     <content type="html"><![CDATA[<h2 id="u8BC1_u4E66_u5236_u4F5C"><a href="#u8BC1_u4E66_u5236_u4F5C" class="headerlink" title="证书制作"></a>证书制作</h2><figure class="highlight groovy"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br></pre></td><td class="code"><pre><span class="line"><span class="label"> C:</span>\Users\njp\sanhao\workspace-netty&gt;keytool -genkey -alias server -keyalg RSA -k</span><br><span class="line">eystore server.jks -validity <span class="number">3650</span></span><br><span class="line">输入密钥库口令:</span><br><span class="line">密钥库口令太短 - 至少必须为 <span class="number">6</span> 个字符</span><br><span class="line">输入密钥库口令:</span><br><span class="line">再次输入新口令:</span><br><span class="line">您的名字与姓氏是什么?</span><br><span class="line">  [Unknown]:  nie</span><br><span class="line">您的组织单位名称是什么?</span><br><span class="line">  [Unknown]:  sanhao</span><br><span class="line">您的组织名称是什么?</span><br><span class="line">  [Unknown]:  sanhao</span><br><span class="line">您所在的城市或区域名称是什么?</span><br><span class="line">  [Unknown]:  beijing</span><br><span class="line">您所在的省<span class="regexp">/市/</span>自治区名称是什么?</span><br><span class="line">  [Unknown]:  beijing</span><br><span class="line">该单位的双字母国家/地区代码是什么?</span><br><span class="line">  [Unknown]:  cn</span><br><span class="line">CN=nie, OU=sanhao, O=sanhao, L=beijing, ST=beijing, C=cn是否正确?</span><br><span class="line">  [否]:  yes</span><br><span class="line">您的名字与姓氏是什么?</span><br><span class="line">  [nie]:  niejinping</span><br><span class="line">您的组织单位名称是什么?</span><br><span class="line">  [sanhao]:</span><br><span class="line">您的组织名称是什么?</span><br><span class="line">  [sanhao]:</span><br><span class="line">您所在的城市或区域名称是什么?</span><br><span class="line">  [beijing]:</span><br><span class="line">您所在的省<span class="regexp">/市/</span>自治区名称是什么?</span><br><span class="line">  [beijing]:</span><br><span class="line">该单位的双字母国家/地区代码是什么?</span><br><span class="line">  [cn]:</span><br><span class="line">CN=niejinping, OU=sanhao, O=sanhao, L=beijing, ST=beijing, C=cn是否正确?</span><br><span class="line">  [否]:</span><br><span class="line">您的名字与姓氏是什么?</span><br><span class="line">  [niejinping]:</span><br><span class="line">您的组织单位名称是什么?</span><br><span class="line">  [sanhao]:</span><br><span class="line">您的组织名称是什么?</span><br><span class="line">  [sanhao]:</span><br><span class="line">您所在的城市或区域名称是什么?</span><br><span class="line">  [beijing]:</span><br><span class="line">您所在的省<span class="regexp">/市/</span>自治区名称是什么?</span><br><span class="line">  [beijing]:</span><br><span class="line">该单位的双字母国家/地区代码是什么?</span><br><span class="line">  [cn]:</span><br><span class="line">CN=niejinping, OU=sanhao, O=sanhao, L=beijing, ST=beijing, C=cn是否正确?</span><br><span class="line">  [否]:  y</span><br><span class="line"></span><br><span class="line">输入 &lt;server&gt; 的密钥口令</span><br><span class="line">        (如果和密钥库口令相同, 按回车):</span><br></pre></td></tr></table></figure>
 <h2 id="u4E70_u8BC1_u4E66"><a href="#u4E70_u8BC1_u4E66" class="headerlink" title="买证书"></a>买证书</h2><p>上<a href="/startssl.com">startssl.com</a>,免费的。但格式是P12格式的，需要转换为jks格式。方法如下：<br><figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">C:\&gt;keytool -importkeysto</span><br><span class="line">re -srckeystore <span class="string">"niejinping2014%40gmail.com.p12"</span> -srcstoretype pkcs12 -destkeyst</span><br><span class="line">ore startssl.jks</span><br><span class="line">输入目标密钥库口令:</span><br><span class="line">再次输入新口令:</span><br><span class="line">输入源密钥库口令:</span><br><span class="line">已成功导入别名 <span class="number">1</span> 的条目。</span><br><span class="line">已完成导入命令: <span class="number">1</span> 个条目成功导入, <span class="number">0</span> 个条目失败或取消</span><br></pre></td></tr></table></figure></p>
 <h2 id="APP_u4EE3_u7801"><a href="#APP_u4EE3_u7801" class="headerlink" title="APP代码"></a>APP代码</h2><figure class="highlight groovy"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="annotation">@SpringBootApplication</span></span><br><span class="line"><span class="annotation">@EnableAutoConfiguration</span>(exclude = &#123;DataSourceAutoConfiguration.<span class="keyword">class</span>, HibernateJpaAutoConfiguration.<span class="keyword">class</span>&#125;)</span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">App</span> &#123;</span></span><br><span class="line"></span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">static</span> <span class="typename">void</span> main(String[] args) <span class="keyword">throws</span> Exception &#123;</span><br><span class="line">        SpringApplication.run(App.<span class="keyword">class</span>, args);</span><br><span class="line">    &#125;</span><br></pre></td></tr></table></figure>
@@ -904,7 +910,7 @@
     <link href="http://wiki.niejinkun.com/2016/05/12/opencv/"/>
     <id>http://wiki.niejinkun.com/2016/05/12/opencv/</id>
     <published>2016-05-11T16:00:00.000Z</published>
-    <updated>2016-05-31T09:03:23.134Z</updated>
+    <updated>2016-12-29T05:56:48.850Z</updated>
     <content type="html"><![CDATA[<p>opcvͼ�������Ŀ�������������������ʶ���� �ü������ţ���ת�ȹ��ܡ�����opencv���Է����Ĺ�����˾�Լ���ͼƬ������<br>opcv�ǻ���C/C++���п����ģ���java����Ч�ʸߣ����ˣ����б��뽫���Ǽ��������������Լ���ͼƬ�������ܡ�</p>
 <h2 id="uFFFD_uFFFD_uFFFD_uFFFD_u057B"><a href="#uFFFD_uFFFD_uFFFD_uFFFD_u057B" class="headerlink" title="����ջ"></a>����ջ</h2><ul>
 <li>spring mvc : �ṩ���������Ľӿ�</li>
@@ -930,32 +936,11 @@
   </entry>
   
   <entry>
-    <title><![CDATA[spring netty protolbuf集成]]></title>
-    <link href="http://wiki.niejinkun.com/2016/05/06/spring-netty-protobuffer%E9%9B%86%E6%88%90/"/>
-    <id>http://wiki.niejinkun.com/2016/05/06/spring-netty-protobuffer集成/</id>
-    <published>2016-05-05T16:00:00.000Z</published>
-    <updated>2016-05-06T03:25:38.559Z</updated>
-    <content type="html"></content>
-    <summary type="html">
-    
-    </summary>
-    
-      <category term="netty" scheme="http://wiki.niejinkun.com/tags/netty/"/>
-    
-      <category term="protolbuf" scheme="http://wiki.niejinkun.com/tags/protolbuf/"/>
-    
-      <category term="spring" scheme="http://wiki.niejinkun.com/tags/spring/"/>
-    
-      <category term="java" scheme="http://wiki.niejinkun.com/categories/java/"/>
-    
-  </entry>
-  
-  <entry>
     <title><![CDATA[基于mqtt搭建im和推送系统]]></title>
-    <link href="http://wiki.niejinkun.com/2016/05/06/mqtt%E6%90%AD%E5%BB%BAIm%E5%92%8C%E6%8E%A8%E9%80%81%E7%B3%BB%E7%BB%9F/"/>
-    <id>http://wiki.niejinkun.com/2016/05/06/mqtt搭建Im和推送系统/</id>
+    <link href="http://wiki.niejinkun.com/2016/05/06/mqtt%E2%94%A4%D1%8E%E2%95%9C%D0%B8Im%E2%95%91%E2%95%90%E2%95%90%E2%95%9E%E2%95%A6%E2%95%90%E2%95%A7%E2%95%A1%E2%95%90%E2%94%82/"/>
+    <id>http://wiki.niejinkun.com/2016/05/06/mqtt┤ю╜иIm║══╞╦═╧╡═│/</id>
     <published>2016-05-05T16:00:00.000Z</published>
-    <updated>2016-05-06T03:17:35.131Z</updated>
+    <updated>2016-12-29T05:56:48.824Z</updated>
     <content type="html"><![CDATA[<h2 id="u95EE_u9898_u63D0_u51FA"><a href="#u95EE_u9898_u63D0_u51FA" class="headerlink" title="问题提出"></a>问题提出</h2><p>  我想搞类似于UBER或滴滴的APP应用,流程场景如下：</p>
 <ul>
 <li>乘客下单</li>
@@ -998,11 +983,32 @@
   </entry>
   
   <entry>
+    <title><![CDATA[spring netty protolbuf集成]]></title>
+    <link href="http://wiki.niejinkun.com/2016/05/06/spring-netty-protobuffer%E2%95%9D%D0%BF%E2%94%82%E2%95%94/"/>
+    <id>http://wiki.niejinkun.com/2016/05/06/spring-netty-protobuffer╝п│╔/</id>
+    <published>2016-05-05T16:00:00.000Z</published>
+    <updated>2016-12-29T05:56:48.869Z</updated>
+    <content type="html"></content>
+    <summary type="html">
+    
+    </summary>
+    
+      <category term="netty" scheme="http://wiki.niejinkun.com/tags/netty/"/>
+    
+      <category term="protolbuf" scheme="http://wiki.niejinkun.com/tags/protolbuf/"/>
+    
+      <category term="spring" scheme="http://wiki.niejinkun.com/tags/spring/"/>
+    
+      <category term="java" scheme="http://wiki.niejinkun.com/categories/java/"/>
+    
+  </entry>
+  
+  <entry>
     <title><![CDATA[图片服务]]></title>
-    <link href="http://wiki.niejinkun.com/2016/05/05/%E5%9B%BE%E7%89%87%E6%9C%8D%E5%8A%A1%E5%BC%80%E5%8F%91/"/>
-    <id>http://wiki.niejinkun.com/2016/05/05/图片服务开发/</id>
+    <link href="http://wiki.niejinkun.com/2016/05/05/%E2%95%90%E2%95%9D%E2%95%9E%D0%BC%E2%95%96%E2%96%A0%E2%95%AC%D1%91%E2%94%90%D0%BA%E2%95%96%D0%B2/"/>
+    <id>http://wiki.niejinkun.com/2016/05/05/═╝╞м╖■╬ё┐к╖в/</id>
     <published>2016-05-04T16:00:00.000Z</published>
-    <updated>2016-05-09T09:45:49.015Z</updated>
+    <updated>2016-12-29T05:56:48.890Z</updated>
     <content type="html"><![CDATA[<p>  图片服务是电商网站的基本服务。你打开XXX网站，进入列表页，看到的是商品的缩略图。<br>  进入详情页，还在大一点缩略图。你点击一下缩略图，完整的图片最终出来了。</p>
 <p>  这里涉及几个方面：</p>
 <ul>
