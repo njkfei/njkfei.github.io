@@ -19,9 +19,10 @@ branches:
   - source
 before_install:
 - openssl aes-256-cbc -K $encrypted_45b062151db0_key -iv $encrypted_45b062151db0_iv
+  -in id_rsa_blog.enc -out id_rsa_blog -d
+- openssl aes-256-cbc -K $encrypted_45b062151db0_key -iv $encrypted_45b062151db0_iv
   -in id_rsa.enc -out ~\/.ssh/id_rsa -d
 - openssl aes-256-cbc -K $encrypted_7a858500971c_key -iv $encrypted_7a858500971c_iv
   -in id_rsa_blog.enc -out .travis/id_rsa_blog -d
 - openssl aes-256-cbc -K $encrypted_7a858500971c_key -iv $encrypted_7a858500971c_iv
-  -in id_rsa_blog.enc -out id_rsa_blog -d
-  - chmod +x hexo
+  -in id_rsa_blog.enc -out id_rsa_blog -d - chmod +x hexo
