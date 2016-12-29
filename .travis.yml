@@ -3,9 +3,7 @@ node_js: stable
 install:
 - npm install
 script:
-- hexo clean
 - hexo g
-- hexo d
 after_script:
 - cd ./public
 - git init
