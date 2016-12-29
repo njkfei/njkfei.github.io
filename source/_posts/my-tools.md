@@ -1,9 +1,22 @@
 title: 我的工具经验(不定期更新)
-date: 2016.05.31
+date: 2016.11.04
 categories: 架构 #分类
 tags: [架构]
 toc: true
 ---
+* 在线修改表结构：pt-online-schema-change dba神器，在线扩充表结构
+* 图床：微博图床，配合markdown,发文利器
+* 全链路压测：tcpcopy
+* mysql慢查询可视化：box anemometer
+* gc log analyst online : 在线GC日志分析：[http://gceasy.io/](http://gceasy.io/)
+* gc log demo : [http://gceasy.io/my-gc-report.jsp?p=c2hhcmVkLzIwMTYvMTEvNC8tLWdjLmxvZy0tMTUtMTctNTE=](http://gceasy.io/my-gc-report.jsp?p=c2hhcmVkLzIwMTYvMTEvNC8tLWdjLmxvZy0tMTUtMTctNTE=)
+
+* jstack log analyst online : 在线thread日志分析 ：[http://fastthread.io/](http://fastthread.io/)
+* jstack log demo: [http://fastthread.io/ft-thread-report.jsp?dumpId=1&oTxnId_value=8152f8f3-2e6a-4747-bb62-6e2ef99596e0](http://fastthread.io/ft-thread-report.jsp?dumpId=1&oTxnId_value=8152f8f3-2e6a-4747-bb62-6e2ef99596e0)
+
+* goaccess nginx 日志分析：nginx日志分析神器
+
+* travic ci hexo github : 自动完成博客发布
 
 * 搜索：elasticsearch
 * 推荐：mahout
