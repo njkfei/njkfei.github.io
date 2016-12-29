@@ -1,0 +1,396 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  
+  <title>线上ngnix日志分析 | 游骑爬，生命在于折腾</title>
+<a class="nav-icon" href="http://weibo.com/1032111474" title="微博" target="_blank">&#61834;</a>
+<a class="nav-icon" href="http://user.qzone.qq.com/297206021" title="QQ空间" target="_blank">&#61910;</a>
+<a class="nav-icon" href="https://twitter.com/HKEY_C17" title="twitter" target="_blank">&#61593;</a>
+<a class="nav-icon" href="https://github.com/njkfei" title="GitHub" target="_blank">&#61595;</a>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <meta name="description" content="安装goaccessgoaccess是免费开源的nginx日志分析神器，他可以分析很多有用的数据。goaccess，你值得拥有。
+centos1sudo yum install goaccess
+关于goaccess的使用方法，建议前往goacces官网.
+配置goaccess.conf文件必须配置下面三项
+
+log-format
+date-format
+time-format
+
+示例文件如下：1">
+<meta property="og:type" content="article">
+<meta property="og:title" content="线上ngnix日志分析">
+<meta property="og:url" content="http://wiki.niejinkun.com/2016/11/03/nginx╚╒╓╛╖╓╬Ў/index.html">
+<meta property="og:site_name" content="游骑爬，生命在于折腾">
+<meta property="og:description" content="安装goaccessgoaccess是免费开源的nginx日志分析神器，他可以分析很多有用的数据。goaccess，你值得拥有。
+centos1sudo yum install goaccess
+关于goaccess的使用方法，建议前往goacces官网.
+配置goaccess.conf文件必须配置下面三项
+
+log-format
+date-format
+time-format
+
+示例文件如下：1">
+<meta property="og:updated_time" content="2016-12-29T07:27:54.570Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="线上ngnix日志分析">
+<meta name="twitter:description" content="安装goaccessgoaccess是免费开源的nginx日志分析神器，他可以分析很多有用的数据。goaccess，你值得拥有。
+centos1sudo yum install goaccess
+关于goaccess的使用方法，建议前往goacces官网.
+配置goaccess.conf文件必须配置下面三项
+
+log-format
+date-format
+time-format
+
+示例文件如下：1">
+  
+    <link rel="alternative" href="/atom.xml" title="游骑爬，生命在于折腾" type="application/atom+xml">
+  
+  
+    <link rel="icon" href="/favicon.png">
+  
+  <link href="//fonts.googleapis.com/css?family=Source+Code+Pro" rel="stylesheet" type="text/css">
+  <link rel="stylesheet" href="/css/style.css" type="text/css">
+  
+<!-- Google Analytics -->
+<script type="text/javascript">
+(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+})(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+ga('create', 'UA-72124819-1', 'auto');
+ga('send', 'pageview');
+
+</script>
+<!-- End Google Analytics -->
+
+
+
+</head>
+<body>
+  <div id="container">
+    <div id="wrap">
+      <header id="header">
+  <div id="banner"></div>
+  <div id="header-outer" class="outer">
+    <div id="header-title" class="inner">
+      <h1 id="logo-wrap">
+        <a href="/" id="logo">游骑爬，生命在于折腾</a>
+      </h1>
+      
+        <h2 id="subtitle-wrap">
+          <a href="/" id="subtitle">记录点滴</a>
+        </h2>
+      
+    </div>
+    <div id="header-inner" class="inner">
+      <nav id="main-nav">
+        <a id="main-nav-toggle" class="nav-icon"></a>
+        
+          <a class="main-nav-link" href="/">首页</a>
+        
+          <a class="main-nav-link" href="/archives">归档</a>
+        
+          <a class="main-nav-link" href="/about">关于我</a>
+        
+      </nav>
+       <nav id="sub-nav">
+        <a class="nav-icon-social" href="https://github.com/njkfei" title="GitHub" target="_blank"><img src="/imgs/github-32.png"></a>
+        <a class="nav-icon-social" href="http://weibo.com/1032111474" title="微博" target="_blank"><img src="/imgs/weibo-32.png"></a>
+        <a class="nav-icon-social" title="Search"><img src="/imgs/search-32.png"></a> 
+           
+        <a class="nav-icon-social" href="/atom.xml" title="RSS Feed"></a>
+        
+       </nav>
+      <div id="search-form-wrap">
+        <form action="//google.com/search" method="get" accept-charset="UTF-8" class="search-form"><input type="search" name="q" results="0" class="search-form-input" placeholder="Search"><button type="submit" class="search-form-submit">&#xF002;</button><input type="hidden" name="sitesearch" value="http://wiki.niejinkun.com"></form>
+      </div>
+    </div>
+  </div>
+
+<script>
+    
+    var d = new Date();
+    var m = d.getMinutes();
+    var num = Math.ceil((m + 1) / (60 / 6));
+    document.getElementById("banner").style.backgroundImage = "url(/css/images/banner" + num + ".jpg)";
+    
+</script>
+</header>
+      <div class="outer">
+        <section id="main"><article id="post-nginx╚╒╓╛╖╓╬Ў" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2016/11/03/nginx╚╒╓╛╖╓╬Ў/" class="article-date">
+  <time datetime="2016-11-03T16:00:00.000Z" itemprop="datePublished">2016-11-04</time>
+</a>
+    
+  <div class="article-category">
+    <a class="article-category-link" href="/categories/nginx/">nginx</a>
+  </div>
+
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 class="article-title" itemprop="name">
+      线上ngnix日志分析
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <!-- Table of Contents -->
+        
+          <div id="toc" class="toc-article">
+            <strong class="toc-title">文章目录</strong>
+            <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#u5B89_u88C5goaccess"><span class="toc-number">1.</span> <span class="toc-text">安装goaccess</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#centos"><span class="toc-number">1.1.</span> <span class="toc-text">centos</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#u914D_u7F6Egoaccess-conf_u6587_u4EF6"><span class="toc-number">2.</span> <span class="toc-text">配置goaccess.conf文件</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#u5751_u7684_u8BF4_u660E"><span class="toc-number">3.</span> <span class="toc-text">坑的说明</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#u8F6C_u6362nginx_u65E5_u5FD7_u683C_u5F0F"><span class="toc-number">4.</span> <span class="toc-text">转换nginx日志格式</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#u5F00_u59CB_u5206_u6790"><span class="toc-number">5.</span> <span class="toc-text">开始分析</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#u6765_u4E2A_u793A_u4F8B"><span class="toc-number">6.</span> <span class="toc-text">来个示例</span></a></li></ol>
+          </div>
+        
+        <h2 id="u5B89_u88C5goaccess"><a href="#u5B89_u88C5goaccess" class="headerlink" title="安装goaccess"></a>安装goaccess</h2><p>goaccess是免费开源的nginx日志分析神器，他可以分析很多有用的数据。<br>goaccess，你值得拥有。</p>
+<h3 id="centos"><a href="#centos" class="headerlink" title="centos"></a>centos</h3><figure class="highlight cmake"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sudo yum <span class="keyword">install</span> goaccess</span><br></pre></td></tr></table></figure>
+<p>关于goaccess的使用方法，建议前往goacces官网.</p>
+<h2 id="u914D_u7F6Egoaccess-conf_u6587_u4EF6"><a href="#u914D_u7F6Egoaccess-conf_u6587_u4EF6" class="headerlink" title="配置goaccess.conf文件"></a>配置goaccess.conf文件</h2><p>必须配置下面三项</p>
+<ul>
+<li>log-format</li>
+<li>date-format</li>
+<li>time-format</li>
+</ul>
+<p>示例文件如下：<br><figure class="highlight mel"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">$ vi goaccess.conf</span><br><span class="line"><span class="keyword">log</span>-<span class="keyword">format</span> <span class="variable">%d</span>:<span class="variable">%t</span> <span class="variable">%^</span> <span class="variable">%h</span> <span class="variable">%s</span> <span class="variable">%T</span>  <span class="variable">%m</span> <span class="variable">%U</span> <span class="variable">%H</span> <span class="variable">%b</span></span><br><span class="line">time-<span class="keyword">format</span> <span class="variable">%H</span>:<span class="variable">%S</span>:<span class="variable">%M</span></span><br><span class="line"><span class="keyword">date</span>-<span class="keyword">format</span> <span class="variable">%d</span>/<span class="variable">%b</span>/<span class="variable">%Y</span></span><br></pre></td></tr></table></figure></p>
+<p>注意，%T和%m之前有两个空格，这个很坑，goaccess对空格很敏感，一个都不能少</p>
+<h2 id="u5751_u7684_u8BF4_u660E"><a href="#u5751_u7684_u8BF4_u660E" class="headerlink" title="坑的说明"></a>坑的说明</h2><p>goaccess对日志格式要求非常严格，自定义的格式，想通过语法检查还是很难的，建议只导出少量关键日志即可。<br>goaccess必须要有的日志有：</p>
+<ul>
+<li>时间</li>
+<li>请求url</li>
+<li>有效的IP地址</li>
+</ul>
+<p>即：</p>
+<figure class="highlight livecodeserver"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="operator">a</span> valid IPv4/<span class="number">6</span> %h</span><br><span class="line"><span class="operator">a</span> valid <span class="built_in">date</span> %d</span><br><span class="line"><span class="operator">the</span> request %r</span><br></pre></td></tr></table></figure>
+<p>一定要听劝。只导出少量数据，差一个空格，goaccess都会无法解析的。！！！！</p>
+<h2 id="u8F6C_u6362nginx_u65E5_u5FD7_u683C_u5F0F"><a href="#u8F6C_u6362nginx_u65E5_u5FD7_u683C_u5F0F" class="headerlink" title="转换nginx日志格式"></a>转换nginx日志格式</h2><p>由于nginx日志有可能无法直接分析公司自定义的格式，因此，建议进行转换。<br>转换方法示例如下：</p>
+<figure class="highlight stata"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">awk -F <span class="string">"|"</span> '&#123;<span class="keyword">print</span> <span class="label">$2</span>,<span class="label">$3</span>,<span class="label">$5</span>,<span class="label">$6</span>,<span class="label">$12</span>,<span class="label">$14&#125;</span>' access_2016xxxx.<span class="keyword">log</span> &gt; new.<span class="literal">log</span></span><br></pre></td></tr></table></figure>
+<h2 id="u5F00_u59CB_u5206_u6790"><a href="#u5F00_u59CB_u5206_u6790" class="headerlink" title="开始分析"></a>开始分析</h2><figure class="highlight stylus"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">goaccess -f new<span class="class">.log</span> -<span class="tag">p</span> goaccess<span class="class">.conf</span> &gt; <span class="number">20161104</span>.html</span><br></pre></td></tr></table></figure>
+<h2 id="u6765_u4E2A_u793A_u4F8B"><a href="#u6765_u4E2A_u793A_u4F8B" class="headerlink" title="来个示例"></a>来个示例</h2><figure class="highlight crmsh"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br></pre></td><td class="code"><pre><span class="line">Total Requests  <span class="number">73049</span> Unique Visitors <span class="number">1855</span>  Referrers    <span class="number">0</span>   Log Size  <span class="number">7.18</span> MiB</span><br><span class="line">  Failed Requests <span class="number">7</span>     Unique Files    <span class="number">12286</span> Unique <span class="number">404</span>   <span class="number">199</span> Bandwidth <span class="number">269.59</span> MiB</span><br><span class="line">  Generation Time <span class="number">2</span>     Excl. IP Hits   <span class="number">0</span>     Static Files <span class="number">10</span>  Log File  new.log</span><br><span class="line"> &gt; <span class="number">1</span> - Unique visitors per day - Including spiders                                                                                                               Total: <span class="number">2</span>/<span class="number">2</span></span><br><span class="line"> Hits  Vis.      %   Bandwidth Avg. T.S. Cum. T.S. Max. T.S. Data</span><br><span class="line"> ----- ---- ------ ----------- --------- --------- --------- ----</span><br><span class="line"> <span class="number">13</span>       <span class="number">3</span>  <span class="number">0.02</span>%   <span class="number">12.20</span> KiB <span class="number">110.61</span> <span class="keyword">ms</span>   <span class="title">1</span>.<span class="number">44</span>  s <span class="number">387.00</span> <span class="keyword">ms</span> <span class="title">14</span>/Sep/<span class="number">2016</span> |</span><br><span class="line"> <span class="number">73029</span> <span class="number">1852</span> <span class="number">99.97</span>%  <span class="number">269.58</span> MiB   <span class="number">5.67</span>  s   <span class="number">4.79</span>  d   <span class="number">4.55</span> mn <span class="number">13</span>/Sep/<span class="number">2016</span> ||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||</span><br><span class="line"></span><br><span class="line">   <span class="number">2</span> - Top requests (URLs)                                                                                                                                 Total: <span class="number">366</span>/<span class="number">12286</span></span><br><span class="line"> Hits Vis.      %   Bandwidth Avg. T.S. Cum. T.S. Max. T.S. Data</span><br><span class="line"> ---- ---- ------ ----------- --------- --------- --------- ----</span><br><span class="line"> <span class="number">8008</span>  <span class="number">822</span> <span class="number">10.96</span>%   <span class="number">45.19</span> MiB  <span class="number">12.70</span>  s   <span class="number">1.18</span>  d   <span class="number">4.50</span> mn /</span><br><span class="line"> <span class="number">2708</span>  <span class="number">414</span>  <span class="number">3.71</span>%    <span class="number">8.48</span> MiB   <span class="number">4.40</span>  s   <span class="number">3.31</span> hr   <span class="number">3.12</span> mn /login/index</span><br><span class="line"> <span class="number">2483</span>  <span class="number">508</span>  <span class="number">3.40</span>%    <span class="number">5.56</span> KiB   <span class="number">1.07</span>  s  <span class="number">44.46</span> mn   <span class="number">1.41</span> mn /login</span><br><span class="line"></span><br><span class="line">   <span class="number">3</span> - Top static requests (e.g. jpg, png, js, css..)                                                                                                          Total: <span class="number">10</span>/<span class="number">10</span></span><br><span class="line"> Hits Vis.     %   Bandwidth Avg. T.S. Cum. T.S. Max. T.S. Data</span><br><span class="line"> ---- ---- ----- ----------- --------- --------- --------- ----</span><br><span class="line"> <span class="number">22</span>     <span class="number">13</span> <span class="number">0.03</span>%    <span class="number">4.41</span> KiB <span class="number">388.50</span> <span class="keyword">ms</span>   <span class="title">8</span>.<span class="number">55</span>  s   <span class="number">5.00</span>  s /robots.txt</span><br><span class="line"> <span class="number">9</span>       <span class="number">9</span> <span class="number">0.01</span>%    <span class="number">1.56</span> KiB   <span class="number">0.00</span> us   <span class="number">0.00</span> us   <span class="number">0.00</span> us /favicon.ico</span><br><span class="line"> <span class="number">6</span>       <span class="number">5</span> <span class="number">0.01</span>%   <span class="number">924.0</span>   B   <span class="number">0.00</span> us   <span class="number">0.00</span> us   <span class="number">0.00</span> us /apple-touch-icon-precomposed.png</span><br><span class="line"> <span class="number">6</span>       <span class="number">5</span> <span class="number">0.01</span>%   <span class="number">924.0</span>   B   <span class="number">0.00</span> us   <span class="number">0.00</span> us   <span class="number">0.00</span> us /apple-touch-icon.png</span><br><span class="line"> <span class="number">4</span>       <span class="number">4</span> <span class="number">0.01</span>%   <span class="number">86.51</span> KiB   <span class="number">2.00</span> <span class="keyword">ms</span>   <span class="title">8</span>.<span class="number">00</span> <span class="keyword">ms</span>   <span class="title">2</span>.<span class="number">00</span> <span class="keyword">ms</span> <span class="title">/r</span>/images/jhcf_image/logo2.png</span><br><span class="line"> <span class="number">1</span>       <span class="number">1</span> <span class="number">0.00</span>%   <span class="number">178.0</span>   B   <span class="number">0.00</span> us   <span class="number">0.00</span> us   <span class="number">0.00</span> us /sql.txt</span><br><span class="line"> <span class="number">1</span>       <span class="number">1</span> <span class="number">0.00</span>%   <span class="number">11.94</span> KiB   <span class="number">4.00</span> <span class="keyword">ms</span>   <span class="title">4</span>.<span class="number">00</span> <span class="keyword">ms</span>   <span class="title">4</span>.<span class="number">00</span> <span class="keyword">ms</span> <span class="title">/r</span>/css/common.css</span><br><span class="line">   <span class="number">4</span> - HTTP <span class="number">404</span> Not Found URLs                                                                                                                               Total: <span class="number">199</span>/<span class="number">199</span></span><br><span class="line"> Hits Vis.     %   Bandwidth Avg. T.S. Cum. T.S. Max. T.S. Data</span><br><span class="line"> ---- ---- ----- ----------- --------- --------- --------- ----</span><br><span class="line"> <span class="number">17</span>      <span class="number">0</span> <span class="number">0.02</span>%  <span class="number">122.59</span> KiB  <span class="number">10.29</span> <span class="keyword">ms</span> <span class="title">175</span>.<span class="number">00</span> <span class="keyword">ms</span>  <span class="title">21</span>.<span class="number">00</span> <span class="keyword">ms</span> <span class="title">/robots</span>.txt</span><br><span class="line"> <span class="number">11</span>      <span class="number">0</span> <span class="number">0.02</span>%   <span class="number">94.39</span> KiB   <span class="number">9.18</span> <span class="keyword">ms</span> <span class="title">101</span>.<span class="number">00</span> <span class="keyword">ms</span>  <span class="title">17</span>.<span class="number">00</span> <span class="keyword">ms</span> <span class="title">/wp-login</span>.php</span><br><span class="line"> <span class="number">5</span>       <span class="number">0</span> <span class="number">0.01</span>%   <span class="number">25.36</span> KiB <span class="number">631.60</span> <span class="keyword">ms</span>   <span class="title">3</span>.<span class="number">16</span>  s   <span class="number">2.61</span>  s /forum.php</span><br><span class="line"> <span class="number">5</span>       <span class="number">0</span> <span class="number">0.01</span>%   <span class="number">25.36</span> KiB <span class="number">265.40</span> <span class="keyword">ms</span>   <span class="title">1</span>.<span class="number">33</span>  s <span class="number">651.00</span> <span class="keyword">ms</span> <span class="title">/index</span>.php</span><br><span class="line"> <span class="number">4</span>       <span class="number">0</span> <span class="number">0.01</span>%   <span class="number">10.97</span> KiB   <span class="number">9.25</span> <span class="keyword">ms</span>  <span class="title">37</span>.<span class="number">00</span> <span class="keyword">ms</span>  <span class="title">11</span>.<span class="number">00</span> <span class="keyword">ms</span> <span class="title">/&lt;特征词ID</span>&gt;</span><br><span class="line"> <span class="number">3</span>       <span class="number">0</span> <span class="number">0.00</span>%    <span class="number">8.24</span> KiB   <span class="number">9.33</span> <span class="keyword">ms</span>  <span class="title">28</span>.<span class="number">00</span> <span class="keyword">ms</span>  <span class="title">11</span>.<span class="number">00</span> <span class="keyword">ms</span> <span class="title">/fin</span>/cjhb/buy//</span><br><span class="line">   <span class="number">5</span> - Visitor hostnames <span class="operator">and</span> IPs                                                                                                                            Total: <span class="number">366</span>/<span class="number">1861</span></span><br><span class="line"> Hits Vis.     %   Bandwidth Avg. T.S. Cum. T.S. Max. T.S. Data</span><br><span class="line"> ---- ---- ----- ----------- --------- --------- --------- ----</span><br><span class="line"> <span class="number">6221</span>    <span class="number">1</span> <span class="number">8.52</span>%   <span class="number">18.34</span> MiB  <span class="number">15.27</span>  s   <span class="number">1.10</span>  d   <span class="number">4.55</span> mn <span class="number">58.16</span>.<span class="number">112.90</span>    ||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||</span><br><span class="line"> <span class="number">4614</span>    <span class="number">1</span> <span class="number">6.32</span>%   <span class="number">13.62</span> MiB   <span class="number">6.03</span>  s   <span class="number">7.72</span> hr   <span class="number">4.55</span> mn <span class="number">111.85</span>.<span class="number">122.1</span>    ||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||</span><br><span class="line"> <span class="number">3848</span>    <span class="number">1</span> <span class="number">5.27</span>%   <span class="number">11.01</span> MiB   <span class="number">8.10</span>  s   <span class="number">8.65</span> hr   <span class="number">4.52</span> mn <span class="number">58.16</span>.<span class="number">21.22</span>     ||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||</span><br><span class="line"> <span class="number">2386</span>    <span class="number">1</span> <span class="number">3.27</span>%  <span class="number">139.25</span> KiB  <span class="number">27.86</span> <span class="keyword">ms</span>   <span class="title">1</span>.<span class="number">11</span> mn   <span class="number">4.37</span>  s <span class="number">61.135</span>.<span class="number">189.122</span>  |||||||||||||||||||||||||||||||||||||</span><br><span class="line"> <span class="number">2110</span>    <span class="number">1</span> <span class="number">2.89</span>%    <span class="number">6.02</span> MiB   <span class="number">7.04</span>  s   <span class="number">4.13</span> hr   <span class="number">4.50</span> mn <span class="number">111.85</span>.<span class="number">122.222</span>  |||||||||||||||||||||||||||||||||</span><br><span class="line"> <span class="number">2084</span>    <span class="number">1</span> <span class="number">2.85</span>%    <span class="number">5.89</span> MiB   <span class="number">9.07</span>  s   <span class="number">5.25</span> hr   <span class="number">4.50</span> mn <span class="number">58.16</span>.<span class="number">24.42</span>     ||||||||||||||||||||||||||||||||</span><br><span class="line"> <span class="number">1380</span>    <span class="number">1</span> <span class="number">1.89</span>%    <span class="number">2.98</span> MiB  <span class="number">17.94</span>  s   <span class="number">6.88</span> hr   <span class="number">4.55</span> mn <span class="number">220.197</span>.<span class="number">207.138</span> |||||||||||||||||||||</span><br></pre></td></tr></table></figure>
+
+      
+    </div>
+    <footer class="article-footer">
+      <div class="bshare-custom"><a title="分享到QQ空间" class="bshare-qzone"></a><a title="分享到新浪微博" class="bshare-sinaminiblog"></a><a title="分享到人人网" class="bshare-renren"></a><a title="分享到腾讯微博" class="bshare-qqmb"></a><a title="分享到网易微博" class="bshare-neteasemb"></a><a title="更多平台" class="bshare-more bshare-more-icon more-style-addthis"></a><span class="BSHARE_COUNT bshare-share-count">0</span></div><script type="text/javascript" charset="utf-8" src="http://static.bshare.cn/b/buttonLite.js#style=-1&amp;uuid=&amp;pophcol=2&amp;lang=zh"></script><script type="text/javascript" charset="utf-8" src="http://static.bshare.cn/b/bshareC0.js"></script>
+    <!-- 分享  <a data-url="http://wiki.niejinkun.com/2016/11/03/nginx╚╒╓╛╖╓╬Ў/" data-id="cixa1tlh3009kei4vhrfyax7d" class="article-share-link">Share</a> -->
+      
+      
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/nginx/">nginx</a></li></ul>
+
+    </footer>
+  </div>
+  
+    
+<nav id="article-nav">
+  
+    <a href="/2016/12/28/my-tools/" id="article-nav-newer" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Newer</strong>
+      <div class="article-nav-title">
+        
+          我的工具经验(不定期更新)
+        
+      </div>
+    </a>
+  
+  
+    <a href="/2016/10/27/╨╘─▄╙┼╗п╓оO2O/" id="article-nav-older" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Older</strong>
+      <div class="article-nav-title">性能优化之O2O大法</div>
+    </a>
+  
+</nav>
+
+  
+</article>
+
+ 
+  <section id="comments">
+    <!-- 多说评论框 start -->
+    <div class="ds-thread" data-thread-key="post-nginx╚╒╓╛╖╓╬Ў" data-title="线上ngnix日志分析" data-url="http://wiki.niejinkun.com/2016/11/03/nginx╚╒╓╛╖╓╬Ў/"></div>
+    <!-- 多说评论框 end -->
+    <!-- 多说公共JS代码 start (一个网页只需插入一次) -->
+    <script type="text/javascript">
+    var duoshuoQuery = {short_name:'niejinping'};
+      (function() {
+        var ds = document.createElement('script');
+        ds.type = 'text/javascript';ds.async = true;
+        ds.src = (document.location.protocol == 'https:' ? 'https:' : 'http:') + '//static.duoshuo.com/embed.js';
+        ds.charset = 'UTF-8';
+        (document.getElementsByTagName('head')[0] 
+         || document.getElementsByTagName('body')[0]).appendChild(ds);
+      })();
+      </script>
+    <!-- 多说公共JS代码 end -->
+  </section>
+  
+</section>
+        
+          <aside id="sidebar">
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Categories</h3>
+    <div class="widget">
+      <ul class="category-list"><li class="category-list-item"><a class="category-list-link" href="/categories/api/">api</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/java/">java</a><span class="category-list-count">34</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/linux/">linux</a><span class="category-list-count">12</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/mysql/">mysql</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/nginx/">nginx</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/opencv/">opencv</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/php/">php</a><span class="category-list-count">3</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/protocal/">protocal</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/web前端/">web前端</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/前端/">前端</a><span class="category-list-count">3</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/大数据/">大数据</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/存储系统/">存储系统</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/安全/">安全</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/工具/">工具</a><span class="category-list-count">3</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/性能优化/">性能优化</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/搜索/">搜索</a><span class="category-list-count">5</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/数据库/">数据库</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/有用的资源/">有用的资源</a><span class="category-list-count">2</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/服务/">服务</a><span class="category-list-count">18</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/架构/">架构</a><span class="category-list-count">5</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/沟通协作/">沟通协作</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/生活/">生活</a><span class="category-list-count">7</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/编程开发/">编程开发</a><span class="category-list-count">2</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/设计/">设计</a><span class="category-list-count">4</span></li></ul>
+    </div>
+  </div>
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Tags</h3>
+    <div class="widget">
+      <ul class="tag-list"><li class="tag-list-item"><a class="tag-list-link" href="/tags/AngularJS/">AngularJS</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/ImageMagick/">ImageMagick</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/android/">android</a><span class="tag-list-count">3</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/aop/">aop</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/api/">api</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/async/">async</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/audio/">audio</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/cache/">cache</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/commons-fileupload/">commons-fileupload</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/concunrrent/">concunrrent</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/crontab/">crontab</a><span class="tag-list-count">6</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/download/">download</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/dubbo/">dubbo</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/ehcache/">ehcache</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/elasticsearch/">elasticsearch</a><span class="tag-list-count">4</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/es/">es</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/fileuploads/">fileuploads</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/git/">git</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/github/">github</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/go/">go</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/gradle/">gradle</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/grep/">grep</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/https/">https</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/im/">im</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/image/">image</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/indexer/">indexer</a><span class="tag-list-count">4</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/ionic/">ionic</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/italy/">italy</a><span class="tag-list-count">3</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/java/">java</a><span class="tag-list-count">49</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/javav/">javav</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/jdbctemplate/">jdbctemplate</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/jetty/">jetty</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/job/">job</a><span class="tag-list-count">7</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/jquery/">jquery</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/json/">json</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/jta/">jta</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/jvm/">jvm</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/life/">life</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/linux/">linux</a><span class="tag-list-count">13</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/liux/">liux</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/mail/">mail</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/map/">map</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/maven/">maven</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/memcached/">memcached</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/mq/">mq</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/mqtt/">mqtt</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/mvc/">mvc</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/mybatis/">mybatis</a><span class="tag-list-count">9</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/mysal/">mysal</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/mysql/">mysql</a><span class="tag-list-count">4</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/mytabis/">mytabis</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/netty/">netty</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/nginx/">nginx</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/opencv/">opencv</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/pb/">pb</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/php/">php</a><span class="tag-list-count">3</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/protolbuf/">protolbuf</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/push/">push</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/quartz/">quartz</a><span class="tag-list-count">3</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/redis/">redis</a><span class="tag-list-count">4</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/rome/">rome</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/schedule/">schedule</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/search/">search</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/security/">security</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/servlet/">servlet</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/session/">session</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/shell/">shell</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/sms/">sms</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/solr/">solr</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/spirng/">spirng</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/spring/">spring</a><span class="tag-list-count">8</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/spring-security/">spring security</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/springboot/">springboot</a><span class="tag-list-count">10</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/springcache/">springcache</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/springmvc/">springmvc</a><span class="tag-list-count">6</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/ssl/">ssl</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/threads/">threads</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/tomcat/">tomcat</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/travel/">travel</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/video/">video</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/web/">web</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/yii2/">yii2</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/zookeeper/">zookeeper</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/事务/">事务</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/分布式/">分布式</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/分布式事务/">分布式事务</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/前端/">前端</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/协调/">协调</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/大数据/">大数据</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/安全/">安全</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/定时任务/">定时任务</a><span class="tag-list-count">6</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/工具/">工具</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/性能/">性能</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/性能优化，O2O/">性能优化，O2O</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/性能，架构/">性能，架构</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/推荐/">推荐</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/推送/">推送</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/搜索/">搜索</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/支付/">支付</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/支付宝/">支付宝</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/数据库/">数据库</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/服务化/">服务化</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/架构/">架构</a><span class="tag-list-count">14</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/消息/">消息</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/短信/">短信</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/队列/">队列</a><span class="tag-list-count">2</span></li></ul>
+    </div>
+  </div>
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Tag Cloud</h3>
+    <div class="widget tagcloud">
+      <a href="/tags/AngularJS/" style="font-size: 10px;">AngularJS</a> <a href="/tags/ImageMagick/" style="font-size: 10px;">ImageMagick</a> <a href="/tags/android/" style="font-size: 11.82px;">android</a> <a href="/tags/aop/" style="font-size: 10px;">aop</a> <a href="/tags/api/" style="font-size: 10px;">api</a> <a href="/tags/async/" style="font-size: 10px;">async</a> <a href="/tags/audio/" style="font-size: 10px;">audio</a> <a href="/tags/cache/" style="font-size: 10.91px;">cache</a> <a href="/tags/commons-fileupload/" style="font-size: 10px;">commons-fileupload</a> <a href="/tags/concunrrent/" style="font-size: 10px;">concunrrent</a> <a href="/tags/crontab/" style="font-size: 13.64px;">crontab</a> <a href="/tags/download/" style="font-size: 10px;">download</a> <a href="/tags/dubbo/" style="font-size: 10.91px;">dubbo</a> <a href="/tags/ehcache/" style="font-size: 10px;">ehcache</a> <a href="/tags/elasticsearch/" style="font-size: 12.73px;">elasticsearch</a> <a href="/tags/es/" style="font-size: 10px;">es</a> <a href="/tags/fileuploads/" style="font-size: 10.91px;">fileuploads</a> <a href="/tags/git/" style="font-size: 10.91px;">git</a> <a href="/tags/github/" style="font-size: 10px;">github</a> <a href="/tags/go/" style="font-size: 10px;">go</a> <a href="/tags/gradle/" style="font-size: 10.91px;">gradle</a> <a href="/tags/grep/" style="font-size: 10px;">grep</a> <a href="/tags/https/" style="font-size: 10px;">https</a> <a href="/tags/im/" style="font-size: 10px;">im</a> <a href="/tags/image/" style="font-size: 10px;">image</a> <a href="/tags/indexer/" style="font-size: 12.73px;">indexer</a> <a href="/tags/ionic/" style="font-size: 10px;">ionic</a> <a href="/tags/italy/" style="font-size: 11.82px;">italy</a> <a href="/tags/java/" style="font-size: 20px;">java</a> <a href="/tags/javav/" style="font-size: 10px;">javav</a> <a href="/tags/jdbctemplate/" style="font-size: 10px;">jdbctemplate</a> <a href="/tags/jetty/" style="font-size: 10px;">jetty</a> <a href="/tags/job/" style="font-size: 14.55px;">job</a> <a href="/tags/jquery/" style="font-size: 10px;">jquery</a> <a href="/tags/json/" style="font-size: 10px;">json</a> <a href="/tags/jta/" style="font-size: 10px;">jta</a> <a href="/tags/jvm/" style="font-size: 10px;">jvm</a> <a href="/tags/life/" style="font-size: 10px;">life</a> <a href="/tags/linux/" style="font-size: 18.18px;">linux</a> <a href="/tags/liux/" style="font-size: 10px;">liux</a> <a href="/tags/mail/" style="font-size: 10px;">mail</a> <a href="/tags/map/" style="font-size: 10px;">map</a> <a href="/tags/maven/" style="font-size: 10px;">maven</a> <a href="/tags/memcached/" style="font-size: 10px;">memcached</a> <a href="/tags/mq/" style="font-size: 10.91px;">mq</a> <a href="/tags/mqtt/" style="font-size: 10px;">mqtt</a> <a href="/tags/mvc/" style="font-size: 10.91px;">mvc</a> <a href="/tags/mybatis/" style="font-size: 16.36px;">mybatis</a> <a href="/tags/mysal/" style="font-size: 10px;">mysal</a> <a href="/tags/mysql/" style="font-size: 12.73px;">mysql</a> <a href="/tags/mytabis/" style="font-size: 10px;">mytabis</a> <a href="/tags/netty/" style="font-size: 10.91px;">netty</a> <a href="/tags/nginx/" style="font-size: 10px;">nginx</a> <a href="/tags/opencv/" style="font-size: 10px;">opencv</a> <a href="/tags/pb/" style="font-size: 10px;">pb</a> <a href="/tags/php/" style="font-size: 11.82px;">php</a> <a href="/tags/protolbuf/" style="font-size: 10px;">protolbuf</a> <a href="/tags/push/" style="font-size: 10.91px;">push</a> <a href="/tags/quartz/" style="font-size: 11.82px;">quartz</a> <a href="/tags/redis/" style="font-size: 12.73px;">redis</a> <a href="/tags/rome/" style="font-size: 10.91px;">rome</a> <a href="/tags/schedule/" style="font-size: 10px;">schedule</a> <a href="/tags/search/" style="font-size: 10px;">search</a> <a href="/tags/security/" style="font-size: 10px;">security</a> <a href="/tags/servlet/" style="font-size: 10.91px;">servlet</a> <a href="/tags/session/" style="font-size: 10px;">session</a> <a href="/tags/shell/" style="font-size: 10px;">shell</a> <a href="/tags/sms/" style="font-size: 10px;">sms</a> <a href="/tags/solr/" style="font-size: 10px;">solr</a> <a href="/tags/spirng/" style="font-size: 10px;">spirng</a> <a href="/tags/spring/" style="font-size: 15.45px;">spring</a> <a href="/tags/spring-security/" style="font-size: 10px;">spring security</a> <a href="/tags/springboot/" style="font-size: 17.27px;">springboot</a> <a href="/tags/springcache/" style="font-size: 10px;">springcache</a> <a href="/tags/springmvc/" style="font-size: 13.64px;">springmvc</a> <a href="/tags/ssl/" style="font-size: 10px;">ssl</a> <a href="/tags/threads/" style="font-size: 10px;">threads</a> <a href="/tags/tomcat/" style="font-size: 10px;">tomcat</a> <a href="/tags/travel/" style="font-size: 10px;">travel</a> <a href="/tags/video/" style="font-size: 10px;">video</a> <a href="/tags/web/" style="font-size: 10.91px;">web</a> <a href="/tags/yii2/" style="font-size: 10.91px;">yii2</a> <a href="/tags/zookeeper/" style="font-size: 10px;">zookeeper</a> <a href="/tags/事务/" style="font-size: 10px;">事务</a> <a href="/tags/分布式/" style="font-size: 10.91px;">分布式</a> <a href="/tags/分布式事务/" style="font-size: 10px;">分布式事务</a> <a href="/tags/前端/" style="font-size: 10px;">前端</a> <a href="/tags/协调/" style="font-size: 10px;">协调</a> <a href="/tags/大数据/" style="font-size: 10px;">大数据</a> <a href="/tags/安全/" style="font-size: 10px;">安全</a> <a href="/tags/定时任务/" style="font-size: 13.64px;">定时任务</a> <a href="/tags/工具/" style="font-size: 10px;">工具</a> <a href="/tags/性能/" style="font-size: 10px;">性能</a> <a href="/tags/性能优化，O2O/" style="font-size: 10px;">性能优化，O2O</a> <a href="/tags/性能，架构/" style="font-size: 10px;">性能，架构</a> <a href="/tags/推荐/" style="font-size: 10px;">推荐</a> <a href="/tags/推送/" style="font-size: 10px;">推送</a> <a href="/tags/搜索/" style="font-size: 10px;">搜索</a> <a href="/tags/支付/" style="font-size: 10px;">支付</a> <a href="/tags/支付宝/" style="font-size: 10px;">支付宝</a> <a href="/tags/数据库/" style="font-size: 10px;">数据库</a> <a href="/tags/服务化/" style="font-size: 10.91px;">服务化</a> <a href="/tags/架构/" style="font-size: 19.09px;">架构</a> <a href="/tags/消息/" style="font-size: 10.91px;">消息</a> <a href="/tags/短信/" style="font-size: 10px;">短信</a> <a href="/tags/队列/" style="font-size: 10.91px;">队列</a>
+    </div>
+  </div>
+
+  
+    <iframe width="100%" height="550" class="share_self"  frameborder="0" scrolling="no" src="http://widget.weibo.com/weiboshow/index.php?language=&width=0&height=550&fansRow=2&ptype=1&speed=0&skin=1&isTitle=1&noborder=1&isWeibo=1&isFans=1&uid=1032111474&verifier=90bc37f2&dpc=1"></iframe>
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Recents</h3>
+    <div class="widget">
+      <ul>
+        
+          <li>
+            <a href="/2016/12/28/my-tools/">我的工具经验(不定期更新)</a>
+          </li>
+        
+          <li>
+            <a href="/2016/11/03/nginx╚╒╓╛╖╓╬Ў/">线上ngnix日志分析</a>
+          </li>
+        
+          <li>
+            <a href="/2016/10/27/╨╘─▄╙┼╗п╓оO2O/">性能优化之O2O大法</a>
+          </li>
+        
+          <li>
+            <a href="/2016/10/23/╬─╝■░▓╚л/">web文件安全</a>
+          </li>
+        
+          <li>
+            <a href="/2016/10/23/git╫ю╝╤╩╡╝∙/">git最佳实践</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">关于我</h3>
+    <div class="widget">
+      	<ul class="entry">
+		<li><a href="mailto:niejinping2014@gmail.com" title="email">邮箱:niejinping2014@gmail.com</a></li>
+		<li><a href="https://github.com/njkfei" title="github">github:https://github.com/njkfei</a></li>
+	</ul>
+    </div>
+  </div>
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Archives</h3>
+    <div class="widget">
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/12/">十二月 2016</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/11/">十一月 2016</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/10/">十月 2016</a><span class="archive-list-count">5</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/08/">八月 2016</a><span class="archive-list-count">4</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/06/">六月 2016</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/05/">五月 2016</a><span class="archive-list-count">7</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/04/">四月 2016</a><span class="archive-list-count">3</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/03/">三月 2016</a><span class="archive-list-count">26</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/02/">二月 2016</a><span class="archive-list-count">4</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/01/">一月 2016</a><span class="archive-list-count">57</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/12/">十二月 2015</a><span class="archive-list-count">1</span></li></ul>
+    </div>
+  </div>
+
+  
+    <div class="widget-wrap">
+<h3 class="widget-title">友情链接</h3>
+<div class="widget">
+	<ul class="entry">
+		<li><a href="http://www.58.com/" title="神奇的网站">神奇的网站:58同城</a></li>
+		<li><a href="http://www.sanhao.com/" title="让教育回归家庭">让教育回归家庭:三好网</a></li>
+	</ul>
+</div>
+</div>
+
+  
+</aside>
+        
+      </div>
+      <footer id="footer">
+  
+<div class="outer">
+    <div id="footer-info" class="inner" style="text-align:center;">
+	  <table width="100%" border="0">
+        <tr>
+          <td style="text-align:left">
+            Copyright &copy; 2014-2016 niejinping &nbsp; &nbsp;
+            Powered by <a href="http://hexo.io/" target="_blank">Hexo</a><br>
+	        Theme <a href="https://github.com/njk/landscape-njk" target="_blank">爱折腾</a> by 游骑爬 &nbsp; &nbsp;
+	        Hosted on <a href="https://github.com/" target="_blank">GitHub</a>
+		  </td>
+		  <td style="text-align:right">
+		    <div style="font-family: FontAwesome;font-size: 20px;">
+		    <a href="http://weibo.com/1032111474" title="微博" target="_blank">&#61834;</a>&nbsp;
+			<a href="http://user.qzone.qq.com/297206021" title="QQ空间" target="_blank">&#61910;</a>&nbsp;
+			<a href="https://github.com/njkfei" title="GitHub" target="_blank">&#61595;</a>&nbsp;
+			</div><br>
+		    <a href="/sitemap.xml">网站地图</a>&nbsp; &nbsp;
+			<a href="/atom.xml">订阅本站</a>&nbsp; &nbsp;
+			<a href="mailto:297206021@qq.com" target="_blank">联系作者</a>&nbsp; &nbsp;
+			ICP 备案中
+		  </td>
+        </tr>
+      </table>
+    </div>
+</div>
+</footer>
+
+    </div>
+    <nav id="mobile-nav">
+  
+    <a href="/" class="mobile-nav-link">首页</a>
+  
+    <a href="/archives" class="mobile-nav-link">归档</a>
+  
+    <a href="/about" class="mobile-nav-link">关于我</a>
+  
+</nav>
+    
+
+<script type="text/javascript">(function(){document.write(unescape('%3Cdiv id="bdcs"%3E%3C/div%3E'));var bdcs = document.createElement('script');bdcs.type = 'text/javascript';bdcs.async = true;bdcs.src = 'http://znsv.baidu.com/customer_search/api/js?sid=4804069604996030452' + '&plate_url=' + encodeURIComponent(window.location.href) + '&t=' + Math.ceil(new Date()/3600000);var s = document.getElementsByTagName('script')[0];s.parentNode.insertBefore(bdcs, s);})();</script>
+
+<script src="//ajax.googleapis.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script>
+
+
+  <link rel="stylesheet" href="/fancybox/jquery.fancybox.css" type="text/css">
+  <script src="/fancybox/jquery.fancybox.pack.js" type="text/javascript"></script>
+
+
+<div id="totop" style="position:fixed;bottom:150px;right:50px;cursor: pointer;">
+<a title="返回顶部"><img src="/imgs/scrollup.png"/></a>
+</div>
+<script src="/js/totop.js"></script>
+
+<script src="/js/script.js" type="text/javascript"></script>
+
+  </div>
+</body>
+</html>
